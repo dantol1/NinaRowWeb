@@ -9,5 +9,11 @@ public class Player {
         pieceShape = i_pieceShape;
         isComputer = i_isComputer;
     }
+
+    public String getName(){
+
+        return name;
+
+    }
 }
 
