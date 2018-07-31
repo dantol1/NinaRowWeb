@@ -6,6 +6,11 @@ public class Player {
 
     private String name;
     private String id;
+
+    public char getPieceShape() {
+        return pieceShape;
+    }
+
     private char pieceShape;
     private Type playerType;
 

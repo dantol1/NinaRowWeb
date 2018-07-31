@@ -4,13 +4,29 @@ public class Board {
 
     private int columns;
     private int rows;
+
+    public char[][] getBoard() {
+        return board;
+    }
+
     private char[][] board;
+
+    public int[] getNextPlaceInColumn() {
+        return nextPlaceInColumn;
+    }
+
     private int nextPlaceInColumn[];
 
-    public void dropDisc(int i_column, char i_pieceshape){
+    public boolean dropDisc(int i_column, char i_pieceshape){
 
-        board[nextPlaceInColumn[i_column]][i_column] = i_pieceshape;
-        nextPlaceInColumn[i_column]--;
+        if (nextPlaceInColumn[i_column] != 0) {
+            board[nextPlaceInColumn[i_column]][i_column] = i_pieceshape;
+            nextPlaceInColumn[i_column]--;
+
+            return true;
+        }
+
+        return false;
 
     }
 
@@ -21,6 +37,11 @@ public class Board {
         board = new char[i_rows][i_columns];
         columns = i_columns;
         rows = i_rows;
+    }
+
+    public char getCellSymbol(int row, int col) throws ArrayIndexOutOfBoundsException {
+
+        return board[row][col];
     }
 
 }
