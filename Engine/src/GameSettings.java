@@ -1,10 +1,3 @@
-import jaxb.schema.generated.GameDescriptor;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
-
 public class GameSettings {
     public enum GameType{
         Basic,
