@@ -33,43 +33,63 @@ public class Menu {
     private void showBoard()
     {
         int rows = theGame.getSettings().getRows() + 2;
-        int cols = theGame.getSettings().getColumns() + 3;
+        int cols = theGame.getSettings().getColumns() + 2;
 
         for (int i = 0; i<rows; i++) {
 
-            for (int j = 0; i<cols; j++) {
+            for (int j = 0; j<cols; j++) {
 
-                if ( (i == 0 || i == 1) && (j == 0 || j == 1)) {
+                if ( (i == 0 || i == 1) && (j == 0)) {
 
-                    System.out.println(' ');
+                    System.out.print(' ');
+                }
+                if (i == 0 && j == 1) {
+                    System.out.print(' ');
+                }
+                if ( i== 1 && j == 1) {
+
+                    System.out.print(" X ");
                 }
 
-                if (i == 0 && (j != 0 && j !=1)) {
-
-                    System.out.println(j-1);
+                if (i == 0 && (j>1 && j<cols)) {
+                    if (j>10) {
+                        System.out.print("  ");
+                    }
+                    else {
+                        System.out.print("   ");
+                    }
+                    System.out.print(j-1);
+                    if (j>10) {
+                        System.out.print("  ");
+                    }
+                    else {
+                        System.out.print("  ");
+                    }
                 }
 
-                if (i == 1 && (j != 0 && j !=1)) {
+                if (i == 1 && (j>1 && j<cols)) {
 
-                    System.out.println("__");
+                    System.out.print("--- X ");
                 }
 
                 if ((i>1) && (j == 0)) {
-
-                    System.out.println(i-1);
+                    if (i<11) {
+                        System.out.print(' ');
+                    }
+                    System.out.print(i-1);
                 }
 
-                if ((i>1) && (j == 1 || j == cols-1)) {
+                if ((i>1) && (j == 1)) {
 
-                    System.out.println('|');
+                    System.out.print('|');
                 }
-                if ((i>1) && (j>1 && j<cols-1)) {
+                if ((i>1) && (j>1 && j<cols)) {
 
-                    System.out.println("__");
+                    System.out.print(" ___ |");
                 }
             }
+            System.out.print('\n');
 
-            System.out.println('\n');
         }
     }
 }
