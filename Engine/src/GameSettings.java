@@ -15,4 +15,5 @@ public class GameSettings {
     int rows;
     int columns;
     int target;
+    private Player players[];
 }

@@ -1,13 +1,18 @@
 public class Player {
+    private enum Type{
+        Human,
+        Computer
+    }
 
     private String name;
+    private String id;
     private char pieceShape;
-    private boolean isComputer = false;
+    private Type playerType;
 
-    public Player(String i_name, char i_pieceShape, boolean i_isComputer) {
+    public Player(String i_name, char i_pieceShape, Type i_isComputer) {
         name = i_name;
         pieceShape = i_pieceShape;
-        isComputer = i_isComputer;
+        playerType = i_isComputer;
     }
 
     public String getName(){
