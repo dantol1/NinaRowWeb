@@ -1,7 +1,9 @@
+
 public class Menu {
 
-
+    private boolean exitGame = false;
     private boolean PreGame = true;
+    private StopWatch gameTime = new StopWatch();
 
     public enum MenuOptions {
         SelectGameFile,
@@ -15,7 +17,18 @@ public class Menu {
         UndoMove,
         ShowGameDetails
     }
-    public void showGame()
+
+    public void showMenu()
+    {
+
+    }
+
+    private void showTime()
+    {
+        System.out.println(gameTime.timeRunning());
+    }
+
+    private void showBoard()
     {
 
     }
