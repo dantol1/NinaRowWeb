@@ -128,6 +128,10 @@ public class Game implements Serializable {
         return state;
     }
 
+    public GameSettings getSettings() {
+        return settings;
+    }
+
     private boolean checkConsecutiveDirection(DiscDirection dir, int column) {
         //TODO: check for a general approach
         boolean result = false;
@@ -154,6 +158,7 @@ public class Game implements Serializable {
         }
 
         return result;
+
     }
 
     private boolean checkGameTie() {
