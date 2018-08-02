@@ -1,5 +1,5 @@
 public class Player {
-    private enum Type{
+    public enum Type{
         Human,
         Computer
     }
@@ -14,10 +14,11 @@ public class Player {
     private char pieceShape;
     private Type playerType;
 
-    public Player(String i_name, char i_pieceShape, Type i_isComputer) {
+    public void setPlayer(String i_name, char i_pieceShape, Type i_isComputer) {
         name = i_name;
         pieceShape = i_pieceShape;
         playerType = i_isComputer;
+
     }
 
     public String getName(){

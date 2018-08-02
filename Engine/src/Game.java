@@ -36,6 +36,19 @@ public class Game implements Serializable {
     private Player players[];
     private int numOfActivePlayers;
 
+    public Player getPlayerByIndex(int i) throws ArrayIndexOutOfBoundsException {
+
+        if (i>players.length) {
+
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        else {
+
+           return players[i];
+
+        }
+    }
+
     public int getActivePlayerIndex() {
         return activePlayerIndex;
     }
@@ -57,6 +70,7 @@ public class Game implements Serializable {
         }
 
         players = new Player[numOfActivePlayers];
+        players[0].setPlayer("Player 1",'X',Player.Type.Human);
     }
 
     public void saveGame(String location) throws IOException

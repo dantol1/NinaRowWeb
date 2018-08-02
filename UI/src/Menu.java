@@ -4,8 +4,38 @@ public class Menu {
 
     private boolean exitGame = false;
     private boolean PreGame = true;
+    private boolean StartGame = false;
+    private boolean LoadedXML = false;
     private StopWatch gameTime = new StopWatch();
     private Game theGame;
+
+    public void setTheGame(Game theGame) {
+
+        this.theGame = theGame;
+    }
+    public Game getGame() {
+
+        return theGame;
+    }
+
+
+    public boolean isStartGame() {
+        return StartGame;
+    }
+
+    public void setStartGame(boolean startGame) {
+        StartGame = startGame;
+    }
+
+
+    public boolean isLoadedXML() {
+        return LoadedXML;
+    }
+
+    public void setLoadedXML(boolean loadedXML) {
+        LoadedXML = loadedXML;
+    }
+
 
     public enum MenuOptions {
         SelectGameFile,
