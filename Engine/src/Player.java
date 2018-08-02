@@ -6,6 +6,7 @@ public class Player {
 
     private String name;
     private String id;
+    private int howManyTurnsPlayed = 0;
 
     public char getPieceShape() {
         return pieceShape;
@@ -25,6 +26,14 @@ public class Player {
 
         return name;
 
+    }
+
+    public int getHowManyTurnsPlayed() {
+        return howManyTurnsPlayed;
+    }
+
+    public void setHowManyTurnsPlayed(int howManyTurnsPlayed) {
+        this.howManyTurnsPlayed = howManyTurnsPlayed;
     }
 }
 

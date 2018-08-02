@@ -55,12 +55,12 @@ public class Menu {
 
     }
 
-    private void showTime()
+    public String showTime()
     {
-        System.out.println(gameTime.timeRunning());
+        return gameTime.timeRunning();
     }
 
-    private void showBoard()
+    public void showBoard()
     {
         int rows = theGame.getSettings().getRows() + 2;
         int cols = theGame.getSettings().getColumns() + 2;

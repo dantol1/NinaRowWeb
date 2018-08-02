@@ -21,9 +21,11 @@ public class ReadXML implements Commandable {
                 try {
                     menu.setTheGame(GameFactory.CreateGame(inputStream));
                     menu.setLoadedXML(true);
+                    menu.showBoard();
                 } catch (FileDataException e) {
 
                     System.out.println(e.getMessage());
+
                 } catch (JAXBException e) {
 
                     throw new RuntimeException();
