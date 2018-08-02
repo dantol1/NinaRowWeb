@@ -9,6 +9,10 @@ public class Menu {
     private StopWatch gameTime = new StopWatch();
     private Game theGame;
 
+    public void setExitGame(boolean exitGame) {
+        this.exitGame = exitGame;
+    }
+
     public void setTheGame(Game theGame) {
 
         this.theGame = theGame;
