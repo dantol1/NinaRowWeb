@@ -2,6 +2,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Random;
 
 public class Game implements Serializable {
 
@@ -35,6 +36,7 @@ public class Game implements Serializable {
     private GameSettings settings;
     private Player players[];
     private int numOfActivePlayers;
+    private History moveHistory;
 
     public Player getPlayerByIndex(int i) throws ArrayIndexOutOfBoundsException {
 
@@ -69,6 +71,7 @@ public class Game implements Serializable {
             numOfActivePlayers = 2;
         }
 
+        moveHistory = new History();
         players = new Player[numOfActivePlayers];
         players[0].setPlayer("Player 1",'X',Player.Type.Human);
     }
@@ -267,5 +270,66 @@ public class Game implements Serializable {
         }
 
         return tie;
+    }
+
+    public boolean playTurn(int columnToPlaceDisc)
+    {
+        boolean succeeded = true;
+
+        succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
+        if(succeeded)
+        {
+            moveHistory.AddMoveToHistory(activePlayerIndex, columnToPlaceDisc);
+            changeToNextActivePlayer();
+        }
+
+        return succeeded;
+    }
+
+    public boolean playComputerTurn()
+    {
+        boolean succeeded = false;
+        Random randomCol = new Random();
+        int colToDrop;
+
+        do {
+            colToDrop = randomCol.nextInt(settings.getColumns());
+            succeeded = gameBoard.dropDisc(colToDrop, players[activePlayerIndex].getPieceShape());
+        }while(!succeeded);
+
+        moveHistory.AddMoveToHistory(activePlayerIndex, colToDrop);
+        changeToNextActivePlayer();
+
+        return succeeded;
+    }
+
+    private void changeToNextActivePlayer()
+    {
+        activePlayerIndex = (activePlayerIndex + 1) % numOfActivePlayers;
+    }
+
+    public void undoMove() throws NoMovesMadeException
+    {
+        Move moveToUndo;
+        int columnToRemoveFrom;
+        int rowToRemoveFrom;
+
+        if(!moveHistory.showHistory().isEmpty())
+        {
+            activePlayerIndex--;
+            if (activePlayerIndex < 0) {//it was the first player's turn so we give the turn to the last player.
+                activePlayerIndex = numOfActivePlayers - 1;
+            }
+
+            moveToUndo = moveHistory.showHistory().getLast();
+            moveHistory.removeFromHistory();
+            columnToRemoveFrom = moveToUndo.getColumnIndex();
+            rowToRemoveFrom = gameBoard.getNextPlaceInColumn()[columnToRemoveFrom] + 1;
+            gameBoard.removeDisc(columnToRemoveFrom, rowToRemoveFrom, players[activePlayerIndex].getPieceShape());
+        }
+        else
+        {
+            throw new NoMovesMadeException();
+        }
     }
 }

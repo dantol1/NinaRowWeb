@@ -15,4 +15,15 @@ public class History {
         return moveList;
     }
 
+    public void removeFromHistory(Move moveToRemove)
+    {
+        moveList.remove(moveToRemove);
+    }
+
+    public void removeFromHistory()
+    {
+        //overload that will remove the last move from history - in order to improve performance.
+        moveList.removeLast();
+    }
+
 }

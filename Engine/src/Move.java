@@ -5,6 +5,18 @@ public class Move {
     private int columnIndex;
     private static int moveNum = 0;
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
+    public int getSpecificMoveNum() {
+        return specificMoveNum;
+    }
+
+    public int getColumnIndex() {
+        return columnIndex;
+    }
+
     public Move(int i_playerIndex, int i_columnIndex) {
 
         playerIndex = i_playerIndex;

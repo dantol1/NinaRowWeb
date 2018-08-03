@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 public class Board {
-
+    private static final char EMPTY_CELL = ' ';
     private int columns;
     private int rows;
 
@@ -35,13 +35,56 @@ public class Board {
         nextPlaceInColumn = new int[i_rows];
         Arrays.fill(nextPlaceInColumn,i_rows);
         board = new char[i_rows][i_columns];
+        initializeEmptyBoard();
         columns = i_columns;
         rows = i_rows;
+    }
+
+    private void initializeEmptyBoard()
+    {
+        for(int i = 0; i < rows; i++)
+        {
+            for(int j = 0; j < columns; j++)
+            {
+                board[i][j] = EMPTY_CELL;
+            }
+        }
     }
 
     public char getCellSymbol(int row, int col) throws ArrayIndexOutOfBoundsException {
 
         return board[row][col];
+    }
+
+    public void removeDisc(int colToRemoveFrom, int rowToRemoveFrom, char pieceShape)
+    {
+        //to plan for the future where we will have to remove a disc from the bottom
+        //or remove all the player discs, this will know where to remove the disc/s from.
+
+        board[rowToRemoveFrom][colToRemoveFrom] = ' ';
+        collapseBoard(colToRemoveFrom, rowToRemoveFrom);
+    }
+
+    private void collapseBoard(int colToRemoveFrom, int rowToRemoveFrom)
+    {
+        for(int i  = rowToRemoveFrom; i > 0; i--)
+        {
+            board[i][colToRemoveFrom] = board[i-1][colToRemoveFrom];
+        }
+
+        board[0][colToRemoveFrom] = EMPTY_CELL;
+        updateNextPlaceInCol(colToRemoveFrom);
+    }
+
+    private void updateNextPlaceInCol(int colToRemoveFrom)
+    {
+        for(int i = 0; i < rows; i++)
+        {
+            if(board[i][colToRemoveFrom] == EMPTY_CELL)
+            {
+                nextPlaceInColumn[colToRemoveFrom] = i;
+            }
+        }
     }
 
 }
