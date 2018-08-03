@@ -4,8 +4,42 @@ public class Menu {
 
     private boolean exitGame = false;
     private boolean PreGame = true;
+    private boolean StartGame = false;
+    private boolean LoadedXML = false;
     private StopWatch gameTime = new StopWatch();
     private Game theGame;
+
+    public void setExitGame(boolean exitGame) {
+        this.exitGame = exitGame;
+    }
+
+    public void setTheGame(Game theGame) {
+
+        this.theGame = theGame;
+    }
+    public Game getGame() {
+
+        return theGame;
+    }
+
+
+    public boolean isStartGame() {
+        return StartGame;
+    }
+
+    public void setStartGame(boolean startGame) {
+        StartGame = startGame;
+    }
+
+
+    public boolean isLoadedXML() {
+        return LoadedXML;
+    }
+
+    public void setLoadedXML(boolean loadedXML) {
+        LoadedXML = loadedXML;
+    }
+
 
     public enum MenuOptions {
         SelectGameFile,
@@ -25,51 +59,71 @@ public class Menu {
 
     }
 
-    private void showTime()
+    public String showTime()
     {
-        System.out.println(gameTime.timeRunning());
+        return gameTime.timeRunning();
     }
 
-    private void showBoard()
+    public void showBoard()
     {
         int rows = theGame.getSettings().getRows() + 2;
-        int cols = theGame.getSettings().getColumns() + 3;
+        int cols = theGame.getSettings().getColumns() + 2;
 
         for (int i = 0; i<rows; i++) {
 
-            for (int j = 0; i<cols; j++) {
+            for (int j = 0; j<cols; j++) {
 
-                if ( (i == 0 || i == 1) && (j == 0 || j == 1)) {
+                if ( (i == 0 || i == 1) && (j == 0)) {
 
-                    System.out.println(' ');
+                    System.out.print(' ');
+                }
+                if (i == 0 && j == 1) {
+                    System.out.print(' ');
+                }
+                if ( i== 1 && j == 1) {
+
+                    System.out.print(" X ");
                 }
 
-                if (i == 0 && (j != 0 && j !=1)) {
-
-                    System.out.println(j-1);
+                if (i == 0 && (j>1 && j<cols)) {
+                    if (j>10) {
+                        System.out.print("  ");
+                    }
+                    else {
+                        System.out.print("   ");
+                    }
+                    System.out.print(j-1);
+                    if (j>10) {
+                        System.out.print("  ");
+                    }
+                    else {
+                        System.out.print("  ");
+                    }
                 }
 
-                if (i == 1 && (j != 0 && j !=1)) {
+                if (i == 1 && (j>1 && j<cols)) {
 
-                    System.out.println("__");
+                    System.out.print("--- X ");
                 }
 
                 if ((i>1) && (j == 0)) {
-
-                    System.out.println(i-1);
+                    if (i<11) {
+                        System.out.print(' ');
+                    }
+                    System.out.print(i-1);
                 }
 
-                if ((i>1) && (j == 1 || j == cols-1)) {
+                if ((i>1) && (j == 1)) {
 
-                    System.out.println('|');
+                    System.out.print('|');
                 }
-                if ((i>1) && (j>1 && j<cols-1)) {
+                if ((i>1) && (j>1 && j<cols)) {
 
-                    System.out.println("__");
+                    System.out.print(" ___ |");
                 }
             }
+            System.out.print('\n');
 
-            System.out.println('\n');
         }
     }
 }
