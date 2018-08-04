@@ -279,8 +279,7 @@ public class Game implements Serializable {
         succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
         if(succeeded)
         {
-            moveHistory.AddMoveToHistory(activePlayerIndex, columnToPlaceDisc);
-            changeToNextActivePlayer();
+            endOfTurnActions(columnToPlaceDisc);
         }
 
         return succeeded;
@@ -290,17 +289,23 @@ public class Game implements Serializable {
     {
         boolean succeeded = false;
         Random randomCol = new Random();
-        int colToDrop;
+        int columnToPlaceDisc;
 
         do {
-            colToDrop = randomCol.nextInt(settings.getColumns());
-            succeeded = gameBoard.dropDisc(colToDrop, players[activePlayerIndex].getPieceShape());
+            columnToPlaceDisc = randomCol.nextInt(settings.getColumns());
+            succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
         }while(!succeeded);
 
-        moveHistory.AddMoveToHistory(activePlayerIndex, colToDrop);
-        changeToNextActivePlayer();
+        endOfTurnActions(columnToPlaceDisc);
 
         return succeeded;
+    }
+
+    private void endOfTurnActions(int columnInWhichDiscWasPut)
+    {
+        moveHistory.AddMoveToHistory(activePlayerIndex, columnInWhichDiscWasPut);
+        players[activePlayerIndex].playedTurn();
+        changeToNextActivePlayer();
     }
 
     private void changeToNextActivePlayer()
@@ -326,6 +331,7 @@ public class Game implements Serializable {
             columnToRemoveFrom = moveToUndo.getColumnIndex();
             rowToRemoveFrom = gameBoard.getNextPlaceInColumn()[columnToRemoveFrom] + 1;
             gameBoard.removeDisc(columnToRemoveFrom, rowToRemoveFrom, players[activePlayerIndex].getPieceShape());
+            players[activePlayerIndex].undidTurn();
         }
         else
         {

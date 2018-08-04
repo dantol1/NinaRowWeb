@@ -35,5 +35,8 @@ public class Player {
     public void setHowManyTurnsPlayed(int howManyTurnsPlayed) {
         this.howManyTurnsPlayed = howManyTurnsPlayed;
     }
+
+    public void playedTurn(){ howManyTurnsPlayed++; }
+    public void undidTurn(){ howManyTurnsPlayed--; }
 }
 
