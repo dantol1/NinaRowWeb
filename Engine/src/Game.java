@@ -172,14 +172,19 @@ public class Game implements Serializable {
         if (settings.getVariant() == GameSettings.Variant.Regular
                 || settings.getVariant() == GameSettings.Variant.Popout) {
 
-           for (i= 0; i<settings.getTarget(); i++) {
-             if (gameBoard.getCellSymbol(row,column) == players[activePlayerIndex].getPieceShape()) {
-                 row += rowMovement;
-                 column += colMovement;
-             }
-             else {
-                 break;
-             }
+           for (i = 0; i < settings.getTarget(); i++) {
+               try {
+                   if (gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape()) {
+                       row += rowMovement;
+                       column += colMovement;
+                   } else {
+                       break;
+                   }
+               }
+               catch(ArrayIndexOutOfBoundsException e)
+               {
+                   break;
+               }
            }
            if(i == settings.getTarget())
            {
@@ -188,14 +193,19 @@ public class Game implements Serializable {
         }
         else if(settings.getVariant() == GameSettings.Variant.Circular)
         {
-            for (i= 0; i<settings.getTarget(); i++) {
-                if (gameBoard.getCellSymbol(row,column) == players[activePlayerIndex].getPieceShape()) {
-                    row += rowMovement;
-                    column += colMovement;
-                    row = row % settings.getRows();
-                    column = column % settings.getColumns();
+            for (i = 0; i < settings.getTarget(); i++) {
+                try {
+                    if (gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape()) {
+                        row += rowMovement;
+                        column += colMovement;
+                        row = row % settings.getRows();
+                        column = column % settings.getColumns();
+                    } else {
+                        break;
+                    }
                 }
-                else {
+                catch (ArrayIndexOutOfBoundsException e)
+                {
                     break;
                 }
             }
