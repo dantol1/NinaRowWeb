@@ -159,7 +159,6 @@ public class Game implements Serializable {
     }
 
     private boolean checkConsecutiveDirection(DiscDirection dir, int column) {
-        //TODO: Check if its within boundries of the board
         boolean result = false;
         int row = (gameBoard.getNextPlaceInColumn())[column];
         int rowMovement = 0, colMovement = 0;
