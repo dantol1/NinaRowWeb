@@ -1,7 +1,4 @@
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.Random;
 
 public class Game implements Serializable {
@@ -83,7 +80,14 @@ public class Game implements Serializable {
                              new FileOutputStream(location))) {
             out.writeObject(this);
             out.flush();
+
         }
+    }
+
+    //TODO Implement Load Game
+    public void loadGame() {
+
+
     }
 
     public char[][] returnBoard()
@@ -283,7 +287,7 @@ public class Game implements Serializable {
 
     public boolean playTurn(int columnToPlaceDisc)
     {
-        boolean succeeded = true;
+        boolean succeeded = false;
 
         succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
         if(succeeded)
@@ -346,5 +350,9 @@ public class Game implements Serializable {
         {
             throw new NoMovesMadeException();
         }
+    }
+
+    public History getMoveHistory() {
+        return moveHistory;
     }
 }
