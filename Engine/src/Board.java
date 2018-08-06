@@ -20,11 +20,11 @@ public class Board implements Serializable {
 
     public boolean dropDisc(int i_column, char i_pieceshape){
 
-        if (i_column<0 || i_column>columns) {
+        if (i_column < 0 || i_column >= columns) {
 
             return false;
         }
-        if (nextPlaceInColumn[i_column] != 0) {
+        if (nextPlaceInColumn[i_column] >= 0) {
             board[nextPlaceInColumn[i_column]][i_column] = i_pieceshape;
             nextPlaceInColumn[i_column]--;
 

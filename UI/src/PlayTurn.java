@@ -41,7 +41,7 @@ public class PlayTurn implements Commandable {
                     } while (!validAnswer);
 
                     if (menu.getGame().playTurn(column - 1) == false) {
-
+                        System.out.println("Invalid column selection, Please select a different column.");
                         validAnswer = false;
                     }
                     else {

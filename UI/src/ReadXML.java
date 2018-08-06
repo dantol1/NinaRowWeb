@@ -61,6 +61,7 @@ public class ReadXML implements Commandable {
 
                 int index = input.lastIndexOf('.');
                 extension = input.substring(index+1);
+                extension = extension.toLowerCase();
                 if (extension.matches("xml")) {
 
                     try {

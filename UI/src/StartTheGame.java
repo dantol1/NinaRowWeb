@@ -43,12 +43,11 @@ public class StartTheGame implements Commandable {
         }
         else  if(menu.isGameLoaded() == true)
         {
-            menu.setLoadedXML(true);
             menu.setStartGame(true);
         }
         else {
 
-            System.out.println("Cannot start the game without reading the XML file\n");
+            System.out.println("Cannot start the game without reading the XML file or loading a game.\n");
         }
     }
 }

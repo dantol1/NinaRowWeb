@@ -1,8 +1,9 @@
 import java.io.IOException;
+import java.util.Scanner;
 
 public class SaveGame implements Commandable {
 
-    public static final String FILE_NAME = "SavedGame.dat";
+    //public static final String FILE_NAME = "SavedGame.dat";
 
     @Override
     public String toString() {
@@ -12,9 +13,13 @@ public class SaveGame implements Commandable {
 
     public void Invoke(Menu menu) {
 
+        Scanner sc = new Scanner(System.in);
+        String saveFileName;
         if (menu.isStartGame()) {
+            System.out.println("Please enter the name you want to save the game as:");
+            saveFileName = sc.nextLine();
             try {
-                menu.getGame().saveGame(FILE_NAME);
+                menu.getGame().saveGame(saveFileName);
                 System.out.println("Saved Successfully!");
             } catch (IOException e) {
 

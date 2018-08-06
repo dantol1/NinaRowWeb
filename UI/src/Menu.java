@@ -117,6 +117,7 @@ public class Menu {
 
         this.StartGame = false;
         this.LoadedXML = false;
+        this.gameLoaded = false;
     }
 
     public void showBoard()

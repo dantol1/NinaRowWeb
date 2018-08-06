@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class LoadGame implements Commandable {
 
@@ -11,8 +12,13 @@ public class LoadGame implements Commandable {
 
     public void Invoke(Menu menu) {
 
+        Scanner sc = new Scanner(System.in);
+        String saveFileName;
         try {
-            menu.setTheGame(GameFactory.LoadGame(SaveGame.FILE_NAME));
+            System.out.println("Please enter a save file name to load from:");
+            saveFileName = sc.nextLine();
+            menu.setTheGame(GameFactory.LoadGame(saveFileName));
+            menu.showBoard();
             System.out.println("Loaded Successfully!");
             menu.setGameLoaded(true);
         } catch (FileNotFoundException e) {
