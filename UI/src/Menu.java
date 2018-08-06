@@ -7,6 +7,16 @@ public class Menu {
     private boolean exitGame = false;
     private boolean StartGame = false;
     private boolean LoadedXML = false;
+    private boolean gameLoaded  = false;
+
+    public boolean isGameLoaded() {
+        return gameLoaded;
+    }
+
+    public void setGameLoaded(boolean gameLoaded) {
+        this.gameLoaded = gameLoaded;
+    }
+
     private StopWatch gameTime = new StopWatch();
     private Commandable[] commands = new Commandable[] {new ReadXML(), new StartTheGame()
     ,new GameDetails(), new PlayTurn(), new ShowHistory(), new ExitGame(), new SaveGame(),

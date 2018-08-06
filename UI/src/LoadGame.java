@@ -11,23 +11,18 @@ public class LoadGame implements Commandable {
 
     public void Invoke(Menu menu) {
 
-        if (menu.isStartGame()) {
-            try {
-                menu.getGame().loadGame(SaveGame.FILE_NAME);
-                System.out.println("Loaded Successfully!");
-            } catch (FileNotFoundException e) {
+        try {
+            menu.setTheGame(GameFactory.LoadGame(SaveGame.FILE_NAME));
+            System.out.println("Loaded Successfully!");
+            menu.setGameLoaded(true);
+        } catch (FileNotFoundException e) {
 
-                System.out.println("No Saved Game Found");
-            } catch (IOException e) {
+            System.out.println("No Saved Game Found");
+        } catch (IOException e) {
 
-                System.out.println("Error: Load Unsuccessfully");
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        else {
-
-            System.out.println("Game has not been started!\n");
+            System.out.println("Error: Load Unsuccessful");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

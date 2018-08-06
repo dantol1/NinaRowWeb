@@ -8,7 +8,7 @@ public class GameDetails implements Commandable {
 
     public void Invoke(Menu menu) {
 
-        if (menu.isLoadedXML()) {
+        if (menu.isLoadedXML() || menu.isGameLoaded()) {
             menu.showBoard();
             System.out.println(String.format("Target: %d", menu.getGame().getSettings().getTarget()));
             if (menu.isStartGame()) {
