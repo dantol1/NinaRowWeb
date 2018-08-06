@@ -1,4 +1,6 @@
-public class GameSettings {
+import java.io.Serializable;
+
+public class GameSettings implements Serializable {
     public enum GameType{
         Basic,
         MultiPlayer,

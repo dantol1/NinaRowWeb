@@ -82,13 +82,15 @@ public class Game implements Serializable {
 
     public void saveGame(String fileName) throws IOException
     {
-        try (ObjectOutputStream out =
-                     new ObjectOutputStream(
-                             new FileOutputStream(fileName))) {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
             out.writeObject(this);
             out.flush();
-
         }
+        catch (IOException e) {
+
+            throw e;
+       }
     }
 
 

@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Board {
+public class Board implements Serializable {
     private static final char EMPTY_CELL = ' ';
     private int columns;
     private int rows;

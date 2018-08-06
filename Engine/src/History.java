@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class History {
+public class History implements Serializable {
 
     private LinkedList<Move> moveList = new LinkedList<>();
 
