@@ -1,4 +1,6 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;
 
 public class Game implements Serializable {
@@ -73,21 +75,27 @@ public class Game implements Serializable {
         players[0].setPlayer("Player 1",'X',Player.Type.Human);
     }
 
-    public void saveGame(String location) throws IOException
+    public void saveGame(String fileName) throws IOException
     {
         try (ObjectOutputStream out =
                      new ObjectOutputStream(
-                             new FileOutputStream(location))) {
+                             new FileOutputStream(fileName))) {
             out.writeObject(this);
             out.flush();
 
         }
     }
 
-    //TODO Implement Load Game
-    public void loadGame() {
 
+    public void loadGame(String fileName) throws ClassNotFoundException, IOException {
 
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
+
+        this.gameBoard = ((Game)in.readObject()).gameBoard;
+        this.moveHistory = ((Game)in.readObject()).moveHistory;
+        this.settings = ((Game)in.readObject()).settings;
+        this.players = ((Game)in.readObject()).players;
+        this.numOfActivePlayers = ((Game)in.readObject()).numOfActivePlayers;
     }
 
     public char[][] returnBoard()

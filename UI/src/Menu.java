@@ -10,7 +10,7 @@ public class Menu {
     private StopWatch gameTime = new StopWatch();
     private Commandable[] commands = new Commandable[] {new ReadXML(), new StartTheGame()
     ,new GameDetails(), new PlayTurn(), new ShowHistory(), new ExitGame(), new SaveGame(),
-    new LoadGame(), };
+    new LoadGame(),new UndoMove() };
     private Game theGame;
 
     public void setExitGame(boolean exitGame) {
@@ -51,25 +51,6 @@ public class Menu {
         LoadedXML = loadedXML;
     }
 
-
-    public enum MenuOptions {
-        SelectGameFile,
-        LoadGame,
-        History,
-        PlayTurn,
-        SaveGame,
-        Exit,
-        Stop,
-        StartGame,
-        UndoMove,
-        ShowGameDetails
-    }
-
-    public void showMenu()
-    {
-
-    }
-
     public String showTime()
     {
         return gameTime.timeRunning();
@@ -85,7 +66,6 @@ public class Menu {
             userInput = getUserInput();
             commands[userInput-1].Invoke(this);
         }
-
     }
 
     public int getUserInput() {

@@ -2,6 +2,12 @@ import java.util.Scanner;
 
 public class StartTheGame implements Commandable {
 
+    @Override
+    public String toString(){
+
+        return "2. Start Game";
+    }
+
     public void Invoke(Menu menu) {
 
         if (menu.isLoadedXML() == true) {

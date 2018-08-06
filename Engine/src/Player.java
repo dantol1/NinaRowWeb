@@ -22,6 +22,16 @@ public class Player {
 
     }
 
+    public boolean isComputer() {
+
+        if (playerType == Type.Computer) {
+
+            return true;
+        }
+
+        return false;
+    }
+
     public String getName(){
 
         return name;

@@ -10,6 +10,12 @@ public class ReadXML implements Commandable {
 
     private InputStream inputStream;
 
+    @Override
+    public String toString(){
+
+        return "1. ReadXML";
+    }
+
     public void Invoke(Menu menu){
 
         if (menu.isStartGame() == false) {

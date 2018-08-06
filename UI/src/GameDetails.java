@@ -1,5 +1,11 @@
 public class GameDetails implements Commandable {
 
+    @Override
+    public String toString(){
+
+        return "3. Show Game Details";
+    }
+
     public void Invoke(Menu menu) {
 
         menu.showBoard();
