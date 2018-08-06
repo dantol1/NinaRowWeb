@@ -167,7 +167,7 @@ public class Game implements Serializable {
             state = GameState.GameWin;
         }
 
-
+        changeToNextActivePlayer();
         return state;
     }
 
@@ -177,7 +177,7 @@ public class Game implements Serializable {
 
     private boolean checkConsecutiveDirection(DiscDirection dir, int column) {
         boolean result = false;
-        int row = (gameBoard.getNextPlaceInColumn())[column];
+        int row = (gameBoard.getNextPlaceInColumn())[column]+1;
         int rowMovement = 0, colMovement = 0;
         int i;
         movement moveChange = getMovementByDirection(dir);
@@ -193,7 +193,8 @@ public class Game implements Serializable {
                    if (gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape()) {
                        row += rowMovement;
                        column += colMovement;
-                   } else {
+                   }
+                   else {
                        break;
                    }
                }
@@ -216,7 +217,8 @@ public class Game implements Serializable {
                         column += colMovement;
                         row = row % settings.getRows();
                         column = column % settings.getColumns();
-                    } else {
+                    }
+                    else {
                         break;
                     }
                 }
@@ -331,7 +333,6 @@ public class Game implements Serializable {
     {
         moveHistory.AddMoveToHistory(activePlayerIndex, columnInWhichDiscWasPut);
         players[activePlayerIndex].playedTurn();
-        changeToNextActivePlayer();
     }
 
     private void changeToNextActivePlayer()

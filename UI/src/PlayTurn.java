@@ -17,52 +17,59 @@ public class PlayTurn implements Commandable {
         String possibleWinnerName = menu.getGame().getPlayerByIndex(menu.getGame().getActivePlayerIndex())
                 .getName();
 
+        if (menu.isStartGame()) {
+            Game.GameState gameState = null;
 
-        if (!menu.getGame().getPlayerByIndex(menu.getGame().getActivePlayerIndex()).isComputer()) {
-            //A Human Turn
-            menu.showBoard();
+            if (!menu.getGame().getPlayerByIndex(menu.getGame().getActivePlayerIndex()).isComputer()) {
+                //A Human Turn
+                menu.showBoard();
 
-            do {
                 do {
+                    do {
 
-                    System.out.println("Please specify the column number to drop the disc: ");
-                    Scanner scanner = new Scanner(System.in);
+                        System.out.println("Please specify the column number to drop the disc: ");
+                        Scanner scanner = new Scanner(System.in);
 
-                    try {
-                        column = Integer.parseInt(scanner.nextLine());
-                        validAnswer = true;
-                    } catch (NumberFormatException e) {
+                        try {
+                            column = Integer.parseInt(scanner.nextLine());
+                            validAnswer = true;
+                        } catch (NumberFormatException e) {
 
-                        System.out.println("Please specify a valid column number");
+                            System.out.println("Please specify a valid column number");
+                        }
+
+                    } while (!validAnswer);
+
+                    if (menu.getGame().playTurn(column - 1) == false) {
+
+                        validAnswer = false;
                     }
+                    else {
 
-                } while (!validAnswer);
+                        validMove = true;
+                    }
+                } while (!validMove);
+            } else { //A Computer Turn
 
-                if (menu.getGame().playTurn(column - 1) == false) {
+                menu.getGame().playComputerTurn();
+            }
 
-                    validAnswer = false;
-                } else {
+            menu.showBoard();
+            gameState = menu.getGame().isGameEnded(column-1);
 
-                    validMove = true;
-                }
-            } while (!validMove);
+            if (gameState == Game.GameState.GameTie) {
+
+                System.out.println("Game Ended With Tie");
+                menu.setNewGame();
+            } else if (gameState == Game.GameState.GameWin) {
+
+                System.out.println(String.format("Game Ended, The Winner is: %s", possibleWinnerName));
+                menu.setNewGame();
+            }
         }
-        else { //A Computer Turn
+        else {
 
-            menu.getGame().playComputerTurn();
-        }
-
-        menu.showBoard();
-
-        if (menu.getGame().isGameEnded(column) == Game.GameState.GameTie){
-
-            System.out.println("Game Ended With Tie");
-            menu.setNewGame();
-        }
-        else if (menu.getGame().isGameEnded(column) == Game.GameState.GameWin) {
-
-            System.out.println(String.format("Game Ended, The Winner is: %s", possibleWinnerName));
-            menu.setNewGame();
+            System.out.println("Game has not been started!\n");
         }
 
     }

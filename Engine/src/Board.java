@@ -19,7 +19,7 @@ public class Board {
 
     public boolean dropDisc(int i_column, char i_pieceshape){
 
-        if (i_column<columns || i_column>columns) {
+        if (i_column<0 || i_column>columns) {
 
             return false;
         }
@@ -36,12 +36,12 @@ public class Board {
 
     public Board (int i_columns, int i_rows){
 
-        nextPlaceInColumn = new int[i_rows];
-        Arrays.fill(nextPlaceInColumn,i_rows);
+        nextPlaceInColumn = new int[i_columns];
+        Arrays.fill(nextPlaceInColumn,i_rows-1);
         board = new char[i_rows][i_columns];
-        initializeEmptyBoard();
         columns = i_columns;
         rows = i_rows;
+        initializeEmptyBoard();
     }
 
     private void initializeEmptyBoard()

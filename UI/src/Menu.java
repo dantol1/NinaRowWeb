@@ -28,6 +28,9 @@ public class Menu {
 
     public void printCommands() {
 
+
+        System.out.print("\n");
+
         for (Commandable commandsItr : commands) {
 
             System.out.println(commandsItr.toString());
@@ -70,26 +73,31 @@ public class Menu {
 
     public int getUserInput() {
 
+        NumberFormatException e1 = null;
         int userInput = 0;
         boolean validInput = false;
         Scanner scanner = new Scanner(System.in);
+        System.out.print("\nInput: ");
 
         do {
             try {
                 userInput = Integer.parseInt(scanner.nextLine());
+                System.out.print("\n");
             } catch (NumberFormatException e) {
 
                 System.out.println("Invalid Input, please choose a number of the available options");
+                e1 = e;
             }
+            if (e1 == null) {
+                if (userInput > 0 && userInput < commands.length+1) {
 
-            if (userInput > 0 && userInput<commands.length) {
+                    validInput = true;
+                } else {
 
-                validInput = true;
+                    System.out.println("Invalid Input, please choose a number of the available options");
+                }
             }
-            else {
-
-                System.out.println("Invalid Input, please choose a number of the available option");
-            }
+            e1 = null;
         } while (!validInput);
 
         return userInput;
@@ -155,7 +163,7 @@ public class Menu {
                 }
                 if ((i>1) && (j>1 && j<cols)) { //Printing the columns
                     System.out.print(" _");
-                    if(theGame.returnBoard()[i-2][j-2] != ' ') {
+                    if((theGame.returnBoard())[i-2][j-2] != ' ') {
                         System.out.print(theGame.returnBoard()[i-2][j-2]);
                     }
                     else{
@@ -168,5 +176,6 @@ public class Menu {
             System.out.print('\n');
 
         }
+        System.out.print('\n');
     }
 }

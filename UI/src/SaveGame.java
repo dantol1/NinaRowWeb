@@ -12,13 +12,18 @@ public class SaveGame implements Commandable {
 
     public void Invoke(Menu menu) {
 
-        try {
-            menu.getGame().saveGame(FILE_NAME);
-            System.out.println("Saved Successfully!");
-        }
-        catch (IOException e) {
+        if (menu.isStartGame()) {
+            try {
+                menu.getGame().saveGame(FILE_NAME);
+                System.out.println("Saved Successfully!");
+            } catch (IOException e) {
 
-            System.out.println("Error: Save Unsuccessful");
+                System.out.println("Error: Save Unsuccessful");
+            }
+        }
+        else {
+
+            System.out.println("Game has not been started!\n");
         }
     }
 }

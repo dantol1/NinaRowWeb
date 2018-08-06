@@ -22,8 +22,8 @@ public class StopWatch
             seconds -= 60;
             minutes++;
         }
-
-        time = String.format("%d:%d", minutes, seconds);
+        //TODO check the time format
+        time = String.format("%f:%f", minutes, seconds);
 
         return time;
     }

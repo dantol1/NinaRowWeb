@@ -13,7 +13,7 @@ public class ReadXML implements Commandable {
     @Override
     public String toString(){
 
-        return "1. ReadXML";
+        return "1. Read XML File";
     }
 
     public void Invoke(Menu menu){

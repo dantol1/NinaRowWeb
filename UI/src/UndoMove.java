@@ -11,6 +11,7 @@ public class UndoMove implements Commandable {
         if (menu.isStartGame()) {
             try {
                 menu.getGame().undoMove();
+                menu.showBoard();
             } catch (NoMovesMadeException e) {
                 System.out.println(e.toString());
             }
