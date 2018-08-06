@@ -58,7 +58,7 @@ public class Game implements Serializable {
         this.activePlayerIndex = activePlayerIndex % numOfActivePlayers;
     }
 
-    private int activePlayerIndex;
+    private int activePlayerIndex = 0;
     private boolean ended = false;
 
     public Game(GameSettings gs)
@@ -72,7 +72,12 @@ public class Game implements Serializable {
 
         moveHistory = new History();
         players = new Player[numOfActivePlayers];
-        players[0].setPlayer("Player 1",'X',Player.Type.Human);
+
+        for (int i = 0; i<numOfActivePlayers; i++) {
+            players[i] = new Player();
+        }
+
+
     }
 
     public void saveGame(String fileName) throws IOException
@@ -295,7 +300,7 @@ public class Game implements Serializable {
 
     public boolean playTurn(int columnToPlaceDisc)
     {
-        boolean succeeded = false;
+        boolean succeeded = true;
 
         succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
         if(succeeded)
