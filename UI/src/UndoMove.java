@@ -8,11 +8,16 @@ public class UndoMove implements Commandable {
 
     public void Invoke(Menu menu) {
 
-        try {
-            menu.getGame().undoMove();
+        if (menu.isStartGame()) {
+            try {
+                menu.getGame().undoMove();
+            } catch (NoMovesMadeException e) {
+                System.out.println(e.toString());
+            }
         }
-        catch (NoMovesMadeException e) {
-            System.out.println(e.toString());
+        else {
+
+            System.out.println("Game has not been started!\n");
         }
     }
 }
