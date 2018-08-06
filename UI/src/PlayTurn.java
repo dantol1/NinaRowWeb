@@ -14,11 +14,11 @@ public class PlayTurn implements Commandable {
         boolean validAnswer = false;
         boolean validMove = false;
         int column = 0;
-        String possibleWinnerName = menu.getGame().getPlayerByIndex(menu.getGame().getActivePlayerIndex())
-                .getName();
 
         if (menu.isStartGame()) {
             Game.GameState gameState = null;
+            String possibleWinnerName = menu.getGame().getPlayerByIndex(menu.getGame().getActivePlayerIndex())
+                    .getName();
 
             if (!menu.getGame().getPlayerByIndex(menu.getGame().getActivePlayerIndex()).isComputer()) {
                 //A Human Turn
@@ -55,7 +55,7 @@ public class PlayTurn implements Commandable {
             }
 
             menu.showBoard();
-            gameState = menu.getGame().isGameEnded(column-1);
+            gameState = menu.getGame().isGameEnded(menu.getGame().getMoveHistory().showHistory().getLast().getColumnIndex());
 
             if (gameState == Game.GameState.GameTie) {
 

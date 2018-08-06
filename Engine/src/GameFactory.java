@@ -39,7 +39,7 @@ public class GameFactory {
         if (columns > 30 || columns < 3) {
             message += "Columns is not within boundries [3,30]";
         }
-        if (target > Math.min(rows,columns)) {
+        if (target >= Math.min(rows,columns)) {
             message += "Target is bigger than Columns and/or Rows";
         }
 
