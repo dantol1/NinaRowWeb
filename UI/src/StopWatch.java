@@ -1,3 +1,10 @@
+import sun.util.calendar.LocalGregorianCalendar;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class StopWatch
 {
     private long startTime;
@@ -7,6 +14,7 @@ public class StopWatch
     {
         startTime = currentTime = System.nanoTime();
     }
+
 
     public String timeRunning()
     {
@@ -23,7 +31,7 @@ public class StopWatch
             minutes++;
         }
         //TODO check the time format
-        time = String.format("%f:%f", minutes, seconds);
+        time = String.format("%d:%d", (int)minutes, (int)seconds);
 
         return time;
     }
