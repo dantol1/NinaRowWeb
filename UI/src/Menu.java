@@ -23,6 +23,11 @@ public class Menu {
     new LoadGame(),new UndoMove() };
     private Game theGame;
 
+    public StopWatch getStopWatch() {
+
+        return gameTime;
+    }
+
     public void setExitGame(boolean exitGame) {
         this.exitGame = exitGame;
     }

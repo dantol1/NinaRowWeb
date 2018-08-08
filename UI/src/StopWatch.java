@@ -4,35 +4,60 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class StopWatch
 {
     private long startTime;
     private long currentTime;
 
-    public  StopWatch()
-    {
-        startTime = currentTime = System.nanoTime();
+    public void StartTime() {
+
+        startTime = System.currentTimeMillis();
     }
 
+    public String timeRunning() {
 
-    public String timeRunning()
-    {
-        long runTime;
-        double minutes = 0, seconds;
         String time;
+        long seconds;
+        long realSeconds;
+        long realMinutes;
 
-        currentTime = System.nanoTime();
-        runTime = currentTime - startTime;
-        seconds = runTime * 0.0000000001;
-        while(seconds > 60)
-        {
-            seconds -= 60;
-            minutes++;
+        long currentTime = System.currentTimeMillis();
+
+
+        long runTime = currentTime - startTime;
+
+        seconds = TimeUnit.MILLISECONDS.toSeconds(runTime);
+
+
+
+        realMinutes = (seconds / 60);
+        if (realMinutes > 60) {
+
+            realMinutes %=60;
         }
-        //TODO check the time format
-        time = String.format("%d:%d", (int)minutes, (int)seconds);
+        realSeconds = seconds % 60;
+
+        if (realMinutes / 10  == 0) {
+
+            time = "0" + realMinutes + ":";
+        }
+        else {
+
+            time = realMinutes + ":";
+        }
+
+        if (realSeconds / 10 == 0) {
+
+            time = time + "0" + realSeconds;
+        }
+        else {
+
+            time = time + realSeconds;
+        }
 
         return time;
+
     }
 }

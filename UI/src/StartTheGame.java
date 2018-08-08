@@ -41,6 +41,7 @@ public class StartTheGame implements Commandable {
                 System.out.println("Please specify a name for Player 2:");
                 menu.getGame().getPlayerByIndex(1).setPlayer(scanner.nextLine(), 'O', player2Type);
                 menu.setStartGame(true);
+                menu.getStopWatch().StartTime();
             } else if (menu.isGameLoaded() == true) {
                 menu.setStartGame(true);
             } else {
