@@ -27,16 +27,18 @@ public class StartTheGame implements Commandable {
                     if (input.matches("Y") || input.matches("y")) {
 
                         player2Type = Player.Type.Computer;
+                        validInput = true;
 
                     } else if (input.matches("N") || input.matches("n")) {
 
                         player2Type = Player.Type.Human;
+                        validInput = true;
 
                     } else {
 
                         System.out.println("Incorrect Input -> Please choose Y for yes, or N for no");
                     }
-                } while (validInput);
+                } while (!validInput);
 
                 System.out.println("Please specify a name for Player 2:");
                 menu.getGame().getPlayerByIndex(1).setPlayer(scanner.nextLine(), 'O', player2Type);

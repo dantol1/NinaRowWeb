@@ -19,6 +19,7 @@ public class LoadGame implements Commandable {
             saveFileName = sc.nextLine();
             menu.setTheGame(GameFactory.LoadGame(saveFileName));
             menu.showBoard();
+            menu.setStartGame(false);
             System.out.println("Loaded Successfully!");
             menu.setGameLoaded(true);
         } catch (FileNotFoundException e) {
