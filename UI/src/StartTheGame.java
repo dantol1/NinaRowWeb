@@ -46,6 +46,7 @@ public class StartTheGame implements Commandable {
                 menu.getStopWatch().StartTime();
             } else if (menu.isGameLoaded() == true) {
                 menu.setStartGame(true);
+                menu.getStopWatch().StartTime();
             } else {
 
                 System.out.println("Cannot start the game without reading the XML file or loading a game.\n");
