@@ -1,9 +1,26 @@
-public class Program {
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-    public static void main(String[] args) {
+public class Program extends Application {
 
-        GameUI theGame = new GameUI();
+    public static void main(String[] args)
+    {
+        launch(args);
+    }
 
-        theGame.Run();
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+        Parent root = FXMLLoader.load(getClass().getResource("GUI.fxml"));
+        primaryStage.setTitle("N In a Row");
+        primaryStage.setScene(new Scene(root, 700, 544));
+        Controller myController = new Controller();
+        myController.setTheStage(primaryStage);
+        primaryStage.show();
+
     }
 }

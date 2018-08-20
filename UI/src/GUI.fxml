@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fx:id="scrollPaneSystem" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="560.0" prefWidth="702.0">
+         <children>
+            <GridPane prefHeight="253.0" prefWidth="206.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="129.20001831054688" minHeight="10.0" prefHeight="77.20000305175782" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="105.19998397827149" minHeight="10.0" prefHeight="79.99999389648437" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="86.4" minHeight="10.0" prefHeight="76.00000610351563" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label fx:id="IdLabel1" text="Label" textFill="#1500ff">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets bottom="60.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="NameLabel1" text="Label" textFill="#1500ff">
+                     <padding>
+                        <Insets bottom="30.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="HowMuchTurnsLabel1" text="Label" textFill="#1500ff">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="KindOfLabel1" text="Label" textFill="#1500ff">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets top="30.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="IdLabel2" layoutX="10.0" layoutY="20.0" text="Label" textFill="RED" GridPane.columnIndex="1">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets bottom="60.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="NameLabel2" layoutX="10.0" layoutY="35.0" prefHeight="82.0" prefWidth="54.0" text="Label" textFill="RED" GridPane.columnIndex="1">
+                     <padding>
+                        <Insets bottom="30.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="HowMuchTurnsLabel2" layoutX="10.0" layoutY="50.0" text="Label" textFill="#ff0000" GridPane.columnIndex="1">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="KindOfLabel2" layoutX="10.0" layoutY="65.0" text="Label" textFill="RED" GridPane.columnIndex="1">
+                     <padding>
+                        <Insets left="10.0" top="30.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="IdLabel3" layoutX="10.0" layoutY="20.0" text="Label" textFill="#2aff00" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="60.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="NameLabel3" layoutX="10.0" layoutY="35.0" text="Label" textFill="#2aff00" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="30.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="HowMuchTurnsLabel3" layoutX="10.0" layoutY="50.0" text="Label" textFill="#2aff00" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="KindOfLabel3" layoutX="10.0" layoutY="65.0" text="Label" textFill="#2aff00" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="10.0" top="30.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="IdLabel4" layoutX="10.0" layoutY="20.0" text="Label" textFill="#9602a9" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="60.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="NameLabel4" layoutX="10.0" layoutY="35.0" text="Label" textFill="#9602a9" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="30.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="HowMuchTurnsLabel4" layoutX="10.0" layoutY="50.0" text="Label" textFill="#9602a9" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="KindOfLabel4" layoutX="10.0" layoutY="65.0" text="Label" textFill="#9602a9" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets left="10.0" top="30.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="IdLabel5" layoutX="10.0" layoutY="20.0" text="Label" textFill="#ff8206" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets bottom="60.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="NameLabel5" layoutX="10.0" layoutY="35.0" text="Label" textFill="#ff8206" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets bottom="30.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="HowMuchTurnsLabel5" layoutX="10.0" layoutY="50.0" text="Label" textFill="#ff8206" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="KindOfLabel5" layoutX="10.0" layoutY="35.0" text="Label" textFill="#ff8206" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets left="10.0" top="30.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="IdLabel6" layoutX="10.0" layoutY="215.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets bottom="60.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="NameLabel6" layoutX="10.0" layoutY="230.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets bottom="30.0" left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="HowMuchTurnsLabel6" layoutX="10.0" layoutY="244.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="KindOfLabel6" layoutX="10.0" layoutY="230.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <padding>
+                        <Insets left="10.0" top="30.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </GridPane>
+            <HBox layoutX="324.0" layoutY="3.0" prefHeight="100.0" prefWidth="371.0" spacing="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Button fx:id="StartGameButton" disable="true" mnemonicParsing="false" onAction="#startTheGame" prefHeight="30.0" prefWidth="98.0" text="Start Game" />
+                  <Button fx:id="StopGameButton" disable="true" mnemonicParsing="false" onAction="#stopTheGame" prefHeight="30.0" prefWidth="98.0" text="Stop Game" />
+                  <Button fx:id="ButtonXMLLoad" mnemonicParsing="false" onAction="#chooseXML" prefHeight="30.0" prefWidth="105.0" text="Load XML" />
+               </children>
+               <padding>
+                  <Insets left="30.0" top="10.0" />
+               </padding>
+            </HBox>
+            <VBox layoutY="254.0" prefHeight="298.0" prefWidth="110.0" spacing="10.0">
+               <children>
+                  <Button fx:id="ReplayButton" mnemonicParsing="false" onAction="#showReplay" prefHeight="26.0" prefWidth="100.0" text="Replay" />
+                  <MenuButton fx:id="ChooseStyleMenuButton" alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Style" textAlignment="CENTER">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#choosedStyle1" text="Style 1" />
+                      <MenuItem mnemonicParsing="false" onAction="#choosedStyle2" text="Style 2" />
+                        <MenuItem mnemonicParsing="false" onAction="#choosedStyle3" text="Style 3" />
+                    </items>
+                  </MenuButton>
+               </children>
+               <padding>
+                  <Insets left="5.0" top="10.0" />
+               </padding>
+            </VBox>
+         </children></AnchorPane>
+  </content>
+</ScrollPane>
