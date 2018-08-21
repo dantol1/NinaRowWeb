@@ -8,6 +8,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.xml.bind.JAXBException;
@@ -20,6 +24,7 @@ import java.nio.file.Paths;
 
 public class Controller {
 
+    private final static int TILE_SIZE = 80;
     public Game getTheGame() {
         return theGame;
     }
@@ -193,6 +198,7 @@ public class Controller {
 
                 theGame = (GameFactory.CreateGame(inputstream));
                 StartGameButton.setDisable(false);
+                printBoard(theGame.getSettings().getColumns(),theGame.getSettings().getRows());
             } catch (FileDataException e) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -205,6 +211,38 @@ public class Controller {
         }
 
 
+    }
+
+    private void printBoard(double columns, double rows) {
+
+        double widthOfGrid = ((columns) * (TILE_SIZE + 5) + TILE_SIZE / 4)+8, heightOfGrid = ((rows) * (TILE_SIZE + 5) + TILE_SIZE / 4)+8;
+
+        if (columns * TILE_SIZE < gamePane.getWidth())
+        {
+            gamePane.setPrefWidth(columns * TILE_SIZE);
+        }
+        if (rows * TILE_SIZE < gamePane.getHeight())
+        {
+            gamePane.setPrefHeight(rows * TILE_SIZE);
+        }
+
+        Shape gridShape = new Rectangle(widthOfGrid,heightOfGrid);
+
+        for (int i = 0; i<rows; i++) {
+            for (int j = 0; j<columns; j++) {
+                Circle circle = new Circle(TILE_SIZE / 2);
+                circle.setCenterX(TILE_SIZE / 2);
+                circle.setCenterY(TILE_SIZE / 2);
+                circle.setTranslateX(j * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                circle.setTranslateY(i * (TILE_SIZE + 5) + TILE_SIZE / 4);
+
+                gridShape = Shape.subtract(gridShape,circle);
+            }
+        }
+
+        gridShape.setFill(Color.MEDIUMPURPLE);
+
+        gamePane.setContent(gridShape);
     }
 
     @FXML
@@ -225,6 +263,7 @@ public class Controller {
     @FXML
     void showReplay(ActionEvent event) {
 
+        printBoard(30,20);
     }
 
     @FXML
