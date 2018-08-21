@@ -1,13 +1,22 @@
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Game implements Serializable {
 
+    public HashSet<Player> getPlayersWon() {
+        return playersWon;
+    }
+
+    private HashSet<Player> playersWon;
+
     public enum GameState {
         GameWin,
         GameTie,
+        SeveralPlayersWonTie,
         GameNotEnded
     }
 
@@ -45,7 +54,7 @@ public class Game implements Serializable {
         }
         else {
 
-           return players[i];
+            return players[i];
 
         }
     }
@@ -90,7 +99,7 @@ public class Game implements Serializable {
         catch (IOException e) {
 
             throw e;
-       }
+        }
     }
 
 
@@ -119,58 +128,97 @@ public class Game implements Serializable {
 
         boolean gameEnded = false;
         GameState state = null;
+        HashSet<Player> winningPlayers = new HashSet<>();
 
-        if (checkConsecutiveDirection(DiscDirection.Down,column) == true)
+        if(settings.getVariant() == GameSettings.Variant.Regular
+                || settings.getVariant() == GameSettings.Variant.Popout)
         {
-            gameEnded = true;
+            gameEnded = checkAllDirectionsForWin(column, gameBoard.getNextPlaceInColumn()[column] + 1);
         }
-        else if (checkConsecutiveDirection(DiscDirection.Left,column) == true)
+        else if(settings.getVariant() == GameSettings.Variant.Circular)
         {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.Up,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.Right,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalLeft,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalLeft,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalRight,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalRight,column) == true)
-        {
-            gameEnded = true;
+            for(int i = 0; i < settings.getRows(); i++)
+            {
+                if(checkAllDirectionsForWin(column, i))
+                {
+                    gameEnded = true;
+                    for(Player p : this.players)
+                    {
+                        if(p.getPieceShape() == this.gameBoard.getCellSymbol(i, column))
+                        {
+                            winningPlayers.add(p);
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         if (gameEnded == false) {
 
-           if(checkGameTie() == true) {
+            if(checkGameTie() == true) {
 
-               state = GameState.GameTie;
-           }
-           else {
+                state = GameState.GameTie;
+            }
+            else {
 
-               state = GameState.GameNotEnded;
-           }
+                state = GameState.GameNotEnded;
+            }
         }
         else
         {
-            state = GameState.GameWin;
+            if(winningPlayers.size() == 1)
+                state = GameState.GameWin;
+            else
+            {
+                state = GameState.SeveralPlayersWonTie;
+                playersWon = winningPlayers;
+            }
+
         }
 
         changeToNextActivePlayer();
         return state;
+    }
+
+    private boolean checkAllDirectionsForWin(int column, int row)
+    {
+        boolean gameEnded = false;
+
+        if (checkConsecutiveDirection(DiscDirection.Down,column, row) == true)
+        {
+            gameEnded = true;
+        }
+        else if (checkConsecutiveDirection(DiscDirection.Left,column, row) == true)
+        {
+            gameEnded = true;
+        }
+        else if (checkConsecutiveDirection(DiscDirection.Up,column, row) == true)
+        {
+            gameEnded = true;
+        }
+        else if (checkConsecutiveDirection(DiscDirection.Right,column, row) == true)
+        {
+            gameEnded = true;
+        }
+        else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalLeft,column, row) == true)
+        {
+            gameEnded = true;
+        }
+        else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalLeft,column, row) == true)
+        {
+            gameEnded = true;
+        }
+        else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalRight,column, row) == true)
+        {
+            gameEnded = true;
+        }
+        else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalRight,column, row) == true)
+        {
+            gameEnded = true;
+        }
+
+        return gameEnded;
     }
 
     public GameSettings getSettings() {
@@ -187,53 +235,64 @@ public class Game implements Serializable {
         rowMovement = moveChange.rowMovement;
         colMovement = moveChange.colMovement;
 
-        if (settings.getVariant() == GameSettings.Variant.Regular
-                || settings.getVariant() == GameSettings.Variant.Popout) {
-
-           for (i = 0; i < settings.getTarget(); i++) {
-               try {
-                   if (gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape()) {
-                       row += rowMovement;
-                       column += colMovement;
-                   }
-                   else {
-                       break;
-                   }
-               }
-               catch(ArrayIndexOutOfBoundsException e)
-               {
-                   break;
-               }
-           }
-           if(i == settings.getTarget())
-           {
-               result = true;
-           }
-        }
-        else if(settings.getVariant() == GameSettings.Variant.Circular)
-        {
-            for (i = 0; i < settings.getTarget(); i++) {
-                try {
-                    if (gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape()) {
-                        row += rowMovement;
-                        column += colMovement;
-                        row = row % settings.getRows();
-                        column = column % settings.getColumns();
-                    }
-                    else {
-                        break;
-                    }
+        for (i = 0; i < settings.getTarget(); i++) {
+            try {
+                if (gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape()) {
+                    row += rowMovement;
+                    column += colMovement;
                 }
-                catch (ArrayIndexOutOfBoundsException e)
-                {
+                else {
                     break;
                 }
             }
-            if(i == settings.getTarget())
+            catch(ArrayIndexOutOfBoundsException e)
             {
-                result = true;
+                break;
             }
         }
+        if(i == settings.getTarget())
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    private boolean checkConsecutiveDirection(DiscDirection dir, int column, int row) {
+        boolean result = false;
+        int rowMovement = 0, colMovement = 0;
+        int i;
+        movement moveChange = getMovementByDirection(dir);
+
+        rowMovement = moveChange.rowMovement;
+        colMovement = moveChange.colMovement;
+
+        for (i = 0; i < settings.getTarget(); i++) {
+            try {
+                if (gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape()) {
+                    row += rowMovement;
+                    column += colMovement;
+                    row = row % settings.getRows();
+                    column = column % settings.getColumns();
+                    if(row < 0)
+                        row = settings.getRows() - 1;
+                    if(column < 0)
+                        column = settings.getColumns() - 1;
+                }
+                else {
+                    break;
+                }
+            }
+            catch (ArrayIndexOutOfBoundsException e)
+            {
+                break;
+            }
+        }
+        if(i == settings.getTarget())
+        {
+            result = true;
+        }
+
 
         return result;
     }
