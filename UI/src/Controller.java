@@ -1,10 +1,15 @@
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +44,15 @@ public class Controller {
     private ScrollPane scrollPaneSystem;
 
     @FXML
+    private GridPane GridPanePlayers;
+
+    @FXML
+    private ScrollPane gamePane;
+
+    @FXML
+    private Pane gridPanePlayer1;
+
+    @FXML
     private Label IdLabel1;
 
     @FXML
@@ -49,6 +63,9 @@ public class Controller {
 
     @FXML
     private Label KindOfLabel1;
+
+    @FXML
+    private Pane gridPanePlayer2;
 
     @FXML
     private Label IdLabel2;
@@ -63,6 +80,9 @@ public class Controller {
     private Label KindOfLabel2;
 
     @FXML
+    private Pane gridPanePlayer3;
+
+    @FXML
     private Label IdLabel3;
 
     @FXML
@@ -73,6 +93,9 @@ public class Controller {
 
     @FXML
     private Label KindOfLabel3;
+
+    @FXML
+    private Pane gridPanePlayer4;
 
     @FXML
     private Label IdLabel4;
@@ -87,6 +110,9 @@ public class Controller {
     private Label KindOfLabel4;
 
     @FXML
+    private Pane gridPanePlayer5;
+
+    @FXML
     private Label IdLabel5;
 
     @FXML
@@ -97,6 +123,9 @@ public class Controller {
 
     @FXML
     private Label KindOfLabel5;
+
+    @FXML
+    private Pane gridPanePlayer6;
 
     @FXML
     private Label IdLabel6;
@@ -120,10 +149,27 @@ public class Controller {
     private Button ButtonXMLLoad;
 
     @FXML
+    private VBox VboxLeft;
+
+    @FXML
     private Button ReplayButton;
 
     @FXML
     private MenuButton ChooseStyleMenuButton;
+
+
+    @FXML
+    private Pane PanePane;
+
+    @FXML
+    private HBox HboxTop;
+
+    @FXML
+    private Button saveGameButton;
+
+    @FXML
+    private Button loadGameButton;
+
 
     @FXML
     void chooseXML(ActionEvent event) {
@@ -133,29 +179,29 @@ public class Controller {
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load XML File");
-        fileChooser.setSelectedExtensionFilter(extFilter);
+        fileChooser.getExtensionFilters().addAll(extFilter);
         File XMLfile = fileChooser.showOpenDialog(theStage);
 
-        try {
-            inputstream = new FileInputStream(XMLfile);
-        }
-        catch (FileNotFoundException e){
+        if (XMLfile != null) {
+            try {
+                inputstream = new FileInputStream(XMLfile);
+            } catch (FileNotFoundException e) {
 
-        }
+            }
 
-        try {
+            try {
 
-            theGame = (GameFactory.CreateGame(inputstream));
-        }
-        catch (FileDataException e) {
+                theGame = (GameFactory.CreateGame(inputstream));
+                StartGameButton.setDisable(false);
+            } catch (FileDataException e) {
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        }
-        catch (JAXBException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            } catch (JAXBException e) {
 
-            throw new RuntimeException();
+                throw new RuntimeException();
+            }
         }
 
 
@@ -178,7 +224,7 @@ public class Controller {
 
     @FXML
     void showReplay(ActionEvent event) {
-        
+
     }
 
     @FXML
@@ -190,5 +236,9 @@ public class Controller {
     void stopTheGame(ActionEvent event) {
 
     }
+    @FXML
+    public void initialize() {
 
+
+    }
 }
