@@ -316,7 +316,7 @@ public class Controller {
         //
         if (true) { //need to be changed to theGame.DropDisc
 
-            Disc disc = new Disc(Color.RED);
+            Disc disc = new Disc(Color.RED); //the color needs to be changed to the current active player color
             theDiscs[row][column] = disc;
             discPane.getChildren().add(disc);
 
@@ -325,6 +325,8 @@ public class Controller {
             TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5),disc);
             animation.setToY(row  * (TILE_SIZE + 5) + TILE_SIZE / 4);
             animation.play();
+
+            //need to add a section to check if the game has ended
 
         }
     }
