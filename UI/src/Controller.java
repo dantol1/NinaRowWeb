@@ -21,6 +21,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Controller {
 
@@ -28,7 +30,7 @@ public class Controller {
     public Game getTheGame() {
         return theGame;
     }
-
+    private Disc[][] theDiscs;
     public void setTheGame(Game theGame) {
         this.theGame = theGame;
     }
@@ -45,6 +47,18 @@ public class Controller {
 
     private Stage theStage;
 
+    private Pane scrollPaneContent = new Pane();
+
+    private class Disc extends Circle {
+
+        public Disc(Color colorOfDisc) {
+            super.setFill(colorOfDisc);
+
+            setCenterX(TILE_SIZE / 2);
+            setCenterY(TILE_SIZE / 2);
+
+        }
+    }
     @FXML
     private ScrollPane scrollPaneSystem;
 
@@ -197,8 +211,9 @@ public class Controller {
             try {
 
                 theGame = (GameFactory.CreateGame(inputstream));
+                theDiscs = new Disc[theGame.getSettings().getColumns()][theGame.getSettings().getRows()];
                 StartGameButton.setDisable(false);
-                printBoard(theGame.getSettings().getColumns(),theGame.getSettings().getRows());
+                paintBoard(theGame.getSettings().getColumns(),theGame.getSettings().getRows());
             } catch (FileDataException e) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -213,7 +228,7 @@ public class Controller {
 
     }
 
-    private void printBoard(double columns, double rows) {
+    private void paintBoard(double columns, double rows) {
 
         double widthOfGrid = ((columns) * (TILE_SIZE + 5) + TILE_SIZE / 4)+8, heightOfGrid = ((rows) * (TILE_SIZE + 5) + TILE_SIZE / 4)+8;
 
@@ -242,7 +257,64 @@ public class Controller {
 
         gridShape.setFill(Color.MEDIUMPURPLE);
 
-        gamePane.setContent(gridShape);
+
+        scrollPaneContent.setPrefWidth(widthOfGrid);
+        scrollPaneContent.setPrefHeight(heightOfGrid);
+        scrollPaneContent.getChildren().add(gridShape);
+        scrollPaneContent.getChildren().addAll(setOverlayAndMouseClickOnOverlay(columns, rows));
+
+        gamePane.setContent(scrollPaneContent);
+    }
+
+    private List<Rectangle> setOverlayAndMouseClickOnOverlay(double columns, double rows) {
+
+        List<Rectangle> overlayList = new ArrayList<>();
+
+        for (int i = 0; i<columns; i++){
+
+            Rectangle rectangleUp = new Rectangle(TILE_SIZE,TILE_SIZE+TILE_SIZE/4 + 1);
+            rectangleUp.setTranslateX(i * (TILE_SIZE + 5) + TILE_SIZE / 4);
+            rectangleUp.setFill(Color.TRANSPARENT);
+
+            rectangleUp.setOnMouseEntered(e -> rectangleUp.setFill(Color.rgb(0,0,0,0.4)));
+            rectangleUp.setOnMouseExited(e -> rectangleUp.setFill(Color.TRANSPARENT));
+            rectangleUp.setOnMouseClicked(e -> dropDisc(rectangleUp));
+
+            overlayList.add(rectangleUp);
+            
+            Rectangle rectangleDown = new Rectangle(TILE_SIZE,TILE_SIZE+TILE_SIZE/4 + 1);
+            rectangleDown.setTranslateY((rows-1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
+            rectangleDown.setTranslateX(i * (TILE_SIZE + 5) + TILE_SIZE / 4);
+            rectangleDown.setFill(Color.TRANSPARENT);
+
+            rectangleDown.setOnMouseEntered(e -> rectangleDown.setFill(Color.rgb(0,0,0,0.4)));
+            rectangleDown.setOnMouseExited(e -> rectangleDown.setFill(Color.TRANSPARENT));
+            rectangleDown.setOnMouseClicked(e -> popDisc());
+
+            overlayList.add(rectangleDown);
+
+        }
+        return overlayList;
+    }
+
+    private void popDisc() {
+
+    }
+
+    private void dropDisc(Rectangle rect) {
+
+        int column = translateColumnFromXposition((int)rect.getTranslateX());
+
+        if (theGame.dropDisc(column)) {
+
+            new Disc(theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).getColor)
+
+        }
+    }
+
+    private int translateColumnFromXposition(int translateX) {
+
+        return ((translateX / (TILE_SIZE +5)) - (TILE_SIZE * 4));
     }
 
     @FXML
@@ -263,7 +335,7 @@ public class Controller {
     @FXML
     void showReplay(ActionEvent event) {
 
-        printBoard(30,20);
+        paintBoard(6,7);
     }
 
     @FXML
