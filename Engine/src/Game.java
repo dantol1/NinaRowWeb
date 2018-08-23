@@ -39,12 +39,13 @@ public class Game implements Serializable {
     private Player players[];
     private int numOfActivePlayers;
     private History moveHistory;
+    HashSet<Player> winningPlayers = new HashSet<>();
+    private int activePlayerIndex = 0;
+    private boolean ended = false;
 
     public HashSet<Player> getWinningPlayers() {
         return winningPlayers;
     }
-
-    HashSet<Player> winningPlayers = new HashSet<>();
 
     public Player getPlayerByIndex(int i) throws ArrayIndexOutOfBoundsException {
 
@@ -66,9 +67,6 @@ public class Game implements Serializable {
     public void setActivePlayerIndex(int activePlayerIndex) {
         this.activePlayerIndex = activePlayerIndex % numOfActivePlayers;
     }
-
-    private int activePlayerIndex = 0;
-    private boolean ended = false;
 
     public Game(GameSettings gs)
     {
