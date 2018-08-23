@@ -124,6 +124,11 @@ public class Game implements Serializable {
         return gameBoard.dropDisc(column,players[activePlayerIndex].getPieceShape());
     }
 
+    public boolean popoutDisc(int column)
+    {
+        return gameBoard.popoutDisc(column);
+    }
+
     public GameState isGameEnded(int column){
 
         boolean gameEnded = false;
