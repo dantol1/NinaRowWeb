@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fx:id="scrollPaneSystem" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<ScrollPane fx:id="scrollPaneSystem" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1024.0">
          <children>
@@ -222,7 +222,7 @@
                         <Insets left="20.0" />
                      </VBox.margin>
                   </MenuButton>
-                  <Button fx:id="saveGameButton" mnemonicParsing="false" prefHeight="86.0" prefWidth="192.0" text="Save Game">
+                  <Button fx:id="saveGameButton" mnemonicParsing="false" onAction="#saveTheGame" prefHeight="86.0" prefWidth="192.0" text="Save Game">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -230,7 +230,7 @@
                         <Insets left="20.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="loadGameButton" mnemonicParsing="false" prefHeight="91.0" prefWidth="194.0" text="Load Game">
+                  <Button fx:id="loadGameButton" mnemonicParsing="false" onAction="#loadTheGame" prefHeight="91.0" prefWidth="194.0" text="Load Game">
                      <font>
                         <Font size="24.0" />
                      </font>

@@ -92,4 +92,15 @@ public class Board implements Serializable {
         }
     }
 
+    public boolean popoutDisc(int column) {
+        boolean popoutSucceeded = false;
+
+        if(nextPlaceInColumn[column] < rows -1)
+        {
+            collapseBoard(column, rows - 1);
+            popoutSucceeded = true;
+        }
+
+        return popoutSucceeded;
+    }
 }
