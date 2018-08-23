@@ -1,3 +1,4 @@
+import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -14,6 +15,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +39,7 @@ public class Controller {
     }
 
     private Game theGame;
+    private Pane discPane = new Pane();
 
     public Stage getTheStage() {
         return theStage;
@@ -52,7 +56,7 @@ public class Controller {
     private class Disc extends Circle {
 
         public Disc(Color colorOfDisc) {
-            super.setFill(colorOfDisc);
+            super(TILE_SIZE/2, colorOfDisc);
 
             setCenterX(TILE_SIZE / 2);
             setCenterY(TILE_SIZE / 2);
@@ -260,6 +264,7 @@ public class Controller {
 
         scrollPaneContent.setPrefWidth(widthOfGrid);
         scrollPaneContent.setPrefHeight(heightOfGrid);
+        scrollPaneContent.getChildren().add(discPane);
         scrollPaneContent.getChildren().add(gridShape);
         scrollPaneContent.getChildren().addAll(setOverlayAndMouseClickOnOverlay(columns, rows));
 
@@ -304,17 +309,34 @@ public class Controller {
     private void dropDisc(Rectangle rect) {
 
         int column = translateColumnFromXposition((int)rect.getTranslateX());
+        //need to be replaced with next position in column from theGame
+        int row = translateRowFromYposition((int)rect.getTranslateY());
+        //ToDelete
+        theDiscs = new Disc[7][6];
+        //
+        if (true) { //need to be changed to theGame.DropDisc
 
-        if (theGame.dropDisc(column)) {
+            Disc disc = new Disc(Color.RED);
+            theDiscs[row][column] = disc;
+            discPane.getChildren().add(disc);
 
-            new Disc(theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).getColor)
+            disc.setTranslateX(column * (TILE_SIZE + 5) + TILE_SIZE / 4);
+
+            TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5),disc);
+            animation.setToY(row  * (TILE_SIZE + 5) + TILE_SIZE / 4);
+            animation.play();
 
         }
     }
 
+    private int translateRowFromYposition(int translateY) {
+
+        return ((translateY - (TILE_SIZE/4))/(TILE_SIZE+5));
+    }
+
     private int translateColumnFromXposition(int translateX) {
 
-        return ((translateX / (TILE_SIZE +5)) - (TILE_SIZE * 4));
+        return ((translateX - (TILE_SIZE/4))/(TILE_SIZE+5));
     }
 
     @FXML
