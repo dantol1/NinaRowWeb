@@ -280,4 +280,14 @@ public class Controller {
 
 
     }
+
+    @FXML
+    void loadTheGame(ActionEvent event) {
+
+    }
+
+    @FXML
+    void saveTheGame(ActionEvent event) {
+
+    }
 }
