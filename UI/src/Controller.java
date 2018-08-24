@@ -1,14 +1,13 @@
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -65,6 +64,10 @@ public class Controller {
     }
     @FXML
     private ScrollPane scrollPaneSystem;
+
+
+    @FXML
+    private AnchorPane anchorPane;
 
     @FXML
     private GridPane GridPanePlayers;
@@ -217,6 +220,7 @@ public class Controller {
                 theDiscs = new Disc[theGame.getSettings().getRows()][theGame.getSettings().getColumns()];
                 StartGameButton.setDisable(false);
                 paintBoard(theGame.getSettings().getColumns(),theGame.getSettings().getRows());
+                fillPlayerData();
             } catch (FileDataException e) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -228,6 +232,41 @@ public class Controller {
             }
         }
 
+
+    }
+
+    private void fillPlayerData() {
+
+        Label[] playerLabels = {NameLabel1, IdLabel1, HowMuchTurnsLabel1, KindOfLabel1,
+        NameLabel2, IdLabel2, HowMuchTurnsLabel2, KindOfLabel2,
+        NameLabel3, IdLabel3, HowMuchTurnsLabel3, KindOfLabel3,
+        NameLabel4, IdLabel4, HowMuchTurnsLabel4, KindOfLabel4,
+        NameLabel5, IdLabel5, HowMuchTurnsLabel5, KindOfLabel5,
+        NameLabel6, IdLabel6, HowMuchTurnsLabel6, KindOfLabel6};
+
+
+        for(int currentPlayerIndex = 0, currentWorkedOnLabel = 0; currentPlayerIndex < theGame.getPlayers().length; currentPlayerIndex++)
+        {
+            playerLabels[currentPlayerIndex + currentWorkedOnLabel].setText(theGame.getPlayers()[currentPlayerIndex].getName());
+            currentWorkedOnLabel++;
+            playerLabels[currentPlayerIndex + currentWorkedOnLabel].setText(((Short)theGame.getPlayers()[currentPlayerIndex].getId()).toString());
+            currentWorkedOnLabel++;
+            playerLabels[currentPlayerIndex + currentWorkedOnLabel].textProperty().bind(new SimpleIntegerProperty(((Integer)theGame.getPlayers()[currentPlayerIndex].getHowManyTurnsPlayed())).asString());
+            currentWorkedOnLabel++;
+            playerLabels[currentPlayerIndex + currentWorkedOnLabel].setText(theGame.getPlayers()[currentPlayerIndex].getPlayerType().toString());
+        }
+
+        for(int unusedPlayerIndex = theGame.getPlayers().length, unusedLabel = unusedPlayerIndex * 4; unusedPlayerIndex < 6; unusedPlayerIndex++)
+        {
+            playerLabels[unusedLabel].setVisible(false);
+            unusedLabel++;
+            playerLabels[unusedLabel].setVisible(false);
+            unusedLabel++;
+            playerLabels[unusedLabel].setVisible(false);
+            unusedLabel++;
+            playerLabels[unusedLabel].setVisible(false);
+            unusedLabel++;
+        }
 
     }
 
@@ -397,7 +436,6 @@ public class Controller {
     }
     @FXML
     public void initialize() {
-
 
     }
 

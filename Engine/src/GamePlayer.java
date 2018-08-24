@@ -10,6 +10,15 @@ public class GamePlayer implements Serializable {
     }
 
     private String name;
+
+    public Type getPlayerType() {
+        return playerType;
+    }
+
+    public short getId() {
+        return id;
+    }
+
     private short id;
     private int howManyTurnsPlayed = 0;
     private Color playerColor;

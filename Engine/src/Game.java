@@ -54,6 +54,11 @@ public class Game implements Serializable {
     }
     private Board gameBoard;
     private GameSettings settings;
+
+    public GamePlayer[] getPlayers() {
+        return players;
+    }
+
     private GamePlayer players[];
     private int numOfActivePlayers;
     private History moveHistory;
