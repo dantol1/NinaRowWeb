@@ -1,10 +1,12 @@
 import jaxb.schema.generated.GameDescriptor;
+import jaxb.schema.generated.Player;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.math.BigInteger;
+import java.util.List;
 
 
 public class GameFactory {
@@ -16,23 +18,46 @@ public class GameFactory {
         Unmarshaller u = jc.createUnmarshaller();
         GameDescriptor gd = (GameDescriptor)u.unmarshal(xmlFile);
 
+
         int rows = gd.getGame().getBoard().getRows();
         int columns = gd.getGame().getBoard().getColumns().intValue();
         String variant = gd.getGame().getVariant();
         int target = gd.getGame().getTarget().intValue();
         String gameType = gd.getGameType();
-        checkGameValidity(rows,columns,target);
-
+        checkGameValidity(rows,columns,target,gd.getPlayers().getPlayer());
 
         GameSettings gs = new GameSettings(gameType, variant, rows, columns, target);
-        Game game = new Game(gs);
+        Game game = new Game(gs,gd.getPlayers().getPlayer());
 
         return game;
     }
 
-    private static void checkGameValidity(int rows, int columns, int target) throws FileDataException{
+    private static void checkGameValidity(int rows, int columns, int target, List<Player> thePlayers) throws FileDataException{
 
         String message = "";
+        boolean idIsDuplicated = false;
+
+        System.out.println(thePlayers.size());
+        if (thePlayers.size() > 6 || thePlayers.size() < 2)
+        {
+            message += "Num of players is incorrect, must be within 2-6";
+        }
+
+        for (int i = 0; i<thePlayers.size(); i++)
+        {
+            for (int j = 0; j<i+1; j++)
+            {
+                if (thePlayers.get(i).getId() == thePlayers.get(j).getId())
+                {
+                    idIsDuplicated = true;
+                    break;
+                }
+            }
+        }
+        if (idIsDuplicated)
+        {
+            message += "Two or more players have the same id, each player must have a different id";
+        }
         if (rows > 50 || rows < 5) {
             message += "Rows is not within boundries [5,50]";
         }
