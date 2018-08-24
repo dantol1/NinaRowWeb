@@ -1,11 +1,29 @@
+import javafx.scene.paint.Color;
+import jaxb.schema.generated.Player;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 public class Game implements Serializable {
+
+    public HashSet<GamePlayer> getPlayersWon() {
+        return playersWon;
+    }
+
+    private HashSet<GamePlayer> playersWon;
+
+    private ArrayList<Color> playerColors = new ArrayList<Color> () {{
+
+        add(Color.BLUE);
+        add(Color.RED);
+        add(Color.GREEN);
+        add(Color.PURPLE);
+        add(Color.ORANGE);
+        add(Color.BLACK);
+
+    }};
 
     public enum GameState {
         GameWin,
@@ -36,18 +54,11 @@ public class Game implements Serializable {
     }
     private Board gameBoard;
     private GameSettings settings;
-    private Player players[];
+    private GamePlayer players[];
     private int numOfActivePlayers;
     private History moveHistory;
-    HashSet<Player> winningPlayers = new HashSet<>();
-    private int activePlayerIndex = 0;
-    private boolean ended = false;
 
-    public HashSet<Player> getWinningPlayers() {
-        return winningPlayers;
-    }
-
-    public Player getPlayerByIndex(int i) throws ArrayIndexOutOfBoundsException {
+    public GamePlayer getPlayerByIndex(int i) throws ArrayIndexOutOfBoundsException {
 
         if (i>players.length) {
 
@@ -68,22 +79,31 @@ public class Game implements Serializable {
         this.activePlayerIndex = activePlayerIndex % numOfActivePlayers;
     }
 
-    public Game(GameSettings gs)
+    private int activePlayerIndex = 0;
+    private boolean ended = false;
+
+    public Game(GameSettings gs, List<Player> thePlayers)
     {
         gameBoard = new Board(gs.getColumns(), gs.getRows());
         settings = gs;
+
         if(gs.getGameType() == GameSettings.GameType.Basic)
         {
             numOfActivePlayers = 2;
         }
-
-        moveHistory = new History();
-        players = new Player[numOfActivePlayers];
-
-        for (int i = 0; i<numOfActivePlayers; i++) {
-            players[i] = new Player();
+        else if (gs.getGameType() == GameSettings.GameType.MultiPlayer)
+        {
+            numOfActivePlayers = thePlayers.size();
         }
 
+        moveHistory = new History();
+        players = new GamePlayer[numOfActivePlayers];
+
+        for (int i = 0; i<numOfActivePlayers; i++) {
+            players[i] = new GamePlayer(thePlayers.get(i).getId(), thePlayers.get(i).getName(),
+                    GamePlayer.Type.valueOf(thePlayers.get(i).getType()), playerColors.get(i));
+
+        }
 
     }
 
@@ -122,7 +142,8 @@ public class Game implements Serializable {
         return gameBoard.dropDisc(column,players[activePlayerIndex].getPieceShape());
     }
 
-    public boolean popoutDisc(int column){
+    public boolean popoutDisc(int column)
+    {
         return gameBoard.popoutDisc(column);
     }
 
@@ -130,30 +151,30 @@ public class Game implements Serializable {
 
         boolean gameEnded = false;
         GameState state = null;
+        HashSet<GamePlayer> winningPlayers = new HashSet<>();
 
         if(settings.getVariant() == GameSettings.Variant.Regular
                 || settings.getVariant() == GameSettings.Variant.Popout)
         {
-            gameWinChecker gameWinCheck = new gameWinChecker() {
-                @Override
-                public void run() {
-                    this.setFoundSequence(
-                            checkAllDirectionsForWinRegularOrPopout(this.getColumn()));
-                }
-            };
-            gameEnded = checkWin(gameWinCheck, column);
+            gameEnded = checkAllDirectionsForWin(column, gameBoard.getNextPlaceInColumn()[column] + 1);
         }
         else if(settings.getVariant() == GameSettings.Variant.Circular)
         {
-            gameWinChecker gameWinCheck = new gameWinChecker() {
-                @Override
-                public void run() {
-                    this.setFoundSequence(
-                            checkAllDirectionsForWinCircular(this.getColumn(), this.getRow()));
+            for(int i = 0; i < settings.getRows(); i++)
+            {
+                if(checkAllDirectionsForWin(column, i))
+                {
+                    gameEnded = true;
+                    for(GamePlayer p : this.players)
+                    {
+                        if(p.getPieceShape() == this.gameBoard.getCellSymbol(i, column))
+                        {
+                            winningPlayers.add(p);
+                            break;
+                        }
+                    }
                 }
-            };
-
-            gameEnded = checkWin(gameWinCheck, column);
+            }
         }
 
         if (gameEnded == false) {
@@ -172,7 +193,10 @@ public class Game implements Serializable {
             if(winningPlayers.size() == 1)
                 state = GameState.GameWin;
             else
+            {
                 state = GameState.SeveralPlayersWonTie;
+                playersWon = winningPlayers;
+            }
 
         }
 
@@ -180,92 +204,7 @@ public class Game implements Serializable {
         return state;
     }
 
-    private boolean checkWin(gameWinChecker winConditionsChecker, int column)
-    {
-        boolean gameEnded = false;
-
-        //check all the column for created sequence
-        winConditionsChecker.setColumn(column);
-        for(int i = 0; i < settings.getRows(); i++)
-        {
-            winConditionsChecker.setRow(i);
-            winConditionsChecker.run();
-            if(winConditionsChecker.isFoundSequence())
-            {
-                gameEnded = true;
-                findWinningPlayers(i, column);
-            }
-        }
-
-        //check all the row for created sequence
-        winConditionsChecker.setRow(gameBoard.getNextPlaceInColumn()[column] + 1);
-        for(int i = 0; i < settings.getColumns(); i++)
-        {
-            winConditionsChecker.setColumn(i);
-            winConditionsChecker.run();
-            if(winConditionsChecker.isFoundSequence())
-            {
-                gameEnded = true;
-                findWinningPlayers(gameBoard.getNextPlaceInColumn()[column] + 1, i);
-            }
-        }
-
-        return gameEnded;
-    }
-
-    private void findWinningPlayers(int row, int column)
-    {
-        for(Player p : this.players)
-        {
-            if(p.getPieceShape() == this.gameBoard.getCellSymbol(row, column))
-            {
-                winningPlayers.add(p);
-                break;
-            }
-        }
-    }
-
-    private boolean checkAllDirectionsForWinRegularOrPopout(int column)
-    {
-        boolean gameEnded = false;
-
-        if (checkConsecutiveDirection(DiscDirection.Down,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.Left,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.Up,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.Right,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalLeft,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalLeft,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalRight,column) == true)
-        {
-            gameEnded = true;
-        }
-        else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalRight,column) == true)
-        {
-            gameEnded = true;
-        }
-
-        return gameEnded;
-    }
-
-    private boolean checkAllDirectionsForWinCircular(int column, int row)
+    private boolean checkAllDirectionsForWin(int column, int row)
     {
         boolean gameEnded = false;
 
@@ -474,7 +413,7 @@ public class Game implements Serializable {
         return succeeded;
     }
 
-    private void endOfTurnActions(int columnInWhichDiscWasPut)
+    public void endOfTurnActions(int columnInWhichDiscWasPut)
     {
         moveHistory.AddMoveToHistory(activePlayerIndex, columnInWhichDiscWasPut);
         players[activePlayerIndex].playedTurn();
@@ -513,5 +452,10 @@ public class Game implements Serializable {
 
     public History getMoveHistory() {
         return moveHistory;
+    }
+
+    public int getNextPlaceInColumn(int column)
+    {
+        return (gameBoard.getNextPlaceInColumn())[column];
     }
 }

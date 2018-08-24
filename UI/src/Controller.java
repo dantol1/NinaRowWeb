@@ -213,9 +213,8 @@ public class Controller {
             }
 
             try {
-
                 theGame = (GameFactory.CreateGame(inputstream));
-                theDiscs = new Disc[theGame.getSettings().getColumns()][theGame.getSettings().getRows()];
+                theDiscs = new Disc[theGame.getSettings().getRows()][theGame.getSettings().getColumns()];
                 StartGameButton.setDisable(false);
                 paintBoard(theGame.getSettings().getColumns(),theGame.getSettings().getRows());
             } catch (FileDataException e) {
@@ -294,7 +293,7 @@ public class Controller {
 
             rectangleDown.setOnMouseEntered(e -> rectangleDown.setFill(Color.rgb(0,0,0,0.4)));
             rectangleDown.setOnMouseExited(e -> rectangleDown.setFill(Color.TRANSPARENT));
-            rectangleDown.setOnMouseClicked(e -> popDisc());
+            rectangleDown.setOnMouseClicked(e -> popDisc(rectangleDown));
 
             overlayList.add(rectangleDown);
 
@@ -302,21 +301,43 @@ public class Controller {
         return overlayList;
     }
 
-    private void popDisc() {
+    private void popDisc(Rectangle rect) {
+
+        int column = translateColumnFromXposition((int)rect.getTranslateX());
+        int row = theGame.getSettings().getRows() - 1;
+
+        if (theGame.popoutDisc(column)) {
+
+            theDiscs[row][column].setFill(Color.TRANSPARENT);
+            theDiscs[row][column] = null;
+
+            row--;
+            while(theDiscs[row][column] != null) {
+
+                theDiscs[row+1][column] = theDiscs[row][column];
+                theDiscs[row][column] = null;
+
+                TranslateTransition animation = new TranslateTransition(Duration.seconds(0.2),theDiscs[row+1][column]);
+                animation.setToY((row+1) * (TILE_SIZE + 5) + TILE_SIZE/4);
+                animation.play();
+                row--;
+            }
+
+            theGame.endOfTurnActions(column);
+            theGame.isGameEnded(column);
+            //need to check a section if game ended
+        }
 
     }
 
     private void dropDisc(Rectangle rect) {
 
         int column = translateColumnFromXposition((int)rect.getTranslateX());
-        //need to be replaced with next position in column from theGame
-        int row = translateRowFromYposition((int)rect.getTranslateY());
-        //ToDelete
-        theDiscs = new Disc[7][6];
-        //
-        if (true) { //need to be changed to theGame.DropDisc
+        int row = theGame.getNextPlaceInColumn(column);
 
-            Disc disc = new Disc(Color.RED); //the color needs to be changed to the current active player color
+        if (theGame.dropDisc(column)) {
+
+            Disc disc = new Disc(theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).getPlayerColor());
             theDiscs[row][column] = disc;
             discPane.getChildren().add(disc);
 
@@ -326,6 +347,9 @@ public class Controller {
             animation.setToY(row  * (TILE_SIZE + 5) + TILE_SIZE / 4);
             animation.play();
 
+
+            theGame.endOfTurnActions(column);
+            theGame.isGameEnded(column);
             //need to add a section to check if the game has ended
 
         }

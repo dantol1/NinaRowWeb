@@ -1,6 +1,5 @@
 import jaxb.schema.generated.GameDescriptor;
 import jaxb.schema.generated.Player;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -45,7 +44,7 @@ public class GameFactory {
 
         for (int i = 0; i<thePlayers.size(); i++)
         {
-            for (int j = 0; j<i+1; j++)
+            for (int j = i+1; j<thePlayers.size(); j++)
             {
                 if (thePlayers.get(i).getId() == thePlayers.get(j).getId())
                 {

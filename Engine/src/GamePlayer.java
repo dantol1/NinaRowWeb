@@ -3,16 +3,16 @@ import javafx.scene.paint.Color;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Player implements Serializable {
+public class GamePlayer implements Serializable {
     public enum Type{
         Human,
         Computer
     }
 
     private String name;
-    private String id;
+    private short id;
     private int howManyTurnsPlayed = 0;
-    private Color PlayerColor;
+    private Color playerColor;
     private char pieceShape;
     private Type playerType;
 
@@ -23,12 +23,20 @@ public class Player implements Serializable {
 
     }
 
+    public GamePlayer(short id, String name, Type type, Color color)
+    {
+        this.id = id;
+        this.name = name;
+        this.playerType = type;
+        this.playerColor = color;
+    }
+
     public Color getPlayerColor() {
-        return PlayerColor;
+        return playerColor;
     }
 
     public void setPlayerColor(Color playerColor) {
-        PlayerColor = playerColor;
+        this.playerColor = playerColor;
     }
 
     public char getPieceShape() {
@@ -49,10 +57,10 @@ public class Player implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
-        return pieceShape == player.pieceShape &&
-                Objects.equals(name, player.name) &&
-                Objects.equals(id, player.id);
+        GamePlayer gamePlayer = (GamePlayer) o;
+        return pieceShape == gamePlayer.pieceShape &&
+                Objects.equals(name, gamePlayer.name) &&
+                Objects.equals(id, gamePlayer.id);
     }
 
     @Override
