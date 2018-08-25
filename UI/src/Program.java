@@ -17,9 +17,11 @@ public class Program extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("GUI.fxml"));
         primaryStage.setTitle("N In a Row");
-        primaryStage.setScene(new Scene(root, 1024, 800));
+        Scene theScene = new Scene(root, 1024, 800);
+        primaryStage.setScene(theScene);
         Controller myController = new Controller();
         myController.setTheStage(primaryStage);
+        myController.setMainScene(theScene);
         primaryStage.show();
 
     }

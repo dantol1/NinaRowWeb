@@ -1,11 +1,14 @@
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -15,6 +18,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import jdk.internal.util.xml.impl.Input;
 
 import javax.xml.bind.JAXBException;
 import java.io.File;
@@ -38,11 +42,9 @@ public class Controller {
     }
 
     private Game theGame;
-    private Pane discPane = new Pane();
+    private Scene mainScene;
 
-    public Stage getTheStage() {
-        return theStage;
-    }
+    private Pane discPane = new Pane();
 
     public void setTheStage(Stage theStage) {
         this.theStage = theStage;
@@ -51,6 +53,14 @@ public class Controller {
     private Stage theStage;
 
     private Pane scrollPaneContent = new Pane();
+
+    public Scene getMainScene() {
+        return mainScene;
+    }
+
+    public void setMainScene(Scene mainScene) {
+        this.mainScene = mainScene;
+    }
 
     private class Disc extends Circle {
 
@@ -215,22 +225,30 @@ public class Controller {
 
             }
 
-            try {
-                theGame = (GameFactory.CreateGame(inputstream));
-                theDiscs = new Disc[theGame.getSettings().getRows()][theGame.getSettings().getColumns()];
-                StartGameButton.setDisable(false);
-                paintBoard(theGame.getSettings().getColumns(),theGame.getSettings().getRows());
-                fillPlayerData();
-            } catch (FileDataException e) {
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
-            } catch (JAXBException e) {
-
-                throw new RuntimeException();
-            }
+            createXMLwithProgressBar(inputstream);
         }
+
+
+    }
+
+    private void createXMLwithProgressBar(InputStream inputstream) {
+
+        Stage window = new Stage();
+        ProgressBarTask task = new ProgressBarTask();
+        task.SetWindow(window);
+        StackPane stackpane = new StackPane();
+        ProgressBar bar = new ProgressBar();
+        bar.setPrefWidth(300);
+        stackpane.getChildren().add(bar);
+        task.SetInputStream(inputstream);
+        bar.progressProperty().bind(task.progressProperty());
+
+        Scene loadScene = new Scene(stackpane,500,200);
+        window.setScene(loadScene);
+        window.show();
+
+       Thread g = new Thread(task);
+       g.start();
 
 
     }
@@ -422,7 +440,6 @@ public class Controller {
     @FXML
     void showReplay(ActionEvent event) {
 
-        paintBoard(6,7);
     }
 
     @FXML
@@ -447,5 +464,66 @@ public class Controller {
     @FXML
     void saveTheGame(ActionEvent event) {
 
+    }
+
+    public class ProgressBarTask extends Task<Integer> {
+
+        InputStream inputstream = null;
+        Stage window = null;
+
+        public void SetWindow(Stage window)
+        {
+            this.window = window;
+        }
+
+        public void SetInputStream(InputStream input) {
+
+            this.inputstream = input;
+        }
+
+
+        @Override
+        protected Integer call() throws InterruptedException {
+            try {
+                theGame = (GameFactory.CreateGame(inputstream));
+                updateProgress(2,10);
+                theDiscs = new Controller.Disc[theGame.getSettings().getRows()][theGame.getSettings().getColumns()];
+                StartGameButton.setDisable(false);
+                updateProgress(5,10);
+                Thread.sleep(200);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        paintBoard(theGame.getSettings().getColumns(),theGame.getSettings().getRows());
+                    }
+                });
+                Thread.sleep(200);
+                updateProgress(7,10);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        fillPlayerData();
+                    }
+                });
+                updateProgress(10,10);
+            } catch (FileDataException e) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            } catch (JAXBException e) {
+
+                throw new RuntimeException();
+            }
+
+            return 10;
+
+        }
+
+        @Override
+        protected void updateProgress(double workDone, double max) {
+
+            super.updateProgress(workDone, max);
+        }
     }
 }
