@@ -274,6 +274,7 @@ public class Controller {
 
         double widthOfGrid = ((columns) * (TILE_SIZE + 5) + TILE_SIZE / 4)+8, heightOfGrid = ((rows) * (TILE_SIZE + 5) + TILE_SIZE / 4)+8;
 
+
         if (columns * TILE_SIZE < gamePane.getWidth())
         {
             gamePane.setPrefWidth(columns * TILE_SIZE);
@@ -392,6 +393,14 @@ public class Controller {
             //need to add a section to check if the game has ended
 
         }
+
+        changeActivePlayerPane();
+    }
+
+    private void changeActivePlayerPane() {
+        Pane[] playersPane = {gridPanePlayer1, gridPanePlayer2, gridPanePlayer3, gridPanePlayer4, gridPanePlayer5, gridPanePlayer6};
+
+        playersPane[theGame.getActivePlayerIndex()].applyCss();
     }
 
     private int translateRowFromYposition(int translateY) {
@@ -406,17 +415,32 @@ public class Controller {
 
     @FXML
     void choosedStyle1(ActionEvent event) {
-
+        gridPanePlayer1.getStyleClass().add("pane1");
+        gridPanePlayer2.getStyleClass().add("pane1");
+        gridPanePlayer3.getStyleClass().add("pane1");
+        gridPanePlayer4.getStyleClass().add("pane1");
+        gridPanePlayer5.getStyleClass().add("pane1");
+        gridPanePlayer6.getStyleClass().add("pane1");
     }
 
     @FXML
     void choosedStyle2(ActionEvent event) {
-
+        gridPanePlayer1.getStyleClass().add("pane2");
+        gridPanePlayer2.getStyleClass().add("pane2");
+        gridPanePlayer3.getStyleClass().add("pane2");
+        gridPanePlayer4.getStyleClass().add("pane2");
+        gridPanePlayer5.getStyleClass().add("pane2");
+        gridPanePlayer6.getStyleClass().add("pane2");
     }
 
     @FXML
     void choosedStyle3(ActionEvent event) {
-
+        gridPanePlayer1.getStyleClass().add("pane3");
+        gridPanePlayer2.getStyleClass().add("pane3");
+        gridPanePlayer3.getStyleClass().add("pane3");
+        gridPanePlayer4.getStyleClass().add("pane3");
+        gridPanePlayer5.getStyleClass().add("pane3");
+        gridPanePlayer6.getStyleClass().add("pane3");
     }
 
     @FXML
@@ -436,7 +460,7 @@ public class Controller {
     }
     @FXML
     public void initialize() {
-
+        choosedStyle1(new ActionEvent());
     }
 
     @FXML
