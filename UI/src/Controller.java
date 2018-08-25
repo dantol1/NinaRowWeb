@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -234,6 +235,8 @@ public class Controller {
     private void createXMLwithProgressBar(InputStream inputstream) {
 
         Stage window = new Stage();
+        Label label = new Label();
+        label.setText("");
         ProgressBarTask task = new ProgressBarTask();
         task.SetWindow(window);
         StackPane stackpane = new StackPane();
@@ -241,7 +244,10 @@ public class Controller {
         bar.setPrefWidth(300);
 
         stackpane.getChildren().add(bar);
+        stackpane.getChildren().addAll(label);
+        label.setPadding(new Insets(50,0,0,0));
         task.SetInputStream(inputstream);
+        label.textProperty().bind(task.messageProperty());
         bar.progressProperty().bind(task.progressProperty());
 
         Scene loadScene = new Scene(stackpane,500,200);
@@ -518,9 +524,12 @@ public class Controller {
             try {
                 theGame = (GameFactory.CreateGame(inputstream));
                 updateProgress(2,10);
+                updateMessage("Game Engine Loaded Successfully");
+                Thread.sleep(500);
                 theDiscs = new Controller.Disc[theGame.getSettings().getRows()][theGame.getSettings().getColumns()];
                 StartGameButton.setDisable(false);
                 updateProgress(5,10);
+                updateMessage("Discs set");
                 Thread.sleep(200);
                 Platform.runLater(new Runnable() {
                     @Override
@@ -528,8 +537,9 @@ public class Controller {
                         paintBoard(theGame.getSettings().getColumns(),theGame.getSettings().getRows());
                     }
                 });
-                Thread.sleep(200);
+                Thread.sleep(500);
                 updateProgress(7,10);
+                updateMessage("Board set");
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -537,6 +547,7 @@ public class Controller {
                     }
                 });
                 updateProgress(10,10);
+                updateMessage("Loaded XML File Successfully");
             } catch (FileDataException e) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -549,12 +560,6 @@ public class Controller {
 
             return 10;
 
-        }
-
-        @Override
-        protected void updateProgress(double workDone, double max) {
-
-            super.updateProgress(workDone, max);
         }
     }
 }
