@@ -40,7 +40,7 @@ public class Controller {
     public void setTheGame(Game theGame) {
         this.theGame = theGame;
     }
-
+    private boolean isGameStarted = false;
     private Game theGame;
     private Scene mainScene;
 
@@ -239,6 +239,7 @@ public class Controller {
         StackPane stackpane = new StackPane();
         ProgressBar bar = new ProgressBar();
         bar.setPrefWidth(300);
+
         stackpane.getChildren().add(bar);
         task.SetInputStream(inputstream);
         bar.progressProperty().bind(task.progressProperty());
@@ -321,6 +322,7 @@ public class Controller {
 
         scrollPaneContent.setPrefWidth(widthOfGrid);
         scrollPaneContent.setPrefHeight(heightOfGrid);
+        scrollPaneContent.getChildren().remove(discPane);
         scrollPaneContent.getChildren().add(discPane);
         scrollPaneContent.getChildren().add(gridShape);
         scrollPaneContent.getChildren().addAll(setOverlayAndMouseClickOnOverlay(columns, rows));
@@ -363,27 +365,28 @@ public class Controller {
 
         int column = translateColumnFromXposition((int)rect.getTranslateX());
         int row = theGame.getSettings().getRows() - 1;
+        if(isGameStarted) {
+            if (theGame.popoutDisc(column)) {
 
-        if (theGame.popoutDisc(column)) {
-
-            theDiscs[row][column].setFill(Color.TRANSPARENT);
-            theDiscs[row][column] = null;
-
-            row--;
-            while(theDiscs[row][column] != null) {
-
-                theDiscs[row+1][column] = theDiscs[row][column];
+                theDiscs[row][column].setFill(Color.TRANSPARENT);
                 theDiscs[row][column] = null;
 
-                TranslateTransition animation = new TranslateTransition(Duration.seconds(0.2),theDiscs[row+1][column]);
-                animation.setToY((row+1) * (TILE_SIZE + 5) + TILE_SIZE/4);
-                animation.play();
                 row--;
-            }
+                while (theDiscs[row][column] != null) {
 
-            theGame.endOfTurnActions(column);
-            theGame.isGameEnded(column);
-            //need to check a section if game ended
+                    theDiscs[row + 1][column] = theDiscs[row][column];
+                    theDiscs[row][column] = null;
+
+                    TranslateTransition animation = new TranslateTransition(Duration.seconds(0.2), theDiscs[row + 1][column]);
+                    animation.setToY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                    animation.play();
+                    row--;
+                }
+
+                theGame.endOfTurnActions(column);
+                theGame.isGameEnded(column);
+                //need to check a section if game ended
+            }
         }
 
     }
@@ -392,27 +395,28 @@ public class Controller {
 
         int column = translateColumnFromXposition((int)rect.getTranslateX());
         int row = theGame.getNextPlaceInColumn(column);
+        if (isGameStarted == true) {
+            if (theGame.dropDisc(column)) {
 
-        if (theGame.dropDisc(column)) {
+                Disc disc = new Disc(theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).getPlayerColor());
+                theDiscs[row][column] = disc;
+                discPane.getChildren().add(disc);
 
-            Disc disc = new Disc(theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).getPlayerColor());
-            theDiscs[row][column] = disc;
-            discPane.getChildren().add(disc);
+                disc.setTranslateX(column * (TILE_SIZE + 5) + TILE_SIZE / 4);
 
-            disc.setTranslateX(column * (TILE_SIZE + 5) + TILE_SIZE / 4);
-
-            TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5),disc);
-            animation.setToY(row  * (TILE_SIZE + 5) + TILE_SIZE / 4);
-            animation.play();
+                TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5), disc);
+                animation.setToY(row * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                animation.play();
 
 
-            theGame.endOfTurnActions(column);
-            theGame.isGameEnded(column);
-            //need to add a section to check if the game has ended
+                theGame.endOfTurnActions(column);
+                theGame.isGameEnded(column);
+                //need to add a section to check if the game has ended
 
+            }
+
+            changeActivePlayerPane();
         }
-
-        changeActivePlayerPane();
     }
 
     private void changeActivePlayerPane() {
@@ -469,6 +473,9 @@ public class Controller {
     @FXML
     void startTheGame(ActionEvent event) {
 
+        isGameStarted = true;
+        ButtonXMLLoad.setDisable(true);
+        StopGameButton.setDisable(false);
     }
 
     @FXML
