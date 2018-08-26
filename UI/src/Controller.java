@@ -54,7 +54,6 @@ public class Controller {
     private Stage theStage;
 
     private Pane scrollPaneContent = new Pane();
-
     public Scene getMainScene() {
         return mainScene;
     }
@@ -87,7 +86,7 @@ public class Controller {
     private ScrollPane gamePane;
 
     @FXML
-    private Pane gridPanePlayer1;
+    private Pane gridPanePlayer1 = new Pane();
 
     @FXML
     private Label IdLabel1;
@@ -351,17 +350,20 @@ public class Controller {
             rectangleUp.setOnMouseClicked(e -> dropDisc(rectangleUp));
 
             overlayList.add(rectangleUp);
-            
-            Rectangle rectangleDown = new Rectangle(TILE_SIZE,TILE_SIZE+TILE_SIZE/4 + 1);
-            rectangleDown.setTranslateY((rows-1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
-            rectangleDown.setTranslateX(i * (TILE_SIZE + 5) + TILE_SIZE / 4);
-            rectangleDown.setFill(Color.TRANSPARENT);
 
-            rectangleDown.setOnMouseEntered(e -> rectangleDown.setFill(Color.rgb(0,0,0,0.4)));
-            rectangleDown.setOnMouseExited(e -> rectangleDown.setFill(Color.TRANSPARENT));
-            rectangleDown.setOnMouseClicked(e -> popDisc(rectangleDown));
+            if (theGame.getSettings().getVariant() == GameSettings.Variant.Popout)
+            {
+                Rectangle rectangleDown = new Rectangle(TILE_SIZE, TILE_SIZE + TILE_SIZE / 4 + 1);
+                rectangleDown.setTranslateY((rows - 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                rectangleDown.setTranslateX(i * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                rectangleDown.setFill(Color.TRANSPARENT);
 
-            overlayList.add(rectangleDown);
+                rectangleDown.setOnMouseEntered(e -> rectangleDown.setFill(Color.rgb(0, 0, 0, 0.4)));
+                rectangleDown.setOnMouseExited(e -> rectangleDown.setFill(Color.TRANSPARENT));
+                rectangleDown.setOnMouseClicked(e -> popDisc(rectangleDown));
+
+                overlayList.add(rectangleDown);
+            }
 
         }
         return overlayList;
