@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -33,144 +34,144 @@
                 <RowConstraints maxHeight="86.4" minHeight="10.0" prefHeight="76.00000610351563" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Pane fx:id="gridPanePlayer1" style="-fx-border-color: #000000;">
+                  <Pane fx:id="gridPanePlayer1" style="-fx-border-color: #000000;" styleClass="activePlayerStyle1">
                      <children>
-                        <Label fx:id="NameLabel1" text="Label" textFill="#1500ff">
+                        <Label fx:id="NameLabel1" text="Player 1 Name" textFill="#1500ff">
                            <padding>
                               <Insets bottom="30.0" left="10.0" top="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="IdLabel1" text="Label" textFill="#1500ff">
+                        <Label fx:id="IdLabel1" text="Player 1 ID" textFill="#1500ff">
                            <padding>
                               <Insets left="10.0" top="20.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="HowMuchTurnsLabel1" text="Label" textFill="#1500ff">
+                        <Label fx:id="HowMuchTurnsLabel1" text="Player 1 Turns" textFill="#1500ff">
                            <padding>
                               <Insets left="10.0" top="35.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="KindOfLabel1" text="Label" textFill="#1500ff">
+                        <Label fx:id="KindOfLabel1" text="Player 1 Type" textFill="#1500ff">
                            <padding>
                               <Insets left="10.0" top="50.0" />
                            </padding>
                         </Label>
                      </children>
                   </Pane>
-                  <Pane fx:id="gridPanePlayer2" layoutX="10.0" layoutY="10.0" style="-fx-border-color: #000000;" GridPane.columnIndex="1">
+                  <Pane fx:id="gridPanePlayer2" layoutX="10.0" layoutY="10.0" style="-fx-border-color: #000000;" styleClass="playerStyle1" GridPane.columnIndex="1">
                      <children>
-                        <Label fx:id="NameLabel2" text="Label" textFill="RED">
+                        <Label fx:id="NameLabel2" text="Player 2 Name" textFill="RED">
                            <padding>
                               <Insets left="10.0" top="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="IdLabel2" text="Label" textFill="#ff0000">
+                        <Label fx:id="IdLabel2" text="Player 2 ID" textFill="#ff0000">
                            <padding>
                               <Insets left="10.0" top="20.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="HowMuchTurnsLabel2" prefHeight="82.0" prefWidth="54.0" text="Label" textFill="RED">
+                        <Label fx:id="HowMuchTurnsLabel2" prefHeight="82.0" prefWidth="91.0" text="Player 2 Turns" textFill="RED">
                            <padding>
                               <Insets bottom="30.0" left="10.0" top="35.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="KindOfLabel2" text="Label" textFill="RED">
+                        <Label fx:id="KindOfLabel2" prefHeight="67.0" prefWidth="96.0" text="Player 2 Type" textFill="RED">
                            <padding>
                               <Insets left="10.0" top="50.0" />
                            </padding>
                         </Label>
                      </children>
                   </Pane>
-                  <Pane fx:id="gridPanePlayer3" layoutX="113.0" layoutY="10.0" style="-fx-border-color: #000000;" GridPane.rowIndex="1">
+                  <Pane fx:id="gridPanePlayer3" layoutX="113.0" layoutY="10.0" style="-fx-border-color: #000000;" styleClass="playerStyle1" GridPane.rowIndex="1">
                      <children>
-                        <Label fx:id="NameLabel3" text="Label" textFill="#2aff00">
+                        <Label fx:id="NameLabel3" text="Player 3 Name" textFill="#2aff00">
                            <padding>
                               <Insets left="10.0" top="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="IdLabel3" text="Label" textFill="#2aff00">
+                        <Label fx:id="IdLabel3" text="Player 3 ID" textFill="#2aff00">
                            <padding>
                               <Insets left="10.0" top="20.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="HowMuchTurnsLabel3" text="Label" textFill="#2aff00">
+                        <Label fx:id="HowMuchTurnsLabel3" text="Player 3 Turns" textFill="#2aff00">
                            <padding>
                               <Insets bottom="30.0" left="10.0" top="35.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="KindOfLabel3" text="Label" textFill="#2aff00">
+                        <Label fx:id="KindOfLabel3" text="Player 3 Type" textFill="#2aff00">
                            <padding>
                               <Insets bottom="60.0" left="10.0" top="50.0" />
                            </padding>
                         </Label>
                      </children>
                   </Pane>
-                  <Pane fx:id="gridPanePlayer4" layoutX="10.0" layoutY="95.0" style="-fx-border-color: #000000;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Pane fx:id="gridPanePlayer4" layoutX="10.0" layoutY="95.0" style="-fx-border-color: #000000;" styleClass="playerStyle1" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <Label fx:id="NameLabel4" text="Label" textFill="#9602a9">
+                        <Label fx:id="NameLabel4" text="Player 4 Name" textFill="#9602a9">
                            <padding>
                               <Insets bottom="30.0" left="10.0" top="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="KindOfLabel4" text="Label" textFill="#9602a9">
+                        <Label fx:id="KindOfLabel4" text="Player 4 ID" textFill="#9602a9">
                            <padding>
                               <Insets left="10.0" top="20.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="HowMuchTurnsLabel4" text="Label" textFill="#9602a9">
+                        <Label fx:id="HowMuchTurnsLabel4" text="Player 4 Turns" textFill="#9602a9">
                            <padding>
                               <Insets left="10.0" top="35.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="IdLabel4" text="Label" textFill="#9602a9">
+                        <Label fx:id="IdLabel4" text="Player 4 Type" textFill="#9602a9">
                            <padding>
                               <Insets bottom="60.0" left="10.0" top="50.0" />
                            </padding>
                         </Label>
                      </children>
                   </Pane>
-                  <Pane fx:id="gridPanePlayer5" layoutX="113.0" layoutY="95.0" style="-fx-border-color: #000000;" GridPane.rowIndex="2">
+                  <Pane fx:id="gridPanePlayer5" layoutX="113.0" layoutY="95.0" style="-fx-border-color: #000000;" styleClass="playerStyle1" GridPane.rowIndex="2">
                      <children>
-                        <Label fx:id="NameLabel5" text="Label" textFill="#ff8206">
+                        <Label fx:id="NameLabel5" text="Player 5 Name" textFill="#ff8206">
                            <padding>
                               <Insets left="10.0" top="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="IdLabel5" text="Label" textFill="#ff8206">
+                        <Label fx:id="IdLabel5" text="Player 5 ID" textFill="#ff8206">
                            <padding>
                               <Insets left="10.0" top="20.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="HowMuchTurnsLabel5" text="Label" textFill="#ff8206">
+                        <Label fx:id="HowMuchTurnsLabel5" text="Player 5 Turns" textFill="#ff8206">
                            <padding>
                               <Insets bottom="30.0" left="10.0" top="35.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="KindOfLabel5" text="Label" textFill="#ff8206">
+                        <Label fx:id="KindOfLabel5" text="Player 5 Type" textFill="#ff8206">
                            <padding>
                               <Insets bottom="60.0" left="10.0" top="50.0" />
                            </padding>
                         </Label>
                      </children>
                   </Pane>
-                  <Pane fx:id="gridPanePlayer6" layoutX="10.0" layoutY="181.0" style="-fx-border-color: #000000;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <Pane fx:id="gridPanePlayer6" layoutX="10.0" layoutY="181.0" style="-fx-border-color: #000000;" styleClass="playerStyle1" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <Label fx:id="NameLabel6" text="Label">
+                        <Label fx:id="NameLabel6" text="Player 6 Name">
                            <padding>
                               <Insets left="10.0" top="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="IdLabel6" text="Label">
+                        <Label fx:id="IdLabel6" text="Player 6 ID">
                            <padding>
                               <Insets left="10.0" top="20.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="HowMuchTurnsLabel6" text="Label">
+                        <Label fx:id="HowMuchTurnsLabel6" text="Player 6 Turns">
                            <padding>
                               <Insets bottom="30.0" left="10.0" top="35.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="KindOfLabel6" text="Label">
+                        <Label fx:id="KindOfLabel6" text="Player 6 Type">
                            <padding>
                               <Insets bottom="60.0" left="10.0" top="50.0" />
                            </padding>
@@ -250,4 +251,9 @@
             </ScrollPane>
          </children></AnchorPane>
   </content>
+   <stylesheets>
+      <URL value="@Style1.css" />
+      <URL value="@Style2.css" />
+      <URL value="@Style3.css" />
+   </stylesheets>
 </ScrollPane>

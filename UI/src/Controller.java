@@ -86,7 +86,7 @@ public class Controller {
     private ScrollPane gamePane;
 
     @FXML
-    private Pane gridPanePlayer1 = new Pane();
+    private Pane gridPanePlayer1;
 
     @FXML
     private Label IdLabel1;
@@ -205,6 +205,24 @@ public class Controller {
 
     @FXML
     private Button loadGameButton;
+
+    private Pane[] playerGridPanes = {
+            gridPanePlayer1,
+            gridPanePlayer2,
+            gridPanePlayer3,
+            gridPanePlayer4,
+            gridPanePlayer5,
+            gridPanePlayer6};
+
+    private Button[] systemButtons = {
+            loadGameButton,
+            saveGameButton,
+            ReplayButton,
+            StopGameButton,
+            StartGameButton,
+            ButtonXMLLoad};
+
+    private String[] chosenStyle = {"playerStyle1", "activePlayerStyle1", "buttonStyle1"};
 
 
     @FXML
@@ -445,32 +463,40 @@ public class Controller {
 
     @FXML
     void choosedStyle1(ActionEvent event) {
-        gridPanePlayer1.getStyleClass().add("pane1");
-        gridPanePlayer2.getStyleClass().add("pane1");
-        gridPanePlayer3.getStyleClass().add("pane1");
-        gridPanePlayer4.getStyleClass().add("pane1");
-        gridPanePlayer5.getStyleClass().add("pane1");
-        gridPanePlayer6.getStyleClass().add("pane1");
+        changeStyleClass("1");
     }
 
     @FXML
     void choosedStyle2(ActionEvent event) {
-        gridPanePlayer1.getStyleClass().add("pane2");
-        gridPanePlayer2.getStyleClass().add("pane2");
-        gridPanePlayer3.getStyleClass().add("pane2");
-        gridPanePlayer4.getStyleClass().add("pane2");
-        gridPanePlayer5.getStyleClass().add("pane2");
-        gridPanePlayer6.getStyleClass().add("pane2");
+        changeStyleClass("2");
     }
 
     @FXML
     void choosedStyle3(ActionEvent event) {
-        gridPanePlayer1.getStyleClass().add("pane3");
-        gridPanePlayer2.getStyleClass().add("pane3");
-        gridPanePlayer3.getStyleClass().add("pane3");
-        gridPanePlayer4.getStyleClass().add("pane3");
-        gridPanePlayer5.getStyleClass().add("pane3");
-        gridPanePlayer6.getStyleClass().add("pane3");
+        changeStyleClass("3");
+    }
+
+    private void changeStyleClass(String chosenStyleNum)
+    {
+        for(Pane p : playerGridPanes)
+        {
+            p.getStyleClass().removeAll(chosenStyle[0]);
+            chosenStyle[0] = "playerStyle" + chosenStyleNum;
+            p.getStyleClass().add(chosenStyle[0]);
+        }
+
+        if(theGame != null) {
+            playerGridPanes[theGame.getActivePlayerIndex()].getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
+            chosenStyle[1] = "activePlayerStyle" + chosenStyleNum;
+            playerGridPanes[theGame.getActivePlayerIndex()].getStyleClass().add(chosenStyle[1]);
+        }
+
+        for(Button b : systemButtons)
+        {
+            b.getStyleClass().removeAll(chosenStyle[2]);
+            chosenStyle[2] = "buttonStyle" + chosenStyleNum;
+            b.getStyleClass().add(chosenStyle[2]);
+        }
     }
 
     @FXML
@@ -492,7 +518,6 @@ public class Controller {
     }
     @FXML
     public void initialize() {
-        choosedStyle1(new ActionEvent());
     }
 
     @FXML
