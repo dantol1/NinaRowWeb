@@ -1,14 +1,10 @@
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -19,17 +15,16 @@ import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import jdk.internal.util.xml.impl.Input;
 
+import javax.swing.*;
 import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Controller {
 
@@ -37,6 +32,13 @@ public class Controller {
     public Game getTheGame() {
         return theGame;
     }
+
+    private enum GameMove {
+
+        PopDisc,
+        DropDisc
+    }
+
     private Disc[][] theDiscs;
     public void setTheGame(Game theGame) {
         this.theGame = theGame;
@@ -75,6 +77,8 @@ public class Controller {
     @FXML
     private ScrollPane scrollPaneSystem;
 
+    @FXML
+    private CheckBox animationCheckBox;
 
     @FXML
     private AnchorPane anchorPane;
@@ -206,7 +210,7 @@ public class Controller {
     @FXML
     private Button loadGameButton;
 
-    private Pane[] playerGridPanes = {
+    private Pane[] playerGridPanes =  {
             gridPanePlayer1,
             gridPanePlayer2,
             gridPanePlayer3,
@@ -267,7 +271,7 @@ public class Controller {
         label.textProperty().bind(task.messageProperty());
         bar.progressProperty().bind(task.progressProperty());
 
-        Scene loadScene = new Scene(stackpane,500,200);
+        Scene loadScene = new Scene(stackpane,600,200);
         window.setScene(loadScene);
         window.show();
 
@@ -365,7 +369,7 @@ public class Controller {
 
             rectangleUp.setOnMouseEntered(e -> rectangleUp.setFill(Color.rgb(0,0,0,0.4)));
             rectangleUp.setOnMouseExited(e -> rectangleUp.setFill(Color.TRANSPARENT));
-            rectangleUp.setOnMouseClicked(e -> dropDisc(rectangleUp));
+            rectangleUp.setOnMouseClicked(e -> playTurnDropDisc(rectangleUp));
 
             overlayList.add(rectangleUp);
 
@@ -378,7 +382,7 @@ public class Controller {
 
                 rectangleDown.setOnMouseEntered(e -> rectangleDown.setFill(Color.rgb(0, 0, 0, 0.4)));
                 rectangleDown.setOnMouseExited(e -> rectangleDown.setFill(Color.TRANSPARENT));
-                rectangleDown.setOnMouseClicked(e -> popDisc(rectangleDown));
+                rectangleDown.setOnMouseClicked(e -> playTurnPopDisc(rectangleDown));
 
                 overlayList.add(rectangleDown);
             }
@@ -387,61 +391,50 @@ public class Controller {
         return overlayList;
     }
 
-    private void popDisc(Rectangle rect) {
+    private void playTurnPopDisc(Rectangle rect) {
 
+        boolean turnSucceeded = false;
         int column = translateColumnFromXposition((int)rect.getTranslateX());
         int row = theGame.getSettings().getRows() - 1;
         if(isGameStarted) {
-            if (theGame.popoutDisc(column)) {
 
-                theDiscs[row][column].setFill(Color.TRANSPARENT);
-                theDiscs[row][column] = null;
+            turnSucceeded = popDisc(column,row);
 
-                row--;
-                while (theDiscs[row][column] != null) {
-
-                    theDiscs[row + 1][column] = theDiscs[row][column];
-                    theDiscs[row][column] = null;
-
-                    TranslateTransition animation = new TranslateTransition(Duration.seconds(0.2), theDiscs[row + 1][column]);
-                    animation.setToY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
-                    animation.play();
-                    row--;
-                }
-
-                theGame.endOfTurnActions(column);
-                theGame.isGameEnded(column);
-                //need to check a section if game ended
+            if (turnSucceeded) {
+                endOfTurnActions(column);
             }
         }
 
     }
 
-    private void dropDisc(Rectangle rect) {
+    private void playTurnDropDisc(Rectangle rect) {
 
+        boolean turnSucceeded =false;
         int column = translateColumnFromXposition((int)rect.getTranslateX());
         int row = theGame.getNextPlaceInColumn(column);
         if (isGameStarted == true) {
-            if (theGame.dropDisc(column)) {
 
-                Disc disc = new Disc(theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).getPlayerColor());
-                theDiscs[row][column] = disc;
-                discPane.getChildren().add(disc);
+            turnSucceeded = dropDisc(column,row);
 
-                disc.setTranslateX(column * (TILE_SIZE + 5) + TILE_SIZE / 4);
-
-                TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5), disc);
-                animation.setToY(row * (TILE_SIZE + 5) + TILE_SIZE / 4);
-                animation.play();
-
-
-                theGame.endOfTurnActions(column);
-                theGame.isGameEnded(column);
-                //need to add a section to check if the game has ended
-
+            if (turnSucceeded)
+            {
+                endOfTurnActions(column);
             }
 
-            changeActivePlayerPane();
+        }
+    }
+
+    private void endOfTurnActions(int column){
+
+        theGame.endOfTurnActions(column);
+        theGame.isGameEnded(column);
+        //need to add a section to check if the game has ended
+
+        changeActivePlayerPane();
+
+        if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
+        {
+            executeComputerTurn();
         }
     }
 
@@ -451,14 +444,119 @@ public class Controller {
         playersPane[theGame.getActivePlayerIndex()].applyCss();
     }
 
-    private int translateRowFromYposition(int translateY) {
-
-        return ((translateY - (TILE_SIZE/4))/(TILE_SIZE+5));
-    }
-
     private int translateColumnFromXposition(int translateX) {
 
         return ((translateX - (TILE_SIZE/4))/(TILE_SIZE+5));
+    }
+
+    private void executeComputerTurn()
+    {
+        Random rand = new Random();
+        boolean turnSucceeded = false;
+        int randomizedColumn;
+
+        do {
+            randomizedColumn = rand.nextInt(theGame.getSettings().getColumns());
+
+            if (theGame.getSettings().getVariant() == GameSettings.Variant.Circular ||
+                    theGame.getSettings().getVariant() == GameSettings.Variant.Regular) {
+
+                int row = theGame.getNextPlaceInColumn(randomizedColumn);
+
+                turnSucceeded = dropDisc(randomizedColumn, row);
+            }
+            else if (theGame.getSettings().getVariant() == GameSettings.Variant.Popout) {
+
+               GameMove randomGameMove = GameMove.values()[rand.nextInt(GameMove.values().length)];
+
+               if (randomGameMove == GameMove.DropDisc) {
+
+                  int row = theGame.getNextPlaceInColumn(randomizedColumn);
+
+                  turnSucceeded = dropDisc(randomizedColumn, row);
+
+               }
+               else if (randomGameMove == GameMove.PopDisc) {
+
+                   int row = theGame.getSettings().getRows() - 1;
+
+                   turnSucceeded = popDisc(randomizedColumn, row);
+
+               }
+            }
+        } while (!turnSucceeded);
+
+        theGame.endOfTurnActions(randomizedColumn);
+        theGame.isGameEnded(randomizedColumn);
+
+        //need to Add a section for when the game is over
+
+        changeActivePlayerPane();
+
+        if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
+        {
+            executeComputerTurn();
+        }
+    }
+
+    private boolean popDisc(int column, int row) {
+
+        boolean result = false;
+
+        if (theGame.popoutDisc(column)) {
+
+            result = true;
+
+            theDiscs[row][column].setFill(Color.TRANSPARENT);
+            theDiscs[row][column] = null;
+
+            row--;
+            while (theDiscs[row][column] != null) {
+
+                theDiscs[row + 1][column] = theDiscs[row][column];
+                theDiscs[row][column] = null;
+
+                if (animationCheckBox.isSelected()) {
+
+                    TranslateTransition animation = new TranslateTransition(Duration.seconds(0.2), theDiscs[row + 1][column]);
+                    animation.setToY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                    animation.play();
+                }
+                else {
+                    theDiscs[row+1][column].setTranslateY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                }
+
+                row--;
+            }
+        }
+
+        return result;
+    }
+    private boolean dropDisc(int column, int row) {
+
+        boolean result = false;
+
+        if (theGame.dropDisc(column)) {
+
+            result = true;
+
+            Disc disc = new Disc(theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).getPlayerColor());
+            theDiscs[row][column] = disc;
+            discPane.getChildren().add(disc);
+
+            disc.setTranslateX(column * (TILE_SIZE + 5) + TILE_SIZE / 4);
+
+            if (animationCheckBox.isSelected()) {
+                TranslateTransition animation = new TranslateTransition(Duration.seconds(0.5), disc);
+                animation.setToY(row * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                animation.play();
+            }
+            else {
+                disc.setTranslateY(row * (TILE_SIZE + 5) + TILE_SIZE / 4);
+            }
+        }
+
+        return result;
     }
 
     @FXML
@@ -480,6 +578,10 @@ public class Controller {
     {
         for(Pane p : playerGridPanes)
         {
+            if (chosenStyle[0] == null)
+            {
+                System.out.println("ok");
+            }
             p.getStyleClass().removeAll(chosenStyle[0]);
             chosenStyle[0] = "playerStyle" + chosenStyleNum;
             p.getStyleClass().add(chosenStyle[0]);
@@ -510,10 +612,35 @@ public class Controller {
         isGameStarted = true;
         ButtonXMLLoad.setDisable(true);
         StopGameButton.setDisable(false);
+        StartGameButton.setDisable(true);
+
+        if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
+        {
+            executeComputerTurn();
+        }
     }
 
     @FXML
     void stopTheGame(ActionEvent event) {
+
+        StopGameButton.setDisable(true);
+        StartGameButton.setDisable(false);
+        ButtonXMLLoad.setDisable(false);
+
+        isGameStarted = false;
+
+        for (int i = 0; i<theDiscs.length; i++)
+        {
+            for (int j = 0; j<theDiscs[i].length; j++)
+            {
+                if (theDiscs[i][j] != null) {
+                    theDiscs[i][j].setFill(Color.TRANSPARENT);
+                    theDiscs[i][j] = null;
+                }
+            }
+        }
+
+        JOptionPane.showMessageDialog(null, "The Game has stopped\nNo Winners");
 
     }
     @FXML
@@ -549,6 +676,9 @@ public class Controller {
         @Override
         protected Integer call() throws InterruptedException {
             try {
+                updateProgress(0.5,10);
+                Thread.sleep(200);
+                updateProgress(1,10);
                 theGame = (GameFactory.CreateGame(inputstream));
                 updateProgress(2,10);
                 updateMessage("Game Engine Loaded Successfully");
@@ -577,13 +707,12 @@ public class Controller {
                 updateMessage("Loaded XML File Successfully");
             } catch (FileDataException e) {
 
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
+                updateMessage("Error: " + e.getMessage());
             } catch (JAXBException e) {
 
                 throw new RuntimeException();
             }
+
 
             return 10;
 
