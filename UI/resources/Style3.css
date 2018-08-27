@@ -15,3 +15,18 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
     -fx-text-fill: #395306;
 }
+.buttonStyle3:pressed{
+    -fx-background-color:
+            linear-gradient(#f0ff35, #a9ff00),
+            radial-gradient(center 100% -20%, radius 200%, #b8ee36 45%, #80c800 65%);
+    -fx-background-radius: 6, 5;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-text-fill: #395306;
+}
+.mainFormStyle3{
+    -fx-background-image: url("BackgroundImage3.jpg");
+    -fx-background-repeat: repeat;
+    -fx-background-position: center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}

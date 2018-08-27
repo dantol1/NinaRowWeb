@@ -197,6 +197,8 @@ public class Controller {
     @FXML
     private MenuButton ChooseStyleMenuButton;
 
+    @FXML
+    private AnchorPane gameAnchorPane;
 
     @FXML
     private Pane PanePane;
@@ -210,7 +212,7 @@ public class Controller {
     @FXML
     private Button loadGameButton;
 
-    private String[] chosenStyle = {"playerStyle1", "activePlayerStyle1", "buttonStyle1"};
+    private String[] chosenStyle = {"playerStyle1", "activePlayerStyle1", "buttonStyle1", "mainFormStyle1"};
 
     @FXML
     void chooseXML(ActionEvent event) {
@@ -273,6 +275,11 @@ public class Controller {
         NameLabel5, IdLabel5, HowMuchTurnsLabel5, KindOfLabel5,
         NameLabel6, IdLabel6, HowMuchTurnsLabel6, KindOfLabel6};
 
+
+        for(Label l : playerLabels)
+        {
+            l.setVisible(true);
+        }
 
         for(int currentPlayerIndex = 0, currentWorkedOnLabel = 0; currentPlayerIndex < theGame.getPlayers().length; currentPlayerIndex++)
         {
@@ -645,6 +652,12 @@ public class Controller {
             b.getStyleClass().add(chosenStyle[2]);
         }
 
+        anchorPane.getStyleClass().remove(chosenStyle[3]);
+        gameAnchorPane.getStyleClass().remove(chosenStyle[3]);
+        chosenStyle[3] = "mainFormStyle" + chosenStyleNum;
+        anchorPane.getStyleClass().add(chosenStyle[3]);
+        gameAnchorPane.getStyleClass().add(chosenStyle[3]);
+
         ChooseStyleMenuButton.getStyleClass().add(chosenStyle[2]);
     }
 
@@ -685,8 +698,11 @@ public class Controller {
 
         theGame = null;
         StartGameButton.setDisable(true);
-        JOptionPane.showMessageDialog(null, "The Game has stopped\nNo Winners");
-
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Ended!");
+        alert.setHeaderText("The Game has stopped");
+        alert.setContentText("No Winners");
+        alert.showAndWait();
     }
 
     private void gameStopActions()
