@@ -413,7 +413,13 @@ public class Controller {
         Game.GameState gs = theGame.isGameEnded(column);
         if(gs == Game.GameState.GameWin)
         {
-            String winMessage = theGame.getWinningPlayers().toString() + "Won!";
+            String winMessage = "";
+
+            for(GamePlayer p : theGame.getWinningPlayers())
+            {
+                winMessage += (p.getName());
+            }
+            winMessage += " Won!";
             gameEndedMessage(winMessage);
             gameStopActions();
             return;
