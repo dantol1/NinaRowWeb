@@ -210,24 +210,7 @@ public class Controller {
     @FXML
     private Button loadGameButton;
 
-    private Pane[] playerGridPanes =  {
-            gridPanePlayer1,
-            gridPanePlayer2,
-            gridPanePlayer3,
-            gridPanePlayer4,
-            gridPanePlayer5,
-            gridPanePlayer6};
-
-    private Button[] systemButtons = {
-            loadGameButton,
-            saveGameButton,
-            ReplayButton,
-            StopGameButton,
-            StartGameButton,
-            ButtonXMLLoad};
-
     private String[] chosenStyle = {"playerStyle1", "activePlayerStyle1", "buttonStyle1"};
-
 
     @FXML
     void chooseXML(ActionEvent event) {
@@ -440,8 +423,13 @@ public class Controller {
 
     private void changeActivePlayerPane() {
         Pane[] playersPane = {gridPanePlayer1, gridPanePlayer2, gridPanePlayer3, gridPanePlayer4, gridPanePlayer5, gridPanePlayer6};
+        int lastPlayerIndex = theGame.getActivePlayerIndex() - 1 < 0 ? theGame.getPlayers().length - 1 : theGame.getActivePlayerIndex() - 1;
 
-        playersPane[theGame.getActivePlayerIndex()].applyCss();
+
+        playersPane[lastPlayerIndex].getStyleClass().remove(chosenStyle[1]);
+        playersPane[lastPlayerIndex].getStyleClass().add(chosenStyle[0]);
+        playersPane[theGame.getActivePlayerIndex()].getStyleClass().remove(chosenStyle[0]);
+        playersPane[theGame.getActivePlayerIndex()].getStyleClass().add(chosenStyle[1]);
     }
 
     private int translateColumnFromXposition(int translateX) {
@@ -495,6 +483,7 @@ public class Controller {
 
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
+
             executeComputerTurn();
         }
     }
@@ -576,29 +565,52 @@ public class Controller {
 
     private void changeStyleClass(String chosenStyleNum)
     {
-        for(Pane p : playerGridPanes)
+        Pane[] playersPane = {gridPanePlayer1, gridPanePlayer2, gridPanePlayer3, gridPanePlayer4, gridPanePlayer5, gridPanePlayer6};
+        Button[] systemButtons = {
+                loadGameButton,
+                saveGameButton,
+                ReplayButton,
+                StopGameButton,
+                StartGameButton,
+                ButtonXMLLoad};
+        int activePlayerIndex = 0;
+
+        ChooseStyleMenuButton.setText("Style" + chosenStyleNum);
+
+        for(Pane p : playersPane)
         {
-            if (chosenStyle[0] == null)
-            {
-                System.out.println("ok");
-            }
-            p.getStyleClass().removeAll(chosenStyle[0]);
-            chosenStyle[0] = "playerStyle" + chosenStyleNum;
+            p.getStyleClass().remove(chosenStyle[0]);
+        }
+
+        chosenStyle[0] = "playerStyle" + chosenStyleNum;
+
+        for(Pane p : playersPane)
+        {
             p.getStyleClass().add(chosenStyle[0]);
         }
 
         if(theGame != null) {
-            playerGridPanes[theGame.getActivePlayerIndex()].getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
-            chosenStyle[1] = "activePlayerStyle" + chosenStyleNum;
-            playerGridPanes[theGame.getActivePlayerIndex()].getStyleClass().add(chosenStyle[1]);
+            activePlayerIndex = theGame.getActivePlayerIndex();
         }
+
+        playersPane[activePlayerIndex].getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
+        chosenStyle[1] = "activePlayerStyle" + chosenStyleNum;
+        playersPane[activePlayerIndex].getStyleClass().add(chosenStyle[1]);
+        ChooseStyleMenuButton.getStyleClass().remove(chosenStyle[2]);
 
         for(Button b : systemButtons)
         {
-            b.getStyleClass().removeAll(chosenStyle[2]);
-            chosenStyle[2] = "buttonStyle" + chosenStyleNum;
+            b.getStyleClass().remove(chosenStyle[2]);
+        }
+
+        chosenStyle[2] = "buttonStyle" + chosenStyleNum;
+
+        for(Button b : systemButtons)
+        {
             b.getStyleClass().add(chosenStyle[2]);
         }
+
+        ChooseStyleMenuButton.getStyleClass().add(chosenStyle[2]);
     }
 
     @FXML
@@ -645,6 +657,7 @@ public class Controller {
     }
     @FXML
     public void initialize() {
+        choosedStyle1(new ActionEvent());
     }
 
     @FXML
