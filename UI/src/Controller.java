@@ -410,15 +410,50 @@ public class Controller {
     private void endOfTurnActions(int column){
 
         theGame.endOfTurnActions(column);
-        theGame.isGameEnded(column);
-        //need to add a section to check if the game has ended
+        Game.GameState gs = theGame.isGameEnded(column);
+        if(gs == Game.GameState.GameWin)
+        {
+            String winMessage = theGame.getPlayersWon().toString() + "Won!";
+            gameEndedMessage(winMessage);
+            gameStopActions();
+            return;
+        }
+        else if(gs == Game.GameState.SeveralPlayersWonTie)
+        {
+            String winMessage = "";
+
+            for(GamePlayer p : theGame.getPlayersWon())
+            {
+                winMessage += (p.getName() + ", ");
+            }
+            winMessage += " all reached the target.\n Game Tied!";
+            gameEndedMessage(winMessage);
+            gameStopActions();
+            return;
+        }
 
         changeActivePlayerPane();
 
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
+            try {
+                wait(500);
+            }
+            catch(Exception e)
+            {
+
+            }
             executeComputerTurn();
         }
+    }
+
+    private void gameEndedMessage(String playersWon)
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Ended!");
+        alert.setHeaderText("Game Ended!");
+        alert.setContentText(playersWon);
+        alert.showAndWait();
     }
 
     private void changeActivePlayerPane() {
@@ -474,16 +509,10 @@ public class Controller {
             }
         } while (!turnSucceeded);
 
-        theGame.endOfTurnActions(randomizedColumn);
-        theGame.isGameEnded(randomizedColumn);
-
-        //need to Add a section for when the game is over
-
-        changeActivePlayerPane();
+        endOfTurnActions(randomizedColumn);
 
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
-
             executeComputerTurn();
         }
     }
@@ -635,11 +664,7 @@ public class Controller {
     @FXML
     void stopTheGame(ActionEvent event) {
 
-        StopGameButton.setDisable(true);
-        StartGameButton.setDisable(false);
-        ButtonXMLLoad.setDisable(false);
-
-        isGameStarted = false;
+        gameStopActions();
 
         for (int i = 0; i<theDiscs.length; i++)
         {
@@ -652,8 +677,18 @@ public class Controller {
             }
         }
 
+        theGame = null;
+        StartGameButton.setDisable(true);
         JOptionPane.showMessageDialog(null, "The Game has stopped\nNo Winners");
 
+    }
+
+    private void gameStopActions()
+    {
+        StopGameButton.setDisable(true);
+        StartGameButton.setDisable(false);
+        ButtonXMLLoad.setDisable(false);
+        isGameStarted = false;
     }
     @FXML
     public void initialize() {

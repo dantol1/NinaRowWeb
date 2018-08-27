@@ -196,7 +196,10 @@ public class Game implements Serializable {
         else
         {
             if(winningPlayers.size() == 1)
+            {
                 state = GameState.GameWin;
+                playersWon = winningPlayers;
+            }
             else
             {
                 state = GameState.SeveralPlayersWonTie;
@@ -253,6 +256,7 @@ public class Game implements Serializable {
         return settings;
     }
 
+    
     private boolean checkConsecutiveDirection(DiscDirection dir, int column) {
         boolean result = false;
         int row = (gameBoard.getNextPlaceInColumn())[column]+1;

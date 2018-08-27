@@ -24,6 +24,7 @@ public class GamePlayer implements Serializable {
     private Color playerColor;
     private char pieceShape;
     private Type playerType;
+    private static char pieceShapeChar = 'a';
 
     public void setPlayer(String i_name, char i_pieceShape, Type i_isComputer) {
         name = i_name;
@@ -38,6 +39,8 @@ public class GamePlayer implements Serializable {
         this.name = name;
         this.playerType = type;
         this.playerColor = color;
+        this.pieceShape = GamePlayer.pieceShapeChar;
+        GamePlayer.pieceShapeChar++;
     }
 
     public Color getPlayerColor() {
@@ -60,21 +63,6 @@ public class GamePlayer implements Serializable {
         }
 
         return false;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GamePlayer gamePlayer = (GamePlayer) o;
-        return pieceShape == gamePlayer.pieceShape &&
-                Objects.equals(name, gamePlayer.name) &&
-                Objects.equals(id, gamePlayer.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, id, pieceShape);
     }
 
     public String getName(){
