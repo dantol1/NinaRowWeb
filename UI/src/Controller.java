@@ -1,3 +1,4 @@
+import javafx.animation.FillTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -7,6 +8,10 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.Light;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -18,11 +23,13 @@ import javafx.util.Duration;
 
 import javax.swing.*;
 import javax.xml.bind.JAXBException;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -66,12 +73,18 @@ public class Controller {
 
     private class Disc extends Circle {
 
-        public Disc(Color colorOfDisc) {
-            super(TILE_SIZE/2, colorOfDisc);
+        private Color colorOfDisc;
 
+        public Disc(Color colorOfDisc1) {
+
+            super(TILE_SIZE/2, colorOfDisc1);
+            colorOfDisc = colorOfDisc1;
             setCenterX(TILE_SIZE / 2);
             setCenterY(TILE_SIZE / 2);
+        }
 
+        public Color getColorOfDisc() {
+            return colorOfDisc;
         }
     }
     @FXML
@@ -426,6 +439,10 @@ public class Controller {
             {
                 winMessage += (p.getName());
             }
+            if (animationCheckBox.isSelected())
+            {
+                animateWinningDiscs();
+            }
             winMessage += " Won!";
             gameEndedMessage(winMessage);
             gameStopActions();
@@ -439,8 +456,20 @@ public class Controller {
             {
                 winMessage += (p.getName() + ", ");
             }
+            if (animationCheckBox.isSelected())
+            {
+                animateWinningDiscs();
+            }
             winMessage += " all reached the target.\n Game Tied!";
             gameEndedMessage(winMessage);
+            gameStopActions();
+            return;
+        }
+        else if (gs == Game.GameState.GameTie)
+        {
+            String tieMessage = "Game ended with tie, no winners";
+
+            gameEndedMessage(tieMessage);
             gameStopActions();
             return;
         }
@@ -469,6 +498,20 @@ public class Controller {
         alert.showAndWait();
     }
 
+    private void animateWinningDiscs() {
+
+        HashSet<Point> winningPieces = theGame.getWinningPieces();
+
+        for (Point p : winningPieces)
+        {
+            FillTransition animation = new FillTransition();
+            animation.setShape(theDiscs[p.y][p.x]);
+            animation.setFromValue(theDiscs[p.y][p.x].getColorOfDisc());
+            animation.setToValue(Color.GOLD);
+            animation.setDuration(Duration.millis(5000));
+            animation.play();
+        }
+    }
     private void changeActivePlayerPane() {
         Pane[] playersPane = {gridPanePlayer1, gridPanePlayer2, gridPanePlayer3, gridPanePlayer4, gridPanePlayer5, gridPanePlayer6};
         int lastPlayerIndex = theGame.getActivePlayerIndex() - 1 < 0 ? theGame.getPlayers().length - 1 : theGame.getActivePlayerIndex() - 1;
