@@ -53,6 +53,7 @@ public class Controller {
     private boolean isGameStarted = false;
     private Game theGame;
     private Scene mainScene;
+    private ArrayList<FillTransition> winningAnimations = null;
 
     private Pane discPane = new Pane();
 
@@ -468,7 +469,6 @@ public class Controller {
         else if (gs == Game.GameState.GameTie)
         {
             String tieMessage = "Game ended with tie, no winners";
-
             gameEndedMessage(tieMessage);
             gameStopActions();
             return;
@@ -501,6 +501,7 @@ public class Controller {
     private void animateWinningDiscs() {
 
         HashSet<Point> winningPieces = theGame.getWinningPieces();
+        winningAnimations = new ArrayList<>();
 
         for (Point p : winningPieces)
         {
@@ -508,9 +509,10 @@ public class Controller {
             animation.setShape(theDiscs[p.y][p.x]);
             animation.setFromValue(theDiscs[p.y][p.x].getColorOfDisc());
             animation.setToValue(Color.GOLD);
-            animation.setDuration(Duration.millis(1000));
+            animation.setDuration(Duration.millis(300));
             animation.setAutoReverse(true);
             animation.setCycleCount(10);
+            winningAnimations.add(animation);
             animation.play();
         }
     }
@@ -731,19 +733,6 @@ public class Controller {
 
         gameStopActions();
 
-        for (int i = 0; i<theDiscs.length; i++)
-        {
-            for (int j = 0; j<theDiscs[i].length; j++)
-            {
-                if (theDiscs[i][j] != null) {
-                    theDiscs[i][j].setFill(Color.TRANSPARENT);
-                    theDiscs[i][j] = null;
-                }
-            }
-        }
-
-        theGame = null;
-        StartGameButton.setDisable(true);
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Ended!");
         alert.setHeaderText("The Game has stopped");
@@ -753,10 +742,38 @@ public class Controller {
 
     private void gameStopActions()
     {
+        clearBoard();
+
         StopGameButton.setDisable(true);
-        StartGameButton.setDisable(false);
+        StartGameButton.setDisable(true);
         ButtonXMLLoad.setDisable(false);
         isGameStarted = false;
+    }
+
+    private void clearBoard() {
+
+        if (winningAnimations != null) {
+            for (FillTransition animation : winningAnimations) {
+                animation.stop();
+                ((Disc) animation.getShape()).setFill(Color.TRANSPARENT);
+
+            }
+        }
+
+        for (int i = 0; i<theDiscs.length; i++)
+        {
+            for (int j = 0; j<theDiscs[i].length; j++)
+            {
+                if (theDiscs[i][j] != null && !theGame.getWinningPieces().contains(new Point(j,i))) {
+                    theDiscs[i][j].setFill(Color.TRANSPARENT);
+                    theDiscs[i][j] = null;
+                }
+            }
+        }
+
+        winningAnimations = null;
+        theGame = null;
+
     }
     @FXML
     public void initialize() {
