@@ -508,10 +508,13 @@ public class Controller {
             animation.setShape(theDiscs[p.y][p.x]);
             animation.setFromValue(theDiscs[p.y][p.x].getColorOfDisc());
             animation.setToValue(Color.GOLD);
-            animation.setDuration(Duration.millis(5000));
+            animation.setDuration(Duration.millis(1000));
+            animation.setAutoReverse(true);
+            animation.setCycleCount(10);
             animation.play();
         }
     }
+
     private void changeActivePlayerPane() {
         Pane[] playersPane = {gridPanePlayer1, gridPanePlayer2, gridPanePlayer3, gridPanePlayer4, gridPanePlayer5, gridPanePlayer6};
         int lastPlayerIndex = theGame.getActivePlayerIndex() - 1 < 0 ? theGame.getPlayers().length - 1 : theGame.getActivePlayerIndex() - 1;
