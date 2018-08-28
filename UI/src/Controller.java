@@ -398,9 +398,9 @@ public class Controller {
 
         boolean turnSucceeded = false;
         int column = translateColumnFromXposition((int)rect.getTranslateX());
-        int row = theGame.getSettings().getRows() - 1;
-        if(isGameStarted) {
 
+        if(isGameStarted) {
+            int row = theGame.getSettings().getRows() - 1;
             turnSucceeded = popDisc(column,row);
 
             if (turnSucceeded) {
@@ -414,9 +414,8 @@ public class Controller {
 
         boolean turnSucceeded =false;
         int column = translateColumnFromXposition((int)rect.getTranslateX());
-        int row = theGame.getNextPlaceInColumn(column);
         if (isGameStarted == true) {
-
+            int row = theGame.getNextPlaceInColumn(column);
             turnSucceeded = dropDisc(column,row);
 
             if (turnSucceeded)
@@ -508,10 +507,16 @@ public class Controller {
             animation.setShape(theDiscs[p.y][p.x]);
             animation.setFromValue(theDiscs[p.y][p.x].getColorOfDisc());
             animation.setToValue(Color.GOLD);
-            animation.setDuration(Duration.millis(1000));
+            animation.setDuration(Duration.millis(500));
             animation.setAutoReverse(true);
             animation.setCycleCount(10);
+            animation.setOnFinished(e->{
+                theDiscs[p.y][p.x].setFill(Color.TRANSPARENT);
+                theDiscs[p.y][p.x] = null;
+                
+            });
             animation.play();
+
         }
     }
 
@@ -744,7 +749,7 @@ public class Controller {
         {
             for (int j = 0; j<theDiscs[i].length; j++)
             {
-                if (theDiscs[i][j] != null) {
+                if ((theDiscs[i][j] != null) && (!theGame.getWinningPieces().contains(new Point(j,i)))) {
                     theDiscs[i][j].setFill(Color.TRANSPARENT);
                     theDiscs[i][j] = null;
                 }
