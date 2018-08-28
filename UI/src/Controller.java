@@ -446,6 +446,7 @@ public class Controller {
             winMessage += " Won!";
             gameEndedMessage(winMessage);
             gameStopActions();
+            StartGameButton.setDisable(true);
             return;
         }
         else if(gs == Game.GameState.SeveralPlayersWonTie)
@@ -460,9 +461,11 @@ public class Controller {
             {
                 animateWinningDiscs();
             }
+            winMessage += "\b\b";
             winMessage += " all reached the target.\n Game Tied!";
             gameEndedMessage(winMessage);
             gameStopActions();
+            StartGameButton.setDisable(true);
             return;
         }
         else if (gs == Game.GameState.GameTie)
@@ -471,6 +474,7 @@ public class Controller {
 
             gameEndedMessage(tieMessage);
             gameStopActions();
+            StartGameButton.setDisable(true);
             return;
         }
 
@@ -742,7 +746,6 @@ public class Controller {
             }
         }
 
-        theGame = null;
         StartGameButton.setDisable(true);
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Ended!");
@@ -753,6 +756,7 @@ public class Controller {
 
     private void gameStopActions()
     {
+        theGame = null;
         StopGameButton.setDisable(true);
         StartGameButton.setDisable(false);
         ButtonXMLLoad.setDisable(false);
