@@ -35,8 +35,7 @@ public class GameFactory {
 
         String message = "";
         boolean idIsDuplicated = false;
-
-        System.out.println(thePlayers.size());
+        
         if (thePlayers.size() > 6 || thePlayers.size() < 2)
         {
             message += "Num of players is incorrect, must be within 2-6";

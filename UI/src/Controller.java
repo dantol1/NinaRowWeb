@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
 
 public class Controller {
 
@@ -576,7 +577,8 @@ public class Controller {
 
     private void timedComputerTurn()
     {
-        new java.util.Timer().schedule(
+        Timer timer = new Timer();
+        timer.schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
