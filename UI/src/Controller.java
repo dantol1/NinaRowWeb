@@ -728,6 +728,15 @@ public class Controller {
 
         gameStopActions();
 
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Ended!");
+        alert.setHeaderText("The Game has stopped");
+        alert.setContentText("No Winners");
+        alert.showAndWait();
+    }
+
+    private void clearBoard() {
+
         for (int i = 0; i<theDiscs.length; i++)
         {
             for (int j = 0; j<theDiscs[i].length; j++)
@@ -740,20 +749,17 @@ public class Controller {
         }
 
         theGame = null;
-        StartGameButton.setDisable(true);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Ended!");
-        alert.setHeaderText("The Game has stopped");
-        alert.setContentText("No Winners");
-        alert.showAndWait();
     }
 
     private void gameStopActions()
     {
         StopGameButton.setDisable(true);
-        StartGameButton.setDisable(false);
+        StartGameButton.setDisable(true);
         ButtonXMLLoad.setDisable(false);
         isGameStarted = false;
+
+        clearBoard();
+
     }
     @FXML
     public void initialize() {
