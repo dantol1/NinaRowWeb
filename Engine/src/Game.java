@@ -1,10 +1,12 @@
 import javafx.scene.paint.Color;
 import jaxb.schema.generated.Player;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 
 public class Game implements Serializable {
 
@@ -62,6 +64,11 @@ public class Game implements Serializable {
     private GamePlayer players[];
     private int numOfActivePlayers;
     private History moveHistory;
+    private HashSet<Point> winningPieces = new HashSet<>();
+
+    public HashSet<Point> getWinningPieces() {
+        return winningPieces;
+    }
 
     public GamePlayer getPlayerByIndex(int i) throws ArrayIndexOutOfBoundsException {
 
@@ -258,37 +265,58 @@ public class Game implements Serializable {
         if (checkConsecutiveDirection(DiscDirection.Down,column) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.Down,column);
         }
         else if (checkConsecutiveDirection(DiscDirection.Left,column) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.Left,column);
         }
         else if (checkConsecutiveDirection(DiscDirection.Up,column) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.Up,column);
         }
         else if (checkConsecutiveDirection(DiscDirection.Right,column) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.Right,column);
         }
         else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalLeft,column) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.LowerDiagonalLeft,column);
         }
         else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalLeft,column) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.UpperDiagonalLeft,column);
         }
         else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalRight,column) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.LowerDiagonalRight,column);
         }
         else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalRight,column) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.UpperDiagonalRight,column);
         }
 
         return gameEnded;
+    }
+
+    private void addWinningPiecesToSet(DiscDirection dir, int column) {
+        int target = this.settings.getTarget();
+        movement mv = getMovementByDirection(dir);
+        int winPieceCol = column, winPieceRow = (gameBoard.getNextPlaceInColumn())[column]+1;
+
+        for(int i = 0; i < target; i++)
+        {
+            winningPieces.add(new Point(winPieceCol, winPieceRow));
+            winPieceCol += mv.colMovement;
+            winPieceRow += mv.rowMovement;
+        }
     }
 
     private boolean checkAllDirectionsForWinCircular(int column, int row)
@@ -298,37 +326,58 @@ public class Game implements Serializable {
         if (checkConsecutiveDirection(DiscDirection.Down,column, row) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.Down,column, row);
         }
         else if (checkConsecutiveDirection(DiscDirection.Left,column, row) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.Left,column, row);
         }
         else if (checkConsecutiveDirection(DiscDirection.Up,column, row) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.Up,column, row);
         }
         else if (checkConsecutiveDirection(DiscDirection.Right,column, row) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.Right,column, row);
         }
         else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalLeft,column, row) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.LowerDiagonalLeft,column, row);
         }
         else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalLeft,column, row) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.UpperDiagonalLeft,column, row);
         }
         else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalRight,column, row) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.LowerDiagonalRight,column, row);
         }
         else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalRight,column, row) == true)
         {
             gameEnded = true;
+            addWinningPiecesToSet(DiscDirection.UpperDiagonalRight,column, row);
         }
 
         return gameEnded;
+    }
+
+    private void addWinningPiecesToSet(DiscDirection dir, int column, int row) {
+        int target = this.settings.getTarget();
+        movement mv = getMovementByDirection(dir);
+        int winPieceCol = column, winPieceRow = row;
+
+        for(int i = 0; i < target; i++)
+        {
+            winningPieces.add(new Point(winPieceCol, winPieceRow));
+            winPieceCol += mv.colMovement;
+            winPieceRow += mv.rowMovement;
+        }
     }
 
     public GameSettings getSettings() {
