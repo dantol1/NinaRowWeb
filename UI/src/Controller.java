@@ -834,6 +834,23 @@ public class Controller {
                     @Override
                     public void run() {
                         fillPlayerData();
+                        setFirstActivePlayer();
+                    }
+
+                    private void setFirstActivePlayer() {
+                        gridPanePlayer1.getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
+                        gridPanePlayer2.getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
+                        gridPanePlayer3.getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
+                        gridPanePlayer4.getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
+                        gridPanePlayer5.getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
+                        gridPanePlayer6.getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
+
+                        gridPanePlayer1.getStyleClass().add(chosenStyle[1]);
+                        gridPanePlayer2.getStyleClass().add(chosenStyle[0]);
+                        gridPanePlayer3.getStyleClass().add(chosenStyle[0]);
+                        gridPanePlayer4.getStyleClass().add(chosenStyle[0]);
+                        gridPanePlayer5.getStyleClass().add(chosenStyle[0]);
+                        gridPanePlayer6.getStyleClass().add(chosenStyle[0]);
                     }
                 });
                 updateProgress(10,10);
