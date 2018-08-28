@@ -51,6 +51,7 @@ public class Controller {
         this.theGame = theGame;
     }
     private boolean isGameStarted = false;
+    private boolean humanPlayerTurn = false;
     private Game theGame;
     private Scene mainScene;
     private ArrayList<FillTransition> winningAnimations = null;
@@ -400,7 +401,7 @@ public class Controller {
         boolean turnSucceeded = false;
         int column = translateColumnFromXposition((int)rect.getTranslateX());
 
-        if(isGameStarted) {
+        if(isGameStarted && humanPlayerTurn) {
             int row = theGame.getSettings().getRows() - 1;
             turnSucceeded = popDisc(column,row);
 
@@ -416,7 +417,7 @@ public class Controller {
         boolean turnSucceeded =false;
         int column = translateColumnFromXposition((int)rect.getTranslateX());
 
-        if (isGameStarted == true) {
+        if (isGameStarted && humanPlayerTurn) {
             int row = theGame.getNextPlaceInColumn(column);
             turnSucceeded = dropDisc(column,row);
 
@@ -476,16 +477,11 @@ public class Controller {
 
         changeActivePlayerPane();
 
+
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
-            try {
-                wait(500);
-            }
-            catch(Exception e)
-            {
-
-            }
-            executeComputerTurn();
+            humanPlayerTurn = false;
+            timedComputerTurn();
         }
     }
 
@@ -574,8 +570,27 @@ public class Controller {
 
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
-            executeComputerTurn();
+            timedComputerTurn();
         }
+    }
+
+    private void timedComputerTurn()
+    {
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                executeComputerTurn();
+                                humanPlayerTurn = true;
+                            }
+                        });
+                    }
+                },
+                500
+        );
     }
 
     private boolean popDisc(int column, int row) {
@@ -722,9 +737,13 @@ public class Controller {
         StopGameButton.setDisable(false);
         StartGameButton.setDisable(true);
 
+
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
-            executeComputerTurn();
+            timedComputerTurn();
+        }
+        else {
+            humanPlayerTurn = true;
         }
     }
 
