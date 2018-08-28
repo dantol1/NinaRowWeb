@@ -398,9 +398,9 @@ public class Controller {
 
         boolean turnSucceeded = false;
         int column = translateColumnFromXposition((int)rect.getTranslateX());
-        int row = theGame.getSettings().getRows() - 1;
-        if(isGameStarted) {
 
+        if(isGameStarted) {
+            int row = theGame.getSettings().getRows() - 1;
             turnSucceeded = popDisc(column,row);
 
             if (turnSucceeded) {
@@ -414,9 +414,9 @@ public class Controller {
 
         boolean turnSucceeded =false;
         int column = translateColumnFromXposition((int)rect.getTranslateX());
-        int row = theGame.getNextPlaceInColumn(column);
-        if (isGameStarted == true) {
 
+        if (isGameStarted == true) {
+            int row = theGame.getNextPlaceInColumn(column);
             turnSucceeded = dropDisc(column,row);
 
             if (turnSucceeded)
