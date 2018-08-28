@@ -248,12 +248,14 @@ public class Game implements Serializable {
 
     private void findWinningPlayers(int row, int column)
     {
-        for(GamePlayer p : this.players)
+        for(Point d : this.winningPieces)
         {
-            if(p.getPieceShape() == this.gameBoard.getCellSymbol(row, column))
+            for(GamePlayer p : this.players)
             {
-                winningPlayers.add(p);
-                break;
+                if(p.getPieceShape() == this.gameBoard.getCellSymbol(d.y, d.x))
+                {
+                    winningPlayers.add(p);
+                }
             }
         }
     }
@@ -377,6 +379,12 @@ public class Game implements Serializable {
             winningPieces.add(new Point(winPieceCol, winPieceRow));
             winPieceCol += mv.colMovement;
             winPieceRow += mv.rowMovement;
+            winPieceCol = winPieceCol % settings.getColumns();
+            winPieceRow = winPieceRow % settings.getRows();
+            if(winPieceRow < 0)
+                winPieceRow = settings.getRows() - 1;
+            if(winPieceCol < 0)
+                winPieceCol = settings.getColumns() - 1;
         }
     }
 
