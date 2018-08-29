@@ -159,7 +159,14 @@ public class Game implements Serializable {
 
     public boolean popoutDisc(int column)
     {
-        return gameBoard.popoutDisc(column);
+        boolean moveSucceeded = gameBoard.popoutDisc(column);
+
+        if(moveSucceeded)
+        {
+            moveHistory.AddMoveToHistory(activePlayerIndex, column, Move.moveType.POPOUT);
+        }
+
+        return moveSucceeded;
     }
 
     public GameState isGameEnded(int column){
@@ -539,7 +546,7 @@ public class Game implements Serializable {
         succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
         if(succeeded)
         {
-            endOfTurnActions(columnToPlaceDisc);
+            endOfTurnActions(columnToPlaceDisc, Move.moveType.POPIN);
         }
 
         return succeeded;
@@ -556,14 +563,14 @@ public class Game implements Serializable {
             succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
         }while(!succeeded);
 
-        endOfTurnActions(columnToPlaceDisc);
+        endOfTurnActions(columnToPlaceDisc, Move.moveType.POPIN);
 
         return succeeded;
     }
 
-    public void endOfTurnActions(int columnInWhichDiscWasPut)
+    public void endOfTurnActions(int columnInWhichDiscWasPut, Move.moveType i_MoveType)
     {
-        moveHistory.AddMoveToHistory(activePlayerIndex, columnInWhichDiscWasPut);
+        moveHistory.AddMoveToHistory(activePlayerIndex, columnInWhichDiscWasPut, i_MoveType);
         players[activePlayerIndex].playedTurn();
     }
 
@@ -668,6 +675,7 @@ public class Game implements Serializable {
                 if(gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape())
                 {
                     gameBoard.getBoard()[row][column] = Board.EMPTY_CELL;
+                    moveHistory.AddMoveToHistory(activePlayerIndex, column, Move.moveType.RETIRE);
                 }
             }
         }

@@ -411,7 +411,7 @@ public class Controller {
             turnSucceeded = popDisc(column,row);
 
             if (turnSucceeded) {
-                endOfTurnActions(column);
+                endOfTurnActions(column, Move.moveType.POPOUT);
             }
         }
 
@@ -428,15 +428,15 @@ public class Controller {
 
             if (turnSucceeded)
             {
-                endOfTurnActions(column);
+                endOfTurnActions(column, Move.moveType.POPIN);
             }
 
         }
     }
 
-    private void endOfTurnActions(int column){
+    private void endOfTurnActions(int column, Move.moveType i_MoveType){
 
-        theGame.endOfTurnActions(column);
+        theGame.endOfTurnActions(column, i_MoveType);
         Game.GameState gs = theGame.isGameEnded(column);
         if(gs == Game.GameState.GameWin)
         {
@@ -547,6 +547,7 @@ public class Controller {
         Random rand = new Random();
         boolean turnSucceeded = false;
         int randomizedColumn;
+        Move.moveType moveType = null;
 
         do {
             randomizedColumn = rand.nextInt(theGame.getSettings().getColumns());
@@ -567,19 +568,19 @@ public class Controller {
                   int row = theGame.getNextPlaceInColumn(randomizedColumn);
 
                   turnSucceeded = dropDisc(randomizedColumn, row);
-
+                  moveType = Move.moveType.POPIN;
                }
                else if (randomGameMove == GameMove.PopDisc) {
 
                    int row = theGame.getSettings().getRows() - 1;
 
                    turnSucceeded = popDisc(randomizedColumn, row);
-
+                   moveType = Move.moveType.POPOUT;
                }
             }
         } while (!turnSucceeded);
 
-        endOfTurnActions(randomizedColumn);
+        endOfTurnActions(randomizedColumn, moveType);
 
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
