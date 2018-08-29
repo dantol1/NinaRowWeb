@@ -94,6 +94,9 @@ public class Controller {
     private ScrollPane scrollPaneSystem;
 
     @FXML
+    private Button quitButton;
+
+    @FXML
     private CheckBox animationCheckBox;
 
     @FXML
@@ -269,6 +272,7 @@ public class Controller {
         stackpane.getChildren().addAll(label);
         label.setPadding(new Insets(50,0,0,0));
         task.SetInputStream(inputstream);
+
         label.textProperty().bind(task.messageProperty());
         bar.progressProperty().bind(task.progressProperty());
 
@@ -607,23 +611,7 @@ public class Controller {
             theDiscs[row][column] = null;
 
             row--;
-            while (theDiscs[row][column] != null) {
-
-                theDiscs[row + 1][column] = theDiscs[row][column];
-                theDiscs[row][column] = null;
-
-                if (animationCheckBox.isSelected()) {
-
-                    TranslateTransition animation = new TranslateTransition(Duration.seconds(0.2), theDiscs[row + 1][column]);
-                    animation.setToY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
-                    animation.play();
-                }
-                else {
-                    theDiscs[row+1][column].setTranslateY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
-                }
-
-                row--;
-            }
+            collapseDiscs(row,column);
         }
 
         return result;
@@ -734,6 +722,7 @@ public class Controller {
     @FXML
     void startTheGame(ActionEvent event) {
 
+        quitButton.setDisable(false);
         isGameStarted = true;
         ButtonXMLLoad.setDisable(true);
         StopGameButton.setDisable(false);
@@ -795,6 +784,51 @@ public class Controller {
         winningAnimations = null;
         theGame = null;
 
+    }
+    @FXML
+    public void quitGame() {
+
+        Color playerColor = theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).getPlayerColor();
+
+        for (int i = 0; i<theDiscs.length; i++)
+        {
+            for (int j = 0; j<theDiscs[i].length; j++)
+            {
+                if (theDiscs[i][j] != null && theDiscs[i][j].getColorOfDisc() == playerColor)
+                {
+
+                    theDiscs[i][j].setFill(Color.TRANSPARENT);
+                    theDiscs[i][j] = null;
+
+                    int row = i;
+
+                    row--;
+                    collapseDiscs(row,j);
+                }
+            }
+        }
+
+    }
+
+    private void collapseDiscs(int row, int column){
+
+        while (theDiscs[row][column] != null)
+        {
+            theDiscs[row + 1][column] = theDiscs[row][column];
+            theDiscs[row][column] = null;
+
+            if (animationCheckBox.isSelected()) {
+
+                TranslateTransition animation = new TranslateTransition(Duration.seconds(0.2), theDiscs[row + 1][column]);
+                animation.setToY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                animation.play();
+            }
+            else {
+                theDiscs[row+1][column].setTranslateY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
+            }
+
+            row--;
+        }
     }
     @FXML
     public void initialize() {
