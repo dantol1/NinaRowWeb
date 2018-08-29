@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="NinaRowGUI:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/NinaRowGUI_jar</output-path>
+    <root id="archive" name="NinaRowGUI.jar">
+      <element id="module-output" name="UI" />
+      <element id="module-output" name="Engine" />
+    </root>
+  </artifact>
+</component>

@@ -231,7 +231,7 @@ public class Controller {
     @FXML
     private Button loadGameButton;
 
-    private String[] chosenStyle = {"playerStyle1", "activePlayerStyle1", "buttonStyle1", "mainFormStyle1"};
+    private String[] chosenStyle = {"playerStyle1", "activePlayerStyle1", "buttonStyle1", "mainFormStyle1", "retiredPlayerStyle1"};
 
     @FXML
     void chooseXML(ActionEvent event) {
@@ -522,6 +522,14 @@ public class Controller {
         Pane[] playersPane = {gridPanePlayer1, gridPanePlayer2, gridPanePlayer3, gridPanePlayer4, gridPanePlayer5, gridPanePlayer6};
         int lastPlayerIndex = theGame.getActivePlayerIndex() - 1 < 0 ? theGame.getPlayers().length - 1 : theGame.getActivePlayerIndex() - 1;
 
+        while(theGame.getRetiredPlayersIndexes()[lastPlayerIndex] == true)
+        {
+            lastPlayerIndex--;
+            if(lastPlayerIndex < 0)
+            {
+                lastPlayerIndex = theGame.getPlayers().length - 1;
+            }
+        }
 
         playersPane[lastPlayerIndex].getStyleClass().remove(chosenStyle[1]);
         playersPane[lastPlayerIndex].getStyleClass().add(chosenStyle[0]);
@@ -667,7 +675,8 @@ public class Controller {
                 ReplayButton,
                 StopGameButton,
                 StartGameButton,
-                ButtonXMLLoad};
+                ButtonXMLLoad,
+                quitButton};
         int activePlayerIndex = 0;
 
         ChooseStyleMenuButton.setText("Style" + chosenStyleNum);
@@ -686,6 +695,27 @@ public class Controller {
 
         if(theGame != null) {
             activePlayerIndex = theGame.getActivePlayerIndex();
+        }
+
+        if(theGame != null)
+        {
+            for(int i = 0; i < theGame.getPlayers().length; i++)
+            {
+                if(theGame.getRetiredPlayersIndexes()[i])
+                {
+                    playersPane[i].getStyleClass().removeAll(chosenStyle[0], chosenStyle[4]);
+                }
+            }
+
+            chosenStyle[4] = "retiredPlayerStyle" + chosenStyleNum;
+
+            for(int i = 0; i < theGame.getPlayers().length; i++)
+            {
+                if(theGame.getRetiredPlayersIndexes()[i])
+                {
+                    playersPane[i].getStyleClass().add(chosenStyle[4]);
+                }
+            }
         }
 
         playersPane[activePlayerIndex].getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
@@ -808,6 +838,17 @@ public class Controller {
             }
         }
 
+        disableRetiredPlayerPane();
+        theGame.retireFromGame();
+        changeActivePlayerPane();
+    }
+
+    private void disableRetiredPlayerPane() {
+        Pane[] playerPanes = {gridPanePlayer1, gridPanePlayer2, gridPanePlayer3, gridPanePlayer4, gridPanePlayer5, gridPanePlayer6};
+
+        playerPanes[theGame.getActivePlayerIndex()].getStyleClass().remove(chosenStyle[1]);
+        playerPanes[theGame.getActivePlayerIndex()].getStyleClass().add(chosenStyle[4]);
+        playerPanes[theGame.getActivePlayerIndex()].setDisable(true);
     }
 
     private void collapseDiscs(int row, int column){

@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class Board implements Serializable {
-    private static final char EMPTY_CELL = ' ';
+    public static final char EMPTY_CELL = ' ';
     private int columns;
     private int rows;
 
@@ -102,5 +102,35 @@ public class Board implements Serializable {
         }
 
         return popoutSucceeded;
+    }
+
+    public void collapseSpaces() {
+        for(int column = 0; column < columns; column++)
+        {
+            for(int row = rows - 2; row >= 0; row--)
+            {
+                if(board[row + 1][column] == EMPTY_CELL)
+                {
+                    board[row + 1][column] = board[row][column];
+                    board[row][column] = EMPTY_CELL;
+                }
+            }
+        }
+
+        updateNextPlacesInColumns();
+    }
+
+    private void updateNextPlacesInColumns()
+    {
+        for(int column = 0; column < columns; column++)
+        {
+            for(int row = 0; row < rows; row++)
+            {
+                if(board[row][column]== Board.EMPTY_CELL)
+                {
+                    nextPlaceInColumn[column] = row;
+                }
+            }
+        }
     }
 }

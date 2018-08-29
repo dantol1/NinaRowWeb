@@ -3,8 +3,6 @@ import jaxb.schema.generated.Player;
 
 import java.awt.*;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
@@ -65,6 +63,7 @@ public class Game implements Serializable {
     private int numOfActivePlayers;
     private History moveHistory;
     private HashSet<Point> winningPieces = new HashSet<>();
+    private boolean[] retiredPlayersIndexes = new boolean[6];
 
     public HashSet<Point> getWinningPieces() {
         return winningPieces;
@@ -117,6 +116,10 @@ public class Game implements Serializable {
 
         }
 
+        for(boolean i : retiredPlayersIndexes)
+        {
+            i = false;
+        }
     }
 
     public void saveGame(String fileName) throws IOException
@@ -567,6 +570,10 @@ public class Game implements Serializable {
     private void changeToNextActivePlayer()
     {
         activePlayerIndex = (activePlayerIndex + 1) % numOfActivePlayers;
+        if(retiredPlayersIndexes[activePlayerIndex] == true)
+        {
+            changeToNextActivePlayer();
+        }
     }
 
     public void undoMove() throws NoMovesMadeException
@@ -602,5 +609,39 @@ public class Game implements Serializable {
     public int getNextPlaceInColumn(int column)
     {
         return (gameBoard.getNextPlaceInColumn())[column];
+    }
+
+    public void retireFromGame()
+    {
+        removeAllPlayerPiecesFromBoard();
+        removePlayerFromGame();
+        collapseRemainingPieces();
+    }
+
+    public boolean[] getRetiredPlayersIndexes() {
+        return retiredPlayersIndexes;
+    }
+
+    private void collapseRemainingPieces() {
+        gameBoard.collapseSpaces();
+    }
+
+    private void removePlayerFromGame() {
+        retiredPlayersIndexes[activePlayerIndex] = true;
+        changeToNextActivePlayer();
+    }
+
+    private void removeAllPlayerPiecesFromBoard()
+    {
+        for(int row = 0; row < settings.getRows(); row++)
+        {
+            for(int column = 0; column < settings.getColumns(); column++)
+            {
+                if(gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape())
+                {
+                    gameBoard.getBoard()[row][column] = Board.EMPTY_CELL;
+                }
+            }
+        }
     }
 }

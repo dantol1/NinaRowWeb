@@ -30,3 +30,8 @@
     -fx-background-position: center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
+.retiredPlayerStyle3
+{
+    -fx-background-color: beige;
+    -fx-font-style: italic;
+}
