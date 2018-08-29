@@ -611,11 +611,39 @@ public class Game implements Serializable {
         return (gameBoard.getNextPlaceInColumn())[column];
     }
 
-    public void retireFromGame()
+    public GameState retireFromGame()
     {
         removeAllPlayerPiecesFromBoard();
         removePlayerFromGame();
         collapseRemainingPieces();
+
+        return checkIfLastPlayer();
+    }
+
+    private GameState checkIfLastPlayer()
+    {
+        int stillPlaying = 0;
+        int lastPlayerIndex = 0;
+
+        for(int i = 0; i < players.length; i++)
+        {
+            if(!retiredPlayersIndexes[i])
+            {
+                stillPlaying++;
+                lastPlayerIndex = i;
+            }
+        }
+
+        if(stillPlaying == 1)
+        {
+            winningPlayers.add(players[lastPlayerIndex]);
+
+            return GameState.GameWin;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public boolean[] getRetiredPlayersIndexes() {

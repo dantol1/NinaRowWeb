@@ -757,7 +757,7 @@ public class Controller {
         ButtonXMLLoad.setDisable(true);
         StopGameButton.setDisable(false);
         StartGameButton.setDisable(true);
-
+        clearExtraStyles();
 
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
@@ -765,6 +765,16 @@ public class Controller {
         }
         else {
             humanPlayerTurn = true;
+        }
+    }
+
+    private void clearExtraStyles() {
+        Pane[] playerPanes = {gridPanePlayer1, gridPanePlayer2, gridPanePlayer3, gridPanePlayer4, gridPanePlayer5, gridPanePlayer6};
+
+        for(Pane p : playerPanes)
+        {
+            p.getStyleClass().remove(chosenStyle[4]);
+            p.setDisable(false);
         }
     }
 
@@ -787,6 +797,7 @@ public class Controller {
         StopGameButton.setDisable(true);
         StartGameButton.setDisable(true);
         ButtonXMLLoad.setDisable(false);
+        quitButton.setDisable(true);
         isGameStarted = false;
     }
 
@@ -839,7 +850,20 @@ public class Controller {
         }
 
         disableRetiredPlayerPane();
-        theGame.retireFromGame();
+        if(theGame.retireFromGame() == Game.GameState.GameWin)
+        {
+            String winMessage = "";
+
+            for(GamePlayer p : theGame.winningPlayers)
+            {
+                winMessage += p.getName();
+            }
+
+            winMessage += " Won by default.";
+            gameEndedMessage(winMessage);
+            gameStopActions();
+            return;
+        }
         changeActivePlayerPane();
     }
 
