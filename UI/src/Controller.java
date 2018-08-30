@@ -5,7 +5,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -28,10 +30,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.Timer;
 
 public class Controller {
@@ -59,13 +59,19 @@ public class Controller {
 
     private Pane discPane = new Pane();
 
+    private Shape theGridShape;
+
+    public Game getGame(){
+        return theGame;
+    }
+
     public void setTheStage(Stage theStage) {
         this.theStage = theStage;
     }
 
     private Stage theStage;
 
-    private Pane scrollPaneContent = new Pane();
+    private Pane scrollPaneContent;
     public Scene getMainScene() {
         return mainScene;
     }
@@ -90,6 +96,28 @@ public class Controller {
             return colorOfDisc;
         }
     }
+
+    @FXML
+    private ScrollPane replayScrollPane;
+
+    @FXML
+    private Button replayNext;
+
+    @FXML
+    private Button replayPrev;
+
+    @FXML
+    private Button replayClose;
+
+    @FXML
+    private Label replayPlayerName;
+
+    @FXML
+    private Label replayPlayerID;
+
+    @FXML
+    private Label replayPlayerTurns;
+
     @FXML
     private ScrollPane scrollPaneSystem;
 
@@ -356,10 +384,11 @@ public class Controller {
 
         gridShape.setFill(Color.MEDIUMPURPLE);
 
+        theGridShape = gridShape;
 
+        scrollPaneContent = new Pane();
         scrollPaneContent.setPrefWidth(widthOfGrid);
         scrollPaneContent.setPrefHeight(heightOfGrid);
-        scrollPaneContent.getChildren().remove(discPane);
         scrollPaneContent.getChildren().add(discPane);
         scrollPaneContent.getChildren().add(gridShape);
         scrollPaneContent.getChildren().addAll(setOverlayAndMouseClickOnOverlay(columns, rows));
@@ -411,7 +440,7 @@ public class Controller {
             turnSucceeded = popDisc(column,row);
 
             if (turnSucceeded) {
-                endOfTurnActions(column, Move.moveType.POPOUT);
+                endOfTurnActions(theGame.getSettings().getRows() - 1,column, Move.moveType.POPOUT);
             }
         }
 
@@ -428,15 +457,15 @@ public class Controller {
 
             if (turnSucceeded)
             {
-                endOfTurnActions(column, Move.moveType.POPIN);
+                endOfTurnActions(row,column, Move.moveType.POPIN);
             }
 
         }
     }
 
-    private void endOfTurnActions(int column, Move.moveType i_MoveType){
+    private void endOfTurnActions(int row, int column, Move.moveType i_MoveType){
 
-        theGame.endOfTurnActions(column, i_MoveType);
+        theGame.endOfTurnActions(row, column, i_MoveType);
         Game.GameState gs = theGame.isGameEnded(column);
         if(gs == Game.GameState.GameWin)
         {
@@ -580,7 +609,12 @@ public class Controller {
             }
         } while (!turnSucceeded);
 
-        endOfTurnActions(randomizedColumn, moveType);
+        if (moveType == Move.moveType.POPIN) {
+            endOfTurnActions(theGame.getNextPlaceInColumn(randomizedColumn),randomizedColumn, moveType);
+        }
+        else if (moveType == Move.moveType.POPOUT) {
+            endOfTurnActions(theGame.getSettings().getRows() - 1, randomizedColumn, moveType);
+        }
 
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
@@ -620,7 +654,7 @@ public class Controller {
             theDiscs[row][column] = null;
 
             row--;
-            collapseDiscs(row,column);
+            collapseDiscs(theDiscs,row,column);
         }
 
         return result;
@@ -746,9 +780,72 @@ public class Controller {
     }
 
     @FXML
-    void showReplay(ActionEvent event) {
+    void showReplay(ActionEvent event) throws Exception {
+
+        List<ReplayState> replayStates = createReplaySates();
+        Parent root = FXMLLoader.load(getClass().getResource("ReplayWindow.fxml"));
+        Stage window = new Stage();
+        window.setTitle("Replay Mode");
+        Scene scene = new Scene(root,572,403);
+
+        Pane contentPane = replayStates.get(0).getFinalizedPane();
+        replayScrollPane.setContent(contentPane);
+
+        window.showAndWait();
+
 
     }
+
+    private LinkedList<ReplayState> createReplaySates() {
+
+        LinkedList<ReplayState> replayStates = new LinkedList<ReplayState>();
+
+        replayStates.add(new ReplayState(new Disc[theGame.getSettings().getRows()]
+                [theGame.getSettings().getColumns()], new Pane(), theGridShape, "None", (short) 0, 0));
+
+        for (Move move : theGame.getMoveHistory().showHistory()) {
+            if (move.getType() == Move.moveType.POPIN) {
+
+                Pane currentDiscs = ((LinkedList<ReplayState>) replayStates)
+                        .getLast().getDiscPane();
+                Disc disc = new Disc(theGame.getPlayerByIndex(move.getPlayerIndex()).getPlayerColor());
+
+                disc.setTranslateX(move.getColumnIndex() * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                disc.setTranslateY(move.getRowIndex() * (TILE_SIZE + 5) + TILE_SIZE / 4);
+
+                Disc discMatrix[][] = ((LinkedList<ReplayState>) replayStates).getLast().getDiscMatrix();
+                discMatrix[move.getRowIndex()][move.getColumnIndex()] = disc;
+                currentDiscs.getChildren().add(disc);
+
+                replayStates.add(new ReplayState(discMatrix, currentDiscs, theGridShape,
+                        theGame.getPlayerByIndex(move.getPlayerIndex()).getName(),
+                        theGame.getPlayerByIndex(move.getPlayerIndex()).getId(),
+                        theGame.getPlayerByIndex(move.getPlayerIndex()).getHowManyTurnsPlayed()));
+            } else if (move.getType() == Move.moveType.POPOUT) {
+                Pane currentDiscs = ((LinkedList<ReplayState>) replayStates)
+                        .getLast().getDiscPane();
+                int row = move.getRowIndex();
+                Disc discMatrix[][] = ((LinkedList<ReplayState>) replayStates).getLast().getDiscMatrix();
+
+                discMatrix[move.getRowIndex()][move.getColumnIndex()].setFill(Color.TRANSPARENT);
+                discMatrix[row][move.getColumnIndex()] = null;
+
+                row--;
+                collapseDiscs(discMatrix, row, move.getColumnIndex());
+
+                replayStates.add(new ReplayState(discMatrix, currentDiscs, theGridShape,
+                        theGame.getPlayerByIndex(move.getPlayerIndex()).getName(),
+                        theGame.getPlayerByIndex(move.getPlayerIndex()).getId(),
+                        theGame.getPlayerByIndex(move.getPlayerIndex()).getHowManyTurnsPlayed()));
+
+            }
+
+
+        }
+
+        return replayStates;
+    }
+
 
     @FXML
     void startTheGame(ActionEvent event) {
@@ -845,7 +942,7 @@ public class Controller {
                     int row = i;
 
                     row--;
-                    collapseDiscs(row,j);
+                    collapseDiscs(theDiscs,row,j);
                 }
             }
         }
@@ -876,12 +973,12 @@ public class Controller {
         playerPanes[theGame.getActivePlayerIndex()].setDisable(true);
     }
 
-    private void collapseDiscs(int row, int column){
+    private void collapseDiscs(Disc matrix[][], int row, int column){
 
-        while (theDiscs[row][column] != null)
+        while (matrix[row][column] != null)
         {
-            theDiscs[row + 1][column] = theDiscs[row][column];
-            theDiscs[row][column] = null;
+            matrix[row + 1][column] = matrix[row][column];
+            matrix[row][column] = null;
 
             if (animationCheckBox.isSelected()) {
 
@@ -890,7 +987,7 @@ public class Controller {
                 animation.play();
             }
             else {
-                theDiscs[row+1][column].setTranslateY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
+                matrix[row+1][column].setTranslateY((row + 1) * (TILE_SIZE + 5) + TILE_SIZE / 4);
             }
 
             row--;
@@ -992,6 +1089,57 @@ public class Controller {
 
 
             return 10;
+
+        }
+
+
+    }
+
+    public class ReplayState {
+
+        private Pane finalizedPane;
+        private Pane discPane;
+        private Shape gridShape;
+        private String PlayerName;
+        private short  ID;
+        private int howManyTurns;
+        private Disc discMatrix[][];
+
+        public Pane getFinalizedPane() {
+            return finalizedPane;
+        }
+
+        public Disc[][] getDiscMatrix() {
+            return discMatrix;
+        }
+
+        public Pane getDiscPane(){
+            return discPane;
+        }
+
+        public String getPlayerName() {
+            return PlayerName;
+        }
+
+        public short getID() {
+            return ID;
+        }
+
+        public int getHowManyTurns() {
+            return howManyTurns;
+        }
+
+        public ReplayState(Disc[][] matrix,Pane discPane, Shape shape, String name, short idnumber, int turnsPlayed)
+        {
+            this.discPane = discPane;
+            discMatrix = matrix;
+            finalizedPane = new Pane();
+            finalizedPane.getChildren().add(discPane);
+            finalizedPane.getChildren().add(shape);
+
+            this.PlayerName = name;
+            this.ID = idnumber;
+            this.howManyTurns = turnsPlayed;
 
         }
     }
