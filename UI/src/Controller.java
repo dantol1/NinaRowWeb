@@ -899,6 +899,12 @@ public class Controller {
     @FXML
     public void initialize() {
         choosedStyle1(new ActionEvent());
+        anchorPane.minHeightProperty().bind(scrollPaneSystem.heightProperty());
+        anchorPane.minWidthProperty().bind(scrollPaneSystem.widthProperty());
+        anchorPane.prefHeightProperty().bind(scrollPaneSystem.prefHeightProperty());
+        anchorPane.prefWidthProperty().bind(scrollPaneSystem.prefWidthProperty());
+        anchorPane.maxHeightProperty().bind(scrollPaneSystem.maxHeightProperty());
+        anchorPane.maxWidthProperty().bind(scrollPaneSystem.maxWidthProperty());
     }
 
     @FXML

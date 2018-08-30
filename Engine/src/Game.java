@@ -662,6 +662,7 @@ public class Game implements Serializable {
     }
 
     private void removePlayerFromGame() {
+        //TODO: collapsing when there is 1 blue 1 red 1 blue 1 red results in a blank space in the logic.
         retiredPlayersIndexes[activePlayerIndex] = true;
         changeToNextActivePlayer();
     }
