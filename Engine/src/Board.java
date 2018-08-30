@@ -109,10 +109,12 @@ public class Board implements Serializable {
         {
             for(int row = rows - 2; row >= 0; row--)
             {
-                if(board[row + 1][column] == EMPTY_CELL)
+                int currRow = row;
+                while(currRow + 1 < rows && board[currRow + 1][column] == EMPTY_CELL)
                 {
-                    board[row + 1][column] = board[row][column];
-                    board[row][column] = EMPTY_CELL;
+                    board[currRow + 1][column] = board[currRow][column];
+                    board[currRow][column] = EMPTY_CELL;
+                    currRow++;
                 }
             }
         }
