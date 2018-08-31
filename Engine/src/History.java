@@ -5,9 +5,9 @@ public class History implements Serializable {
 
     private LinkedList<Move> moveList = new LinkedList<>();
 
-    public void AddMoveToHistory(int i_PlayerIndex, int i_ColumnIndex, Move.moveType i_MoveType) {
+    public void AddMoveToHistory(int i_PlayerIndex,int i_RowIndex, int i_ColumnIndex, Move.moveType i_MoveType) {
 
-        moveList.add(new Move(i_PlayerIndex,i_ColumnIndex, i_MoveType));
+        moveList.add(new Move(i_PlayerIndex, i_RowIndex, i_ColumnIndex, i_MoveType));
     }
 
     public LinkedList<Move> showHistory(){

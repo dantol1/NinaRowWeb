@@ -163,7 +163,7 @@ public class Game implements Serializable {
 
         if(moveSucceeded)
         {
-            moveHistory.AddMoveToHistory(activePlayerIndex, column, Move.moveType.POPOUT);
+            moveHistory.AddMoveToHistory(activePlayerIndex,settings.getRows() -1,column, Move.moveType.POPOUT);
         }
 
         return moveSucceeded;
@@ -546,7 +546,7 @@ public class Game implements Serializable {
         succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
         if(succeeded)
         {
-            endOfTurnActions(columnToPlaceDisc, Move.moveType.POPIN);
+            endOfTurnActions(getNextPlaceInColumn(columnToPlaceDisc),columnToPlaceDisc, Move.moveType.POPIN);
         }
 
         return succeeded;
@@ -563,14 +563,14 @@ public class Game implements Serializable {
             succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
         }while(!succeeded);
 
-        endOfTurnActions(columnToPlaceDisc, Move.moveType.POPIN);
+        endOfTurnActions(getNextPlaceInColumn(columnToPlaceDisc), columnToPlaceDisc, Move.moveType.POPIN);
 
         return succeeded;
     }
 
-    public void endOfTurnActions(int columnInWhichDiscWasPut, Move.moveType i_MoveType)
+    public void endOfTurnActions(int columnInWhichDiscWasPut,int rowInWhichDiscWasPut, Move.moveType i_MoveType)
     {
-        moveHistory.AddMoveToHistory(activePlayerIndex, columnInWhichDiscWasPut, i_MoveType);
+        moveHistory.AddMoveToHistory(activePlayerIndex,rowInWhichDiscWasPut, columnInWhichDiscWasPut, i_MoveType);
         players[activePlayerIndex].playedTurn();
     }
 
@@ -675,7 +675,7 @@ public class Game implements Serializable {
                 if(gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape())
                 {
                     gameBoard.getBoard()[row][column] = Board.EMPTY_CELL;
-                    moveHistory.AddMoveToHistory(activePlayerIndex, column, Move.moveType.RETIRE);
+                    moveHistory.AddMoveToHistory(activePlayerIndex,-1, column, Move.moveType.RETIRE);
                 }
             }
         }
