@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
 import java.util.Timer;
@@ -259,7 +260,17 @@ public class Controller {
     @FXML
     private Button loadGameButton;
 
-    private String[] chosenStyle = {"playerStyle1", "activePlayerStyle1", "buttonStyle1", "mainFormStyle1", "retiredPlayerStyle1"};
+    private String[] chosenStyle = {"playerStyle1",
+            "activePlayerStyle1",
+            "buttonStyle1",
+            "mainFormStyle1",
+            "retiredPlayerStyle1",
+            "labelStyle1"};
+
+    private  Label[] systemLabels;
+    private  Button[] systemButtons;
+    private  Pane[] systemPlayerPanes;
+
 
     @FXML
     void chooseXML(ActionEvent event) {
@@ -315,40 +326,31 @@ public class Controller {
     }
 
     private void fillPlayerData() {
-
-        Label[] playerLabels = {NameLabel1, IdLabel1, HowMuchTurnsLabel1, KindOfLabel1,
-        NameLabel2, IdLabel2, HowMuchTurnsLabel2, KindOfLabel2,
-        NameLabel3, IdLabel3, HowMuchTurnsLabel3, KindOfLabel3,
-        NameLabel4, IdLabel4, HowMuchTurnsLabel4, KindOfLabel4,
-        NameLabel5, IdLabel5, HowMuchTurnsLabel5, KindOfLabel5,
-        NameLabel6, IdLabel6, HowMuchTurnsLabel6, KindOfLabel6};
-
-
-        for(Label l : playerLabels)
+        for(Label l : systemLabels)
         {
             l.setVisible(true);
         }
 
         for(int currentPlayerIndex = 0, currentWorkedOnLabel = 0; currentPlayerIndex < theGame.getPlayers().length; currentPlayerIndex++)
         {
-            playerLabels[currentPlayerIndex + currentWorkedOnLabel].setText(theGame.getPlayers()[currentPlayerIndex].getName());
+            systemLabels[currentPlayerIndex + currentWorkedOnLabel].setText(theGame.getPlayers()[currentPlayerIndex].getName());
             currentWorkedOnLabel++;
-            playerLabels[currentPlayerIndex + currentWorkedOnLabel].setText(((Short)theGame.getPlayers()[currentPlayerIndex].getId()).toString());
+            systemLabels[currentPlayerIndex + currentWorkedOnLabel].setText(((Short)theGame.getPlayers()[currentPlayerIndex].getId()).toString());
             currentWorkedOnLabel++;
-            playerLabels[currentPlayerIndex + currentWorkedOnLabel].textProperty().bind(new SimpleIntegerProperty(((Integer)theGame.getPlayers()[currentPlayerIndex].getHowManyTurnsPlayed())).asString());
+            systemLabels[currentPlayerIndex + currentWorkedOnLabel].textProperty().bind(new SimpleIntegerProperty(((Integer)theGame.getPlayers()[currentPlayerIndex].getHowManyTurnsPlayed())).asString());
             currentWorkedOnLabel++;
-            playerLabels[currentPlayerIndex + currentWorkedOnLabel].setText(theGame.getPlayers()[currentPlayerIndex].getPlayerType().toString());
+            systemLabels[currentPlayerIndex + currentWorkedOnLabel].setText(theGame.getPlayers()[currentPlayerIndex].getPlayerType().toString());
         }
 
         for(int unusedPlayerIndex = theGame.getPlayers().length, unusedLabel = unusedPlayerIndex * 4; unusedPlayerIndex < 6; unusedPlayerIndex++)
         {
-            playerLabels[unusedLabel].setVisible(false);
+            systemLabels[unusedLabel].setVisible(false);
             unusedLabel++;
-            playerLabels[unusedLabel].setVisible(false);
+            systemLabels[unusedLabel].setVisible(false);
             unusedLabel++;
-            playerLabels[unusedLabel].setVisible(false);
+            systemLabels[unusedLabel].setVisible(false);
             unusedLabel++;
-            playerLabels[unusedLabel].setVisible(false);
+            systemLabels[unusedLabel].setVisible(false);
             unusedLabel++;
         }
 
@@ -703,30 +705,10 @@ public class Controller {
 
     private void changeStyleClass(String chosenStyleNum)
     {
-        Pane[] playersPane = {gridPanePlayer1, gridPanePlayer2, gridPanePlayer3, gridPanePlayer4, gridPanePlayer5, gridPanePlayer6};
-        Button[] systemButtons = {
-                loadGameButton,
-                saveGameButton,
-                ReplayButton,
-                StopGameButton,
-                StartGameButton,
-                ButtonXMLLoad,
-                quitButton};
         int activePlayerIndex = 0;
 
-        ChooseStyleMenuButton.setText("Style" + chosenStyleNum);
-
-        for(Pane p : playersPane)
-        {
-            p.getStyleClass().remove(chosenStyle[0]);
-        }
-
-        chosenStyle[0] = "playerStyle" + chosenStyleNum;
-
-        for(Pane p : playersPane)
-        {
-            p.getStyleClass().add(chosenStyle[0]);
-        }
+        changePanesStyle(chosenStyleNum);
+        changeStyleName(chosenStyleNum);
 
         if(theGame != null) {
             activePlayerIndex = theGame.getActivePlayerIndex();
@@ -734,30 +716,86 @@ public class Controller {
 
         if(theGame != null)
         {
-            for(int i = 0; i < theGame.getPlayers().length; i++)
-            {
-                if(theGame.getRetiredPlayersIndexes()[i])
-                {
-                    playersPane[i].getStyleClass().removeAll(chosenStyle[0], chosenStyle[4]);
-                }
-            }
+            changeRetiredPlayerStyle(chosenStyleNum);
+        }
 
-            chosenStyle[4] = "retiredPlayerStyle" + chosenStyleNum;
+        changeActivePlayerStyle(chosenStyleNum, activePlayerIndex);
 
-            for(int i = 0; i < theGame.getPlayers().length; i++)
+        ChooseStyleMenuButton.getStyleClass().remove(chosenStyle[2]);
+
+        changeButtonStyle(chosenStyleNum);
+        changeAnchorPanesStyle(chosenStyleNum);
+
+        ChooseStyleMenuButton.getStyleClass().add(chosenStyle[2]);
+
+        changeFontStyles(chosenStyleNum);
+    }
+
+    private void changeFontStyles(String chosenStyleNum) {
+
+        for(Label l : systemLabels)
+        {
+            l.getStyleClass().remove(chosenStyle[5]);
+        }
+
+        chosenStyle[5] = "labelStyle" + chosenStyleNum;
+
+        for(Label l : systemLabels)
+        {
+            l.getStyleClass().add(chosenStyle[5]);
+        }
+    }
+
+    private void changeStyleName(String chosenStyleNum) {
+        switch (chosenStyleNum)
+        {
+            case "1":
+                ChooseStyleMenuButton.setText("Marble");
+                break;
+            case "2":
+                ChooseStyleMenuButton.setText("Wood");
+                break;
+            case "3":
+                ChooseStyleMenuButton.setText("Metal");
+                break;
+        }
+    }
+
+    private void changeAnchorPanesStyle(String chosenStyleNum) {
+        anchorPane.getStyleClass().remove(chosenStyle[3]);
+        gameAnchorPane.getStyleClass().remove(chosenStyle[3]);
+        chosenStyle[3] = "mainFormStyle" + chosenStyleNum;
+        anchorPane.getStyleClass().add(chosenStyle[3]);
+        gameAnchorPane.getStyleClass().add(chosenStyle[3]);
+    }
+
+    private void changeActivePlayerStyle(String chosenStyleNum, int activePlayerIndex) {
+        systemPlayerPanes[activePlayerIndex].getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
+        chosenStyle[1] = "activePlayerStyle" + chosenStyleNum;
+        systemPlayerPanes[activePlayerIndex].getStyleClass().add(chosenStyle[1]);
+    }
+
+    private void changeRetiredPlayerStyle(String chosenStyleNum) {
+        for(int i = 0; i < theGame.getPlayers().length; i++)
+        {
+            if(theGame.getRetiredPlayersIndexes()[i])
             {
-                if(theGame.getRetiredPlayersIndexes()[i])
-                {
-                    playersPane[i].getStyleClass().add(chosenStyle[4]);
-                }
+                systemPlayerPanes[i].getStyleClass().removeAll(chosenStyle[0], chosenStyle[4]);
             }
         }
 
-        playersPane[activePlayerIndex].getStyleClass().removeAll(chosenStyle[0], chosenStyle[1]);
-        chosenStyle[1] = "activePlayerStyle" + chosenStyleNum;
-        playersPane[activePlayerIndex].getStyleClass().add(chosenStyle[1]);
-        ChooseStyleMenuButton.getStyleClass().remove(chosenStyle[2]);
+        chosenStyle[4] = "retiredPlayerStyle" + chosenStyleNum;
 
+        for(int i = 0; i < theGame.getPlayers().length; i++)
+        {
+            if(theGame.getRetiredPlayersIndexes()[i])
+            {
+                systemPlayerPanes[i].getStyleClass().add(chosenStyle[4]);
+            }
+        }
+    }
+
+    private void changeButtonStyle(String chosenStyleNum) {
         for(Button b : systemButtons)
         {
             b.getStyleClass().remove(chosenStyle[2]);
@@ -769,14 +807,20 @@ public class Controller {
         {
             b.getStyleClass().add(chosenStyle[2]);
         }
+    }
 
-        anchorPane.getStyleClass().remove(chosenStyle[3]);
-        gameAnchorPane.getStyleClass().remove(chosenStyle[3]);
-        chosenStyle[3] = "mainFormStyle" + chosenStyleNum;
-        anchorPane.getStyleClass().add(chosenStyle[3]);
-        gameAnchorPane.getStyleClass().add(chosenStyle[3]);
+    private void changePanesStyle(String chosenStyleNum) {
+        for(Pane p : systemPlayerPanes)
+        {
+            p.getStyleClass().remove(chosenStyle[0]);
+        }
 
-        ChooseStyleMenuButton.getStyleClass().add(chosenStyle[2]);
+        chosenStyle[0] = "playerStyle" + chosenStyleNum;
+
+        for(Pane p : systemPlayerPanes)
+        {
+            p.getStyleClass().add(chosenStyle[0]);
+        }
     }
 
     @FXML
@@ -995,7 +1039,36 @@ public class Controller {
     }
     @FXML
     public void initialize() {
+        createControllersSets();
         choosedStyle1(new ActionEvent());
+        bindSize();
+    }
+
+    private void createControllersSets() {
+        systemButtons = new Button[]{
+                loadGameButton,
+                saveGameButton,
+                ReplayButton,
+                StopGameButton,
+                StartGameButton,
+                ButtonXMLLoad,
+                quitButton};
+        systemPlayerPanes = new Pane[]{gridPanePlayer1,
+                gridPanePlayer2,
+                gridPanePlayer3,
+                gridPanePlayer4,
+                gridPanePlayer5,
+                gridPanePlayer6};
+        systemLabels = new Label[]{NameLabel1, IdLabel1, HowMuchTurnsLabel1, KindOfLabel1,
+                NameLabel2, IdLabel2, HowMuchTurnsLabel2, KindOfLabel2,
+                NameLabel3, IdLabel3, HowMuchTurnsLabel3, KindOfLabel3,
+                NameLabel4, IdLabel4, HowMuchTurnsLabel4, KindOfLabel4,
+                NameLabel5, IdLabel5, HowMuchTurnsLabel5, KindOfLabel5,
+                NameLabel6, IdLabel6, HowMuchTurnsLabel6, KindOfLabel6};
+
+    }
+
+    private void bindSize() {
         anchorPane.minHeightProperty().bind(scrollPaneSystem.heightProperty());
         anchorPane.minWidthProperty().bind(scrollPaneSystem.widthProperty());
         anchorPane.prefHeightProperty().bind(scrollPaneSystem.prefHeightProperty());

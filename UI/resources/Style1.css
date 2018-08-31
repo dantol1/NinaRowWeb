@@ -39,3 +39,8 @@
     -fx-background-color: darkgrey;
     -fx-font-style: italic;
 }
+.labelStyle1
+{
+    -fx-font-family: "Arial";
+    -fx-font-size: 12;
+}

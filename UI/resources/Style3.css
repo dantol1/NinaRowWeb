@@ -35,3 +35,8 @@
     -fx-background-color: beige;
     -fx-font-style: italic;
 }
+.labelStyle3
+{
+    -fx-font-family: "David";
+    -fx-font-size: 13;
+}

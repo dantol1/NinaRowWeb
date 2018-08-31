@@ -45,3 +45,8 @@
     -fx-background-color: hotpink;
     -fx-font-style: italic;
 }
+.labelStyle2
+{
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 11;
+}
