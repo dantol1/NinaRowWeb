@@ -1,9 +1,11 @@
 import javafx.scene.paint.Color;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 public class GamePlayer implements Serializable {
+
     public enum Type{
         Human,
         Computer
@@ -81,5 +83,17 @@ public class GamePlayer implements Serializable {
 
     public void playedTurn(){ howManyTurnsPlayed++; }
     public void undidTurn(){ howManyTurnsPlayed--; }
+
+
+    public static GamePlayer[] Copy(List<GamePlayer> thePlayers) {
+        GamePlayer[] copiedPlayers = new GamePlayer[thePlayers.size()];
+
+        for(int i = 0; i < thePlayers.size(); i++)
+        {
+            copiedPlayers[i] = new GamePlayer(thePlayers.get(i).id, thePlayers.get(i).name, thePlayers.get(i).playerType, thePlayers.get(i).playerColor);
+        }
+
+        return copiedPlayers;
+    }
 }
 

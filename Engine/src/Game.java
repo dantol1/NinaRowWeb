@@ -122,6 +122,29 @@ public class Game implements Serializable {
         }
     }
 
+    public Game(GameSettings gs, List<GamePlayer> thePlayers, History copyMoveHistory)
+    {
+        gameBoard = new Board(gs.getColumns(), gs.getRows());
+        settings = gs;
+
+        if(gs.getGameType() == GameSettings.GameType.Basic)
+        {
+            numOfActivePlayers = 2;
+        }
+        else if (gs.getGameType() == GameSettings.GameType.MultiPlayer)
+        {
+            numOfActivePlayers = thePlayers.size();
+        }
+
+        moveHistory = History.CopyHistory(copyMoveHistory);
+        players = GamePlayer.Copy(thePlayers);
+
+        for(boolean i : retiredPlayersIndexes)
+        {
+            i = false;
+        }
+    }
+
     public void saveGame(String fileName) throws IOException
     {
         try {
@@ -680,4 +703,6 @@ public class Game implements Serializable {
             }
         }
     }
+
+
 }

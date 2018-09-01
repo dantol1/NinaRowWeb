@@ -5,6 +5,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,7 +17,6 @@ public class GameFactory {
         JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
         Unmarshaller u = jc.createUnmarshaller();
         GameDescriptor gd = (GameDescriptor)u.unmarshal(xmlFile);
-
 
         int rows = gd.getGame().getBoard().getRows();
         int columns = gd.getGame().getBoard().getColumns().intValue();
@@ -84,5 +84,29 @@ public class GameFactory {
         }
 
         return g;
+    }
+
+    public static GameCopy CreateGameCopy(Game gameToCopy)
+    {
+        Game gameCopy;
+        GameCopy copy = new GameCopy();
+
+        List<Player> players = createPlayerCopies(gameToCopy.getPlayers());
+        gameCopy = new Game(gameToCopy.getSettings(), players);
+        copy.setGameCopy(gameCopy);
+        copy.setMoveHistory(gameCopy.getMoveHistory());
+
+        return copy;
+    }
+
+    private static List<Player> createPlayerCopies(GamePlayer[] players) {
+        List<Player> playerCopies = new ArrayList<>(players.length);
+
+        for(GamePlayer pl : players)
+        {
+            playerCopies.add(new Player());
+        }
+
+        return playerCopies;
     }
 }

@@ -26,4 +26,15 @@ public class History implements Serializable {
         moveList.removeLast();
     }
 
+    public static History CopyHistory(History copyMoveHistory) {
+        History copiedHistory = new History();
+
+        for(Move mv : copyMoveHistory.moveList)
+        {
+            copiedHistory.AddMoveToHistory(mv.getPlayerIndex(), mv.getRowIndex(), mv.getColumnIndex(), mv.getType());
+        }
+
+        return copiedHistory;
+    }
+
 }

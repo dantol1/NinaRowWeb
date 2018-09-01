@@ -836,8 +836,6 @@ public class Controller {
         replayScrollPane.setContent(contentPane);
 
         window.showAndWait();
-
-
     }
 
     private LinkedList<ReplayState> createReplaySates() {
