@@ -825,67 +825,6 @@ public class Controller {
 
     @FXML
     void showReplay(ActionEvent event) throws Exception {
-
-        List<ReplayState> replayStates = createReplaySates();
-        Parent root = FXMLLoader.load(getClass().getResource("ReplayWindow.fxml"));
-        Stage window = new Stage();
-        window.setTitle("Replay Mode");
-        Scene scene = new Scene(root,572,403);
-
-        Pane contentPane = replayStates.get(0).getFinalizedPane();
-        replayScrollPane.setContent(contentPane);
-
-        window.showAndWait();
-    }
-
-    private LinkedList<ReplayState> createReplaySates() {
-
-        LinkedList<ReplayState> replayStates = new LinkedList<ReplayState>();
-
-        replayStates.add(new ReplayState(new Disc[theGame.getSettings().getRows()]
-                [theGame.getSettings().getColumns()], new Pane(), theGridShape, "None", (short) 0, 0));
-
-        for (Move move : theGame.getMoveHistory().showHistory()) {
-            if (move.getType() == Move.moveType.POPIN) {
-
-                Pane currentDiscs = ((LinkedList<ReplayState>) replayStates)
-                        .getLast().getDiscPane();
-                Disc disc = new Disc(theGame.getPlayerByIndex(move.getPlayerIndex()).getPlayerColor());
-
-                disc.setTranslateX(move.getColumnIndex() * (TILE_SIZE + 5) + TILE_SIZE / 4);
-                disc.setTranslateY(move.getRowIndex() * (TILE_SIZE + 5) + TILE_SIZE / 4);
-
-                Disc discMatrix[][] = ((LinkedList<ReplayState>) replayStates).getLast().getDiscMatrix();
-                discMatrix[move.getRowIndex()][move.getColumnIndex()] = disc;
-                currentDiscs.getChildren().add(disc);
-
-                replayStates.add(new ReplayState(discMatrix, currentDiscs, theGridShape,
-                        theGame.getPlayerByIndex(move.getPlayerIndex()).getName(),
-                        theGame.getPlayerByIndex(move.getPlayerIndex()).getId(),
-                        theGame.getPlayerByIndex(move.getPlayerIndex()).getHowManyTurnsPlayed()));
-            } else if (move.getType() == Move.moveType.POPOUT) {
-                Pane currentDiscs = ((LinkedList<ReplayState>) replayStates)
-                        .getLast().getDiscPane();
-                int row = move.getRowIndex();
-                Disc discMatrix[][] = ((LinkedList<ReplayState>) replayStates).getLast().getDiscMatrix();
-
-                discMatrix[move.getRowIndex()][move.getColumnIndex()].setFill(Color.TRANSPARENT);
-                discMatrix[row][move.getColumnIndex()] = null;
-
-                row--;
-                collapseDiscs(discMatrix, row, move.getColumnIndex());
-
-                replayStates.add(new ReplayState(discMatrix, currentDiscs, theGridShape,
-                        theGame.getPlayerByIndex(move.getPlayerIndex()).getName(),
-                        theGame.getPlayerByIndex(move.getPlayerIndex()).getId(),
-                        theGame.getPlayerByIndex(move.getPlayerIndex()).getHowManyTurnsPlayed()));
-
-            }
-
-
-        }
-
-        return replayStates;
     }
 
 
@@ -1164,54 +1103,5 @@ public class Controller {
         }
 
 
-    }
-
-    public class ReplayState {
-
-        private Pane finalizedPane;
-        private Pane discPane;
-        private Shape gridShape;
-        private String PlayerName;
-        private short  ID;
-        private int howManyTurns;
-        private Disc discMatrix[][];
-
-        public Pane getFinalizedPane() {
-            return finalizedPane;
-        }
-
-        public Disc[][] getDiscMatrix() {
-            return discMatrix;
-        }
-
-        public Pane getDiscPane(){
-            return discPane;
-        }
-
-        public String getPlayerName() {
-            return PlayerName;
-        }
-
-        public short getID() {
-            return ID;
-        }
-
-        public int getHowManyTurns() {
-            return howManyTurns;
-        }
-
-        public ReplayState(Disc[][] matrix,Pane discPane, Shape shape, String name, short idnumber, int turnsPlayed)
-        {
-            this.discPane = discPane;
-            discMatrix = matrix;
-            finalizedPane = new Pane();
-            finalizedPane.getChildren().add(discPane);
-            finalizedPane.getChildren().add(shape);
-
-            this.PlayerName = name;
-            this.ID = idnumber;
-            this.howManyTurns = turnsPlayed;
-
-        }
     }
 }

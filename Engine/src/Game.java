@@ -197,14 +197,13 @@ public class Game implements Serializable {
         boolean gameEnded = false;
         GameState state = null;
 
-        if(settings.getVariant() == GameSettings.Variant.Regular
-                || settings.getVariant() == GameSettings.Variant.Popout)
+        if(settings.getVariant() == GameSettings.Variant.Regular)
         {
             gameWinChecker gameWinCheck = new gameWinChecker() {
                 @Override
                 public void run() {
                     this.setFoundSequence(
-                            checkAllDirectionsForWinRegularOrPopout(this.getColumn()));
+                            checkAllDirectionsForWinRegular(this.getColumn()));
                 }
             };
             gameEnded = checkWin(gameWinCheck, column);
@@ -219,6 +218,17 @@ public class Game implements Serializable {
                 }
             };
 
+            gameEnded = checkWin(gameWinCheck, column);
+        }
+        else if(settings.getVariant() == GameSettings.Variant.Popout)
+        {
+            gameWinChecker gameWinCheck = new gameWinChecker() {
+                @Override
+                public void run() {
+                    this.setFoundSequence(
+                            checkAllDirectionsForWinPopout(this.getColumn(), this.getRow()));
+                }
+            };
             gameEnded = checkWin(gameWinCheck, column);
         }
 
@@ -261,6 +271,8 @@ public class Game implements Serializable {
                 gameEnded = true;
                 findWinningPlayers(i, column);
             }
+
+            winConditionsChecker.setFoundSequence(false);
         }
 
         //check all the row for created sequence
@@ -293,7 +305,7 @@ public class Game implements Serializable {
         }
     }
 
-    private boolean checkAllDirectionsForWinRegularOrPopout(int column)
+    private boolean checkAllDirectionsForWinRegular(int column)
     {
         boolean gameEnded = false;
 
@@ -341,10 +353,71 @@ public class Game implements Serializable {
         return gameEnded;
     }
 
+    private boolean checkAllDirectionsForWinPopout(int column, int row)
+    {
+        boolean gameEnded = false;
+
+        if (checkConsecutiveDirectionPopout(DiscDirection.Down,column, row) == true)
+        {
+            gameEnded = true;
+            addWinningPiecesToSetPopout(DiscDirection.Down,column, row);
+        }
+        else if (checkConsecutiveDirectionPopout(DiscDirection.Left,column, row) == true)
+        {
+            gameEnded = true;
+            addWinningPiecesToSetPopout(DiscDirection.Left,column, row);
+        }
+        else if (checkConsecutiveDirectionPopout(DiscDirection.Up,column, row) == true)
+        {
+            gameEnded = true;
+            addWinningPiecesToSetPopout(DiscDirection.Up,column, row);
+        }
+        else if (checkConsecutiveDirectionPopout(DiscDirection.Right,column, row) == true)
+        {
+            gameEnded = true;
+            addWinningPiecesToSetPopout(DiscDirection.Right,column, row);
+        }
+        else if (checkConsecutiveDirectionPopout(DiscDirection.LowerDiagonalLeft,column, row) == true)
+        {
+            gameEnded = true;
+            addWinningPiecesToSetPopout(DiscDirection.LowerDiagonalLeft,column, row);
+        }
+        else if (checkConsecutiveDirectionPopout(DiscDirection.UpperDiagonalLeft,column, row) == true)
+        {
+            gameEnded = true;
+            addWinningPiecesToSetPopout(DiscDirection.UpperDiagonalLeft,column, row);
+        }
+        else if (checkConsecutiveDirectionPopout(DiscDirection.LowerDiagonalRight,column, row) == true)
+        {
+            gameEnded = true;
+            addWinningPiecesToSetPopout(DiscDirection.LowerDiagonalRight,column, row);
+        }
+        else if (checkConsecutiveDirectionPopout(DiscDirection.UpperDiagonalRight,column, row) == true)
+        {
+            gameEnded = true;
+            addWinningPiecesToSetPopout(DiscDirection.UpperDiagonalRight,column, row);
+        }
+
+        return gameEnded;
+    }
+
     private void addWinningPiecesToSet(DiscDirection dir, int column) {
         int target = this.settings.getTarget();
         movement mv = getMovementByDirection(dir);
         int winPieceCol = column, winPieceRow = (gameBoard.getNextPlaceInColumn())[column]+1;
+
+        for(int i = 0; i < target; i++)
+        {
+            winningPieces.add(new Point(winPieceCol, winPieceRow));
+            winPieceCol += mv.colMovement;
+            winPieceRow += mv.rowMovement;
+        }
+    }
+
+    private void addWinningPiecesToSetPopout(DiscDirection dir, int column, int row) {
+        int target = this.settings.getTarget();
+        movement mv = getMovementByDirection(dir);
+        int winPieceCol = column, winPieceRow = row;
 
         for(int i = 0; i < target; i++)
         {
@@ -431,14 +504,63 @@ public class Game implements Serializable {
         int row = (gameBoard.getNextPlaceInColumn())[column]+1;
         int rowMovement = 0, colMovement = 0;
         int i;
+        char symbolToCheck;
         movement moveChange = getMovementByDirection(dir);
+        try {
+            symbolToCheck = gameBoard.getCellSymbol(row, column);
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            return false;
+        }
 
         rowMovement = moveChange.rowMovement;
         colMovement = moveChange.colMovement;
 
         for (i = 0; i < settings.getTarget(); i++) {
             try {
-                if (gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape()) {
+                if (gameBoard.getCellSymbol(row, column) == symbolToCheck) {
+                    row += rowMovement;
+                    column += colMovement;
+                }
+                else {
+                    break;
+                }
+            }
+            catch(ArrayIndexOutOfBoundsException e)
+            {
+                break;
+            }
+        }
+        if(i == settings.getTarget())
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    private boolean checkConsecutiveDirectionPopout(DiscDirection dir, int column, int rowToCheck) {
+        boolean result = false;
+        int row = rowToCheck;
+        int rowMovement = 0, colMovement = 0;
+        int i;
+        char symbolToCheck;
+        movement moveChange = getMovementByDirection(dir);
+        try {
+            symbolToCheck = gameBoard.getCellSymbol(row, column);
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            return false;
+        }
+
+        rowMovement = moveChange.rowMovement;
+        colMovement = moveChange.colMovement;
+
+        for (i = 0; i < settings.getTarget(); i++) {
+            try {
+                if (gameBoard.getCellSymbol(row, column) == symbolToCheck && symbolToCheck != Board.EMPTY_CELL) {
                     row += rowMovement;
                     column += colMovement;
                 }
