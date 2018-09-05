@@ -88,9 +88,10 @@ public class GamePlayer implements Serializable {
     public static GamePlayer[] Copy(List<GamePlayer> thePlayers) {
         GamePlayer[] copiedPlayers = new GamePlayer[thePlayers.size()];
 
+
         for(int i = 0; i < thePlayers.size(); i++)
         {
-            copiedPlayers[i] = new GamePlayer(thePlayers.get(i).id, thePlayers.get(i).name, thePlayers.get(i).playerType, thePlayers.get(i).playerColor);
+            copiedPlayers[i] = thePlayers.get(i);
         }
 
         return copiedPlayers;

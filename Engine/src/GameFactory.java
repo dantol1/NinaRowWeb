@@ -91,7 +91,7 @@ public class GameFactory {
         Game gameCopy;
         GameCopy copy = new GameCopy();
 
-        List<Player> players = createPlayerCopies(gameToCopy.getPlayers());
+        List<GamePlayer> players = createPlayerCopies(gameToCopy.getPlayers());
         gameCopy = new Game(gameToCopy.getSettings(), players, gameToCopy.getMoveHistory());
         copy.setGameCopy(gameCopy);
         copy.setMoveHistory(gameCopy.getMoveHistory());
@@ -99,12 +99,13 @@ public class GameFactory {
         return copy;
     }
 
-    private static List<Player> createPlayerCopies(GamePlayer[] players) {
-        List<Player> playerCopies = new ArrayList<>(players.length);
+    private static List<GamePlayer> createPlayerCopies(GamePlayer[] players) {
+        List<GamePlayer> playerCopies = new ArrayList<>(players.length);
 
         for(GamePlayer pl : players)
         {
-            playerCopies.add(new Player());
+            GamePlayer player = new GamePlayer(pl.getId(), pl.getName(), pl.getPlayerType(), pl.getPlayerColor());
+            playerCopies.add(player);
         }
 
         return playerCopies;
