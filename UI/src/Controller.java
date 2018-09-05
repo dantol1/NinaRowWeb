@@ -469,7 +469,7 @@ public class Controller {
 
     private void endOfTurnActions(int row, int column, Move.moveType i_MoveType){
 
-        theGame.endOfTurnActions(row, column, i_MoveType);
+        theGame.endOfTurnActions(column, row, i_MoveType);
         Game.GameState gs = theGame.isGameEnded(column);
         if(gs == Game.GameState.GameWin)
         {
@@ -614,7 +614,7 @@ public class Controller {
         } while (!turnSucceeded);
 
         if (moveType == Move.moveType.POPIN) {
-            endOfTurnActions(theGame.getNextPlaceInColumn(randomizedColumn),randomizedColumn, moveType);
+            endOfTurnActions(theGame.getNextPlaceInColumn(randomizedColumn)+1,randomizedColumn, moveType);
         }
         else if (moveType == Move.moveType.POPOUT) {
             endOfTurnActions(theGame.getSettings().getRows() - 1, randomizedColumn, moveType);
