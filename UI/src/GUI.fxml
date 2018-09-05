@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fx:id="scrollPaneSystem" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" styleClass="mainForm1" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<ScrollPane fx:id="scrollPaneSystem" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1024.0" styleClass="mainForm1" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <content>
     <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1024.0">
          <children>
@@ -204,7 +204,7 @@
             </HBox>
             <VBox fx:id="VboxLeft" layoutY="282.0" prefHeight="506.0" prefWidth="254.0" spacing="10.0">
                <children>
-                  <Button fx:id="ReplayButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#showReplay" prefHeight="75.0" prefWidth="192.0" text="Replay" textOverrun="CLIP">
+                  <Button fx:id="ReplayButton" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#showReplay" prefHeight="75.0" prefWidth="192.0" text="Replay" textOverrun="CLIP">
                      <font>
                         <Font size="24.0" />
                      </font>

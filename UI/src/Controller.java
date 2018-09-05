@@ -20,7 +20,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Duration;
 
 import javax.swing.*;
@@ -81,7 +83,7 @@ public class Controller {
         this.mainScene = mainScene;
     }
 
-    private class Disc extends Circle {
+    public static class Disc extends Circle {
 
         private Color colorOfDisc;
 
@@ -825,12 +827,46 @@ public class Controller {
 
     @FXML
     void showReplay(ActionEvent event) throws Exception {
+
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ReplayWindow.fxml"));
+        fxmlLoader.setControllerFactory(new Callback<Class<?>, Object>() {
+            @Override
+            public Object call(Class<?> controllerClass) {
+                if (controllerClass == ReplayWindowController.class) {
+                    ReplayWindowController controller = new ReplayWindowController();
+                    controller.setCol(theGame.getSettings().getColumns());
+                    controller.setRow(theGame.getSettings().getRows());
+                    controller.setGameCopy(GameFactory.CreateGameCopy(theGame));
+                    return controller;
+                }
+                else {
+                    try {
+                        return controllerClass.newInstance();
+                    }
+                    catch (Exception ecx) {
+                        throw new RuntimeException(ecx);
+                    }
+                }
+            }
+        });
+        Parent root = fxmlLoader.load();
+        window.setTitle("Replay Mode");
+        Scene theScene = new Scene(root, 715, 528);
+        window.setScene(theScene);
+
+        ReplayWindowController replayController = new ReplayWindowController();
+        replayController.setGridShape(theGridShape);
+
+        window.showAndWait();
     }
 
 
     @FXML
     void startTheGame(ActionEvent event) {
 
+        ReplayButton.setDisable(false);
         quitButton.setDisable(false);
         isGameStarted = true;
         ButtonXMLLoad.setDisable(true);

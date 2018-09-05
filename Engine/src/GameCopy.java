@@ -8,7 +8,7 @@ public class GameCopy{
         this.gameCopy = gameCopy;
     }
 
-    Game gameCopy;
+    private Game gameCopy;
 
     public History getMoveHistory() {
         return moveHistory;
@@ -18,11 +18,19 @@ public class GameCopy{
         this.moveHistory = moveHistory;
     }
 
-    History moveHistory;
+    private History moveHistory;
 
-    int lastMoveSeenIndex = 0;
+    public char[][] getBoard() {
 
-    public void PlayMoveFromHistory()
+        return gameCopy.returnBoard();
+    }
+    private int lastMoveSeenIndex = 0;
+
+    public int getLastMoveSeenIndex(){
+        return lastMoveSeenIndex;
+    }
+
+    public Move PlayMoveFromHistory()
     {
         Move moveToPlay = moveHistory.showHistory().get(lastMoveSeenIndex);
 
@@ -36,10 +44,13 @@ public class GameCopy{
         }
 
         lastMoveSeenIndex++;
+
+        return moveToPlay;
     }
 
-    public void UndoMoveFromHistory()
+    public Move UndoMoveFromHistory()
     {
+
         try
         {
             gameCopy.undoMove();
@@ -48,7 +59,9 @@ public class GameCopy{
         {
 
         }
-
+        Move undoMove = moveHistory.showHistory().get(lastMoveSeenIndex);
         lastMoveSeenIndex--;
+
+        return undoMove;
     }
 }
