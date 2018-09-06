@@ -61,8 +61,10 @@ public class GameCopy{
         {
 
         }
-        Move undoMove = moveHistory.showHistory().get(lastMoveSeenIndex);
         lastMoveSeenIndex--;
+        Move undoMove = moveHistory.showHistory().get(lastMoveSeenIndex);
+
+
 
         return undoMove;
     }

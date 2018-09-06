@@ -737,7 +737,8 @@ public class Game implements Serializable {
             }
 
             moveToUndo = moveHistory.showHistory().getLast();
-            moveHistory.removeFromHistory();
+//            moveHistory.removeFromHistory();
+            columnToRemoveFrom = moveToUndo.getColumnIndex();
             columnToRemoveFrom = moveToUndo.getColumnIndex();
             rowToRemoveFrom = moveToUndo.getRowIndex();
             if(moveToUndo.getType() == Move.moveType.POPIN) {

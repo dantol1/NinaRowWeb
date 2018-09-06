@@ -78,7 +78,13 @@ public class ReplayWindowController {
 
     public void initialize() {
 
+
+        setAllLabelsToNone();
         replayPrev.setDisable(true);
+        if (game.getGameCopy().getMoveHistory().showHistory().size() == 0)
+        {
+            replayNext.setDisable(true);
+        }
         makeGrid(col,row);
         theDiscs = new Controller.Disc[row][col];
         pane = new Pane();
@@ -86,6 +92,12 @@ public class ReplayWindowController {
         pane.getChildren().addAll(theGridShape);
         replayScrollPane.setContent(pane);
 
+    }
+
+    private void setAllLabelsToNone() {
+        replayPlayerTurns.setText("");
+        replayPlayerID.setText("");
+        replayPlayerName.setText("");
     }
 
     private void makeGrid(int col, int row) {
@@ -117,6 +129,67 @@ public class ReplayWindowController {
 
         window.close();
     }
+    @FXML
+    public void prevButton() {
+
+        Move move = game.UndoMoveFromHistory();
+        int col = move.getColumnIndex();
+        int row = move.getRowIndex();
+
+
+        int playerIndex = move.getPlayerIndex();
+
+        if (playerIndex == 0)
+        {
+            playerIndex = game.getGameCopy().getPlayers().length - 1;
+        }
+        else
+        {
+            playerIndex--;
+        }
+        setPlayerInfo(new Move(playerIndex,move.getRowIndex(),move.getColumnIndex(),
+                move.getType()));
+
+        if (move.getType() == Move.moveType.POPIN) {
+
+            theDiscs[row][col].setFill(Color.TRANSPARENT);
+            theDiscs[row][col] = null;
+        }
+
+        else if (move.getType() == Move.moveType.POPOUT) {
+
+            while (theDiscs[row][col] != null)
+            {
+                row--;
+                System.out.println("in row-- loop");
+            }
+            while (row < game.getGameCopy().getSettings().getRows() - 1) {
+                System.out.println("in row++ loop");
+                Controller.Disc disc = theDiscs[row+1][col];
+                disc.setTranslateY(row * (80 + 5) + 80 / 4);
+                theDiscs[row][col] = theDiscs[row + 1][col];
+                row++;
+            }
+            Controller.Disc disc = new Controller.Disc(
+                    game.getGameCopy().getPlayerByIndex(move.getPlayerIndex()).getPlayerColor()
+            );
+            disc.setTranslateX(col * (80 + 5) + 80 / 4);
+            disc.setTranslateY(row * (80 + 5) + 80 / 4);
+            theDiscs[row][col] = disc;
+            discPane.getChildren().add(disc);
+
+        }
+
+        if (game.getLastMoveSeenIndex() == 0)
+        {
+            replayPrev.setDisable(true);
+        }
+        if (game.getLastMoveSeenIndex() < game.getGameCopy().getMoveHistory().showHistory().size())
+        {
+            replayNext.setDisable(false);
+        }
+
+    }
 
     @FXML
     public void nextButton(){
@@ -125,7 +198,6 @@ public class ReplayWindowController {
         int col = move.getColumnIndex();
         int row = move.getRowIndex();
 
-        System.out.println(String.format("col:%d row:%d",col,row));
         setPlayerInfo(move);
 
         if (move.getType() == Move.moveType.POPIN) {
@@ -168,13 +240,19 @@ public class ReplayWindowController {
 
     private void setPlayerInfo(Move move) {
 
-        replayPlayerID.setText(String.format("%d",game.getGameCopy().getPlayerByIndex(
-                move.getPlayerIndex()).getId()));
-        replayPlayerName.setText(game.getGameCopy().getPlayerByIndex(
-                move.getPlayerIndex()).getName());
-        replayPlayerTurns.setText(String.format("%d",game.getGameCopy().getPlayerByIndex
-                (move.getPlayerIndex()).getHowManyTurnsPlayed()));
-    }
+        if (game.getLastMoveSeenIndex() != 0) {
+            replayPlayerID.setText(String.format("%d", game.getGameCopy().getPlayerByIndex(
+                    move.getPlayerIndex()).getId()));
+            replayPlayerName.setText(game.getGameCopy().getPlayerByIndex(
+                    move.getPlayerIndex()).getName());
+            replayPlayerTurns.setText(String.format("%d", game.getGameCopy().getPlayerByIndex
+                    (move.getPlayerIndex()).getHowManyTurnsPlayed()));
 
+        }
+        else
+        {
+            setAllLabelsToNone();
+        }
+    }
 
 }

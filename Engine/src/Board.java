@@ -93,6 +93,7 @@ public class Board implements Serializable {
     }
 
     public boolean popoutDisc(int column) {
+
         boolean popoutSucceeded = false;
 
         if(nextPlaceInColumn[column] < rows -1)
@@ -138,7 +139,7 @@ public class Board implements Serializable {
 
     public void insertDiscAtBottom(int columnToAddTo, char pieceShape) {
         bumpUpDiscs(columnToAddTo);
-        board[rows][columnToAddTo] = pieceShape;
+        board[rows-1][columnToAddTo] = pieceShape;
     }
 
     private void bumpUpDiscs(int columnToAddTo) {

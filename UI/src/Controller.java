@@ -909,6 +909,7 @@ public class Controller {
     {
         clearBoard();
 
+        ReplayButton.setDisable(true);
         StopGameButton.setDisable(true);
         StartGameButton.setDisable(true);
         ButtonXMLLoad.setDisable(false);
