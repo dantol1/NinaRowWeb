@@ -583,6 +583,7 @@ public class Controller {
                 int row = theGame.getNextPlaceInColumn(randomizedColumn);
 
                 turnSucceeded = dropDisc(randomizedColumn, row);
+                moveType = Move.moveType.POPIN;
             }
             else if (theGame.getSettings().getVariant() == GameSettings.Variant.Popout) {
 

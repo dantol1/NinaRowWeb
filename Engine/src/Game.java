@@ -743,6 +743,10 @@ public class Game implements Serializable {
         }
         players[activePlayerIndex].playedTurn();
     }
+    public void addComputerTurnToHistory(int columnInWhichDiscWasPut,int rowInWhichDiscWasPut, Move.moveType i_MoveType)
+    {
+        moveHistory.AddMoveToHistory(activePlayerIndex, rowInWhichDiscWasPut, columnInWhichDiscWasPut, i_MoveType);
+    }
 
     public void changeToNextActivePlayer()
     {
