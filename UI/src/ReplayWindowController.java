@@ -171,7 +171,7 @@ public class ReplayWindowController {
                 row++;
             }
             Controller.Disc disc = new Controller.Disc(
-                    game.getGameCopy().getPlayerByIndex(move.getPlayerIndex()).getPlayerColor()
+                    game.getGameCopy().getPlayerByIndex(move.getPlayerIndexDiscThatWasPopped()).getPlayerColor()
             );
             disc.setTranslateX(col * (80 + 5) + 80 / 4);
             disc.setTranslateY(row * (80 + 5) + 80 / 4);

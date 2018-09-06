@@ -182,9 +182,30 @@ public class Game implements Serializable {
 
     public boolean popoutDisc(int column)
     {
-        boolean moveSucceeded = gameBoard.popoutDisc(column);
+        PopoutMoveComplex popoutMove = gameBoard.popoutDisc(column);
 
-        return moveSucceeded;
+
+        if (popoutMove.isSucceeded())
+        {
+            int playerIndex = -1;
+            Move move;
+            for (int i = 0 ; i < players.length; i++) {
+
+                if (players[i].getPieceShape() == popoutMove.getPieceShape()){
+
+                    System.out.println("succeeded");
+                    playerIndex = i;
+                }
+            }
+
+            move = new Move(activePlayerIndex,settings.getRows()-1,column,
+                    Move.moveType.POPOUT);
+            move.setPlayerIndexDiscThatWasPopped(playerIndex);
+            moveHistory.showHistory().add(move);
+
+        }
+
+        return popoutMove.isSucceeded();
     }
 
     public GameState isGameEnded(int column){
@@ -710,7 +731,9 @@ public class Game implements Serializable {
 
     public void endOfTurnActions(int columnInWhichDiscWasPut,int rowInWhichDiscWasPut, Move.moveType i_MoveType)
     {
-        moveHistory.AddMoveToHistory(activePlayerIndex,rowInWhichDiscWasPut, columnInWhichDiscWasPut, i_MoveType);
+        if (i_MoveType != Move.moveType.POPOUT) {
+            moveHistory.AddMoveToHistory(activePlayerIndex, rowInWhichDiscWasPut, columnInWhichDiscWasPut, i_MoveType);
+        }
         players[activePlayerIndex].playedTurn();
     }
 

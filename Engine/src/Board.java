@@ -92,17 +92,23 @@ public class Board implements Serializable {
         }
     }
 
-    public boolean popoutDisc(int column) {
+    public PopoutMoveComplex popoutDisc(int column) {
 
+        PopoutMoveComplex result = null;
+
+        char pieceshape = '`';
         boolean popoutSucceeded = false;
 
         if(nextPlaceInColumn[column] < rows -1)
         {
+            pieceshape = board[rows-1][column];
             collapseBoard(column, rows - 1);
             popoutSucceeded = true;
         }
 
-        return popoutSucceeded;
+        result = new PopoutMoveComplex(pieceshape,popoutSucceeded);
+        return result;
+
     }
 
     public void collapseSpaces() {
