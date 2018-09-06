@@ -192,7 +192,6 @@ public class Game implements Serializable {
 
                 if (players[i].getPieceShape() == popoutMove.getPieceShape()){
 
-                    System.out.println("succeeded");
                     playerIndex = i;
                 }
             }

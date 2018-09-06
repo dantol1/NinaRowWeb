@@ -94,12 +94,6 @@ public class ReplayWindowController {
         pane.getChildren().add(discPane);
         pane.getChildren().addAll(theGridShape);
         replayScrollPane.setContent(pane);
-//        replayScrollPane.minHeightProperty().bind(thePane.heightProperty());
-//        replayScrollPane.minWidthProperty().bind(thePane.widthProperty());
-//        replayScrollPane.maxHeightProperty().bind(thePane.maxHeightProperty());
-//        replayScrollPane.maxWidthProperty().bind(thePane.maxWidthProperty());
-//        replayScrollPane.prefHeightProperty().bind(thePane.prefHeightProperty());
-//        replayScrollPane.prefWidthProperty().bind(thePane.prefWidthProperty());
     }
 
     private void setAllLabelsToNone() {
@@ -169,10 +163,8 @@ public class ReplayWindowController {
             while (theDiscs[row][col] != null)
             {
                 row--;
-                System.out.println("in row-- loop");
             }
             while (row < game.getGameCopy().getSettings().getRows() - 1) {
-                System.out.println("in row++ loop");
                 Controller.Disc disc = theDiscs[row+1][col];
                 disc.setTranslateY(row * (80 + 5) + 80 / 4);
                 theDiscs[row][col] = theDiscs[row + 1][col];

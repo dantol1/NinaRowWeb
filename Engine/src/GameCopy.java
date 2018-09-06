@@ -33,8 +33,6 @@ public class GameCopy{
     public Move PlayMoveFromHistory()
     {
         Move moveToPlay = moveHistory.showHistory().get(lastMoveSeenIndex);
-        System.out.println(String.format("in Move: col:%d row:%d",moveToPlay.getColumnIndex(),
-                moveToPlay.getRowIndex()));
 
         if(moveToPlay.getType() == Move.moveType.POPIN)
         {

@@ -645,7 +645,7 @@ public class Controller {
 
         boolean result = false;
 
-        if (theGame.popoutDisc(column)) {
+        if (theGame.returnBoard()[row][column] == theGame.getPlayers()[theGame.getActivePlayerIndex()].getPieceShape() && theGame.popoutDisc(column)) {
 
             result = true;
 
