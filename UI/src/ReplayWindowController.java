@@ -125,6 +125,7 @@ public class ReplayWindowController {
         int col = move.getColumnIndex();
         int row = move.getRowIndex();
 
+        System.out.println(String.format("col:%d row:%d",col,row));
         setPlayerInfo(move);
 
         if (move.getType() == Move.moveType.POPIN) {
@@ -152,7 +153,15 @@ public class ReplayWindowController {
 
                 row--;
             }
+        }
 
+        if (game.getLastMoveSeenIndex() >= game.getGameCopy().getMoveHistory().showHistory().size())
+        {
+            replayNext.setDisable(true);
+        }
+        if (game.getLastMoveSeenIndex() > 0)
+        {
+            replayPrev.setDisable(false);
         }
 
     }

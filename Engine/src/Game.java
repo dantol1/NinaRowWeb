@@ -184,11 +184,6 @@ public class Game implements Serializable {
     {
         boolean moveSucceeded = gameBoard.popoutDisc(column);
 
-        if(moveSucceeded)
-        {
-            moveHistory.AddMoveToHistory(activePlayerIndex,settings.getRows() -1,column, Move.moveType.POPOUT);
-        }
-
         return moveSucceeded;
     }
 
