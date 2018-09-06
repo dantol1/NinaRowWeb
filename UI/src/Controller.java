@@ -929,6 +929,11 @@ public class Controller {
                     theDiscs[i][j].setFill(Color.TRANSPARENT);
                     theDiscs[i][j] = null;
                 }
+                else if (theDiscs[i][j] != null)
+                {
+                    theDiscs[i][j].setFill(Color.TRANSPARENT);
+                    theDiscs[i][j] = null;
+                }
             }
         }
 
