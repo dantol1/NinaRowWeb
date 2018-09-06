@@ -38,13 +38,15 @@ public class GameCopy{
 
         if(moveToPlay.getType() == Move.moveType.POPIN)
         {
-            gameCopy.dropDisc(moveToPlay.getColumnIndex());
+            gameCopy.playTurn(moveToPlay.getColumnIndex());
         }
         else if(moveToPlay.getType() == Move.moveType.POPOUT)
         {
             gameCopy.popoutDisc(moveToPlay.getColumnIndex());
+            gameCopy.getPlayers()[moveToPlay.getPlayerIndex()].playedTurn();
         }
 
+        gameCopy.changeToNextActivePlayer();
         lastMoveSeenIndex++;
 
         return moveToPlay;
@@ -61,10 +63,9 @@ public class GameCopy{
         {
 
         }
+
         lastMoveSeenIndex--;
         Move undoMove = moveHistory.showHistory().get(lastMoveSeenIndex);
-
-
 
         return undoMove;
     }

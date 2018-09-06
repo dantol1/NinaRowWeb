@@ -94,7 +94,7 @@ public class GameFactory {
         List<GamePlayer> players = createPlayerCopies(gameToCopy.getPlayers());
         gameCopy = new Game(gameToCopy.getSettings(), players, gameToCopy.getMoveHistory());
         copy.setGameCopy(gameCopy);
-        copy.setMoveHistory(gameCopy.getMoveHistory());
+        copy.setMoveHistory(History.CopyHistory(gameToCopy.getMoveHistory()));
 
         return copy;
     }

@@ -136,7 +136,7 @@ public class Game implements Serializable {
             numOfActivePlayers = thePlayers.size();
         }
 
-        moveHistory = History.CopyHistory(copyMoveHistory);
+        moveHistory = new History();
         players = GamePlayer.Copy(thePlayers);
 
         for(boolean i : retiredPlayersIndexes)
@@ -184,7 +184,6 @@ public class Game implements Serializable {
     {
         PopoutMoveComplex popoutMove = gameBoard.popoutDisc(column);
 
-
         if (popoutMove.isSucceeded())
         {
             int playerIndex = -1;
@@ -199,10 +198,8 @@ public class Game implements Serializable {
             }
 
             move = new Move(activePlayerIndex,settings.getRows()-1,column,
-                    Move.moveType.POPOUT);
-            move.setPlayerIndexDiscThatWasPopped(playerIndex);
+                    Move.moveType.POPOUT, playerIndex);
             moveHistory.showHistory().add(move);
-
         }
 
         return popoutMove.isSucceeded();
@@ -713,6 +710,16 @@ public class Game implements Serializable {
         return succeeded;
     }
 
+    public boolean playPopTurn(int columnToPlaceDisc)
+    {
+        boolean succeeded = true;
+
+        succeeded = popoutDisc(columnToPlaceDisc);
+        players[activePlayerIndex].playedTurn();
+
+        return succeeded;
+    }
+
     public boolean playComputerTurn()
     {
         boolean succeeded = false;
@@ -737,7 +744,7 @@ public class Game implements Serializable {
         players[activePlayerIndex].playedTurn();
     }
 
-    private void changeToNextActivePlayer()
+    public void changeToNextActivePlayer()
     {
         activePlayerIndex = (activePlayerIndex + 1) % numOfActivePlayers;
         if(retiredPlayersIndexes[activePlayerIndex] == true)
@@ -760,7 +767,7 @@ public class Game implements Serializable {
             }
 
             moveToUndo = moveHistory.showHistory().getLast();
-//            moveHistory.removeFromHistory();
+            moveHistory.removeFromHistory();
             columnToRemoveFrom = moveToUndo.getColumnIndex();
             columnToRemoveFrom = moveToUndo.getColumnIndex();
             rowToRemoveFrom = moveToUndo.getRowIndex();
@@ -771,7 +778,7 @@ public class Game implements Serializable {
             {
                 gameBoard.insertDiscAtBottom(columnToRemoveFrom, players[moveToUndo.getPlayerIndex()].getPieceShape());
             }
-            players[activePlayerIndex].undidTurn();
+            players[moveToUndo.getPlayerIndex()].undidTurn();
         }
         else
         {

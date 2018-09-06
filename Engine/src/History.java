@@ -10,6 +10,11 @@ public class History implements Serializable {
         System.out.println(String.format("added: col:%d, row: %d",i_ColumnIndex,i_RowIndex));
         moveList.add(new Move(i_PlayerIndex, i_RowIndex, i_ColumnIndex, i_MoveType));
     }
+    public void AddMoveToHistory(int i_PlayerIndex,int i_RowIndex, int i_ColumnIndex, Move.moveType i_MoveType, int playerIndexPopped) {
+
+        System.out.println(String.format("added: col:%d, row: %d",i_ColumnIndex,i_RowIndex));
+        moveList.add(new Move(i_PlayerIndex, i_RowIndex, i_ColumnIndex, i_MoveType, playerIndexPopped));
+    }
 
     public LinkedList<Move> showHistory(){
 
@@ -34,7 +39,14 @@ public class History implements Serializable {
         {
             System.out.println(String.format("in copy history: col:%d row:%d",
                     mv.getColumnIndex(),mv.getRowIndex()));
-            copiedHistory.AddMoveToHistory(mv.getPlayerIndex(), mv.getRowIndex(), mv.getColumnIndex(), mv.getType());
+            if(mv.getType() == Move.moveType.POPOUT)
+            {
+                copiedHistory.AddMoveToHistory(mv.getPlayerIndex(), mv.getRowIndex(), mv.getColumnIndex(), mv.getType(), mv.getPlayerIndexDiscThatWasPopped());
+            }
+            else
+            {
+                copiedHistory.AddMoveToHistory(mv.getPlayerIndex(), mv.getRowIndex(), mv.getColumnIndex(), mv.getType());
+            }
         }
 
         return copiedHistory;

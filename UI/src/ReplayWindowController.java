@@ -30,6 +30,9 @@ public class ReplayWindowController {
     private GameCopy game;
 
     @FXML
+    private Pane thePane;
+
+    @FXML
     private Button replayPrev;
 
     @FXML
@@ -81,7 +84,7 @@ public class ReplayWindowController {
 
         setAllLabelsToNone();
         replayPrev.setDisable(true);
-        if (game.getGameCopy().getMoveHistory().showHistory().size() == 0)
+        if (game.getMoveHistory().showHistory().size() == 0)
         {
             replayNext.setDisable(true);
         }
@@ -91,7 +94,12 @@ public class ReplayWindowController {
         pane.getChildren().add(discPane);
         pane.getChildren().addAll(theGridShape);
         replayScrollPane.setContent(pane);
-
+//        replayScrollPane.minHeightProperty().bind(thePane.heightProperty());
+//        replayScrollPane.minWidthProperty().bind(thePane.widthProperty());
+//        replayScrollPane.maxHeightProperty().bind(thePane.maxHeightProperty());
+//        replayScrollPane.maxWidthProperty().bind(thePane.maxWidthProperty());
+//        replayScrollPane.prefHeightProperty().bind(thePane.prefHeightProperty());
+//        replayScrollPane.prefWidthProperty().bind(thePane.prefWidthProperty());
     }
 
     private void setAllLabelsToNone() {
@@ -184,7 +192,7 @@ public class ReplayWindowController {
         {
             replayPrev.setDisable(true);
         }
-        if (game.getLastMoveSeenIndex() < game.getGameCopy().getMoveHistory().showHistory().size())
+        if (game.getLastMoveSeenIndex() < game.getMoveHistory().showHistory().size())
         {
             replayNext.setDisable(false);
         }
@@ -227,7 +235,7 @@ public class ReplayWindowController {
             }
         }
 
-        if (game.getLastMoveSeenIndex() >= game.getGameCopy().getMoveHistory().showHistory().size())
+        if (game.getLastMoveSeenIndex() >= game.getMoveHistory().showHistory().size())
         {
             replayNext.setDisable(true);
         }

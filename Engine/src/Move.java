@@ -51,6 +51,16 @@ public class Move implements Serializable {
         specificMoveNum = moveNum;
         type = i_MoveType;
     }
+    public Move(int i_playerIndex,int i_rowIndex, int i_columnIndex, moveType i_MoveType, int poppedPiecePlayerIndex) {
+
+        playerIndex = i_playerIndex;
+        columnIndex = i_columnIndex;
+        rowIndex = i_rowIndex;
+        moveNum++;
+        specificMoveNum = moveNum;
+        type = i_MoveType;
+        playerIndexDiscThatWasPopped = poppedPiecePlayerIndex;
+    }
 
 }
 
