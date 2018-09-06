@@ -256,12 +256,6 @@ public class Controller {
     @FXML
     private HBox HboxTop;
 
-    @FXML
-    private Button saveGameButton;
-
-    @FXML
-    private Button loadGameButton;
-
     private String[] chosenStyle = {"playerStyle1",
             "activePlayerStyle1",
             "buttonStyle1",
@@ -339,7 +333,7 @@ public class Controller {
             currentWorkedOnLabel++;
             systemLabels[currentPlayerIndex + currentWorkedOnLabel].setText(((Short)theGame.getPlayers()[currentPlayerIndex].getId()).toString());
             currentWorkedOnLabel++;
-            systemLabels[currentPlayerIndex + currentWorkedOnLabel].textProperty().bind(new SimpleIntegerProperty(((Integer)theGame.getPlayers()[currentPlayerIndex].getHowManyTurnsPlayed())).asString());
+            systemLabels[currentPlayerIndex + currentWorkedOnLabel].textProperty().bind((theGame.getPlayers()[currentPlayerIndex].getHowManyTurnsPlayedProperty()).asString());
             currentWorkedOnLabel++;
             systemLabels[currentPlayerIndex + currentWorkedOnLabel].setText(theGame.getPlayers()[currentPlayerIndex].getPlayerType().toString());
         }
@@ -447,7 +441,6 @@ public class Controller {
                 endOfTurnActions(theGame.getSettings().getRows() - 1,column, Move.moveType.POPOUT);
             }
         }
-
     }
 
     private void playTurnDropDisc(Rectangle rect) {
@@ -514,7 +507,6 @@ public class Controller {
         }
 
         changeActivePlayerPane();
-
 
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
@@ -1022,8 +1014,6 @@ public class Controller {
 
     private void createControllersSets() {
         systemButtons = new Button[]{
-                loadGameButton,
-                saveGameButton,
                 ReplayButton,
                 StopGameButton,
                 StartGameButton,

@@ -1,3 +1,5 @@
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
 
 import java.io.Serializable;
@@ -22,7 +24,7 @@ public class GamePlayer implements Serializable {
     }
 
     private short id;
-    private int howManyTurnsPlayed = 0;
+    private IntegerProperty howManyTurnsPlayed = new SimpleIntegerProperty(0);
     private Color playerColor;
     private char pieceShape;
     private Type playerType;
@@ -74,16 +76,19 @@ public class GamePlayer implements Serializable {
     }
 
     public int getHowManyTurnsPlayed() {
+        return howManyTurnsPlayed.intValue();
+    }
+    public IntegerProperty getHowManyTurnsPlayedProperty() {
         return howManyTurnsPlayed;
     }
 
     public void setHowManyTurnsPlayed(int howManyTurnsPlayed) {
-        this.howManyTurnsPlayed = howManyTurnsPlayed;
+        this.howManyTurnsPlayed.setValue(howManyTurnsPlayed);
     }
 
-    public void playedTurn(){ howManyTurnsPlayed++;
+    public void playedTurn(){ howManyTurnsPlayed.setValue(howManyTurnsPlayed.intValue() + 1);
         System.out.println("kkkkk"); }
-    public void undidTurn(){ howManyTurnsPlayed--; }
+    public void undidTurn(){ howManyTurnsPlayed.setValue(howManyTurnsPlayed.intValue() - 1); }
 
 
     public static GamePlayer[] Copy(List<GamePlayer> thePlayers) {
