@@ -135,4 +135,16 @@ public class Board implements Serializable {
             }
         }
     }
+
+    public void insertDiscAtBottom(int columnToAddTo, char pieceShape) {
+        bumpUpDiscs(columnToAddTo);
+        board[rows][columnToAddTo] = pieceShape;
+    }
+
+    private void bumpUpDiscs(int columnToAddTo) {
+        for(int i = 1; i < rows; i++)
+        {
+            board[i-1][columnToAddTo] = board[i][columnToAddTo];
+        }
+    }
 }

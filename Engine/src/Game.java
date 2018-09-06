@@ -744,8 +744,14 @@ public class Game implements Serializable {
             moveToUndo = moveHistory.showHistory().getLast();
             moveHistory.removeFromHistory();
             columnToRemoveFrom = moveToUndo.getColumnIndex();
-            rowToRemoveFrom = gameBoard.getNextPlaceInColumn()[columnToRemoveFrom] + 1;
-            gameBoard.removeDisc(columnToRemoveFrom, rowToRemoveFrom, players[activePlayerIndex].getPieceShape());
+            rowToRemoveFrom = moveToUndo.getRowIndex();
+            if(moveToUndo.getType() == Move.moveType.POPIN) {
+                gameBoard.removeDisc(columnToRemoveFrom, rowToRemoveFrom, players[activePlayerIndex].getPieceShape());
+            }
+            else if(moveToUndo.getType() == Move.moveType.POPOUT)
+            {
+                gameBoard.insertDiscAtBottom(columnToRemoveFrom, players[moveToUndo.getPlayerIndex()].getPieceShape());
+            }
             players[activePlayerIndex].undidTurn();
         }
         else
