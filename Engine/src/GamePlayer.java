@@ -81,7 +81,8 @@ public class GamePlayer implements Serializable {
         this.howManyTurnsPlayed = howManyTurnsPlayed;
     }
 
-    public void playedTurn(){ howManyTurnsPlayed++; }
+    public void playedTurn(){ howManyTurnsPlayed++;
+        System.out.println("kkkkk"); }
     public void undidTurn(){ howManyTurnsPlayed--; }
 
 

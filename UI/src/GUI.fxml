@@ -225,22 +225,6 @@
                         <Insets left="20.0" />
                      </VBox.margin>
                   </MenuButton>
-                  <Button fx:id="saveGameButton" mnemonicParsing="false" onAction="#saveTheGame" prefHeight="86.0" prefWidth="192.0" text="Save Game">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="20.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="loadGameButton" mnemonicParsing="false" onAction="#loadTheGame" prefHeight="91.0" prefWidth="194.0" text="Load Game">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="20.0" />
-                     </VBox.margin>
-                  </Button>
                </children>
                <padding>
                   <Insets left="5.0" top="40.0" />

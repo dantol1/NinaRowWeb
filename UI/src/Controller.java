@@ -613,12 +613,13 @@ public class Controller {
             }
         } while (!turnSucceeded);
 
-        if (moveType == Move.moveType.POPIN) {
+        if (moveType == Move.moveType.POPIN || moveType == null) {
             endOfTurnActions(theGame.getNextPlaceInColumn(randomizedColumn)+1,randomizedColumn, moveType);
         }
         else if (moveType == Move.moveType.POPOUT) {
             endOfTurnActions(theGame.getSettings().getRows() - 1, randomizedColumn, moveType);
         }
+
 
         if (theGame.getPlayerByIndex(theGame.getActivePlayerIndex()).isComputer())
         {
@@ -636,7 +637,8 @@ public class Controller {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                executeComputerTurn();
+                                ComputerTurnTask computerTask = new ComputerTurnTask();
+                                new Thread(computerTask).start();
                                 humanPlayerTurn = true;
                             }
                         });
@@ -1061,6 +1063,19 @@ public class Controller {
 
     }
 
+    public class ComputerTurnTask extends Task<Void> {
+
+        @Override
+        protected Void call() {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    executeComputerTurn();
+                }
+            });
+            return null;
+        }
+    }
     public class ProgressBarTask extends Task<Integer> {
 
         InputStream inputstream = null;
