@@ -1,10 +1,11 @@
+package GameLogic;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 public class GamePlayer implements Serializable {
 
@@ -34,7 +35,6 @@ public class GamePlayer implements Serializable {
         name = i_name;
         pieceShape = i_pieceShape;
         playerType = i_isComputer;
-
     }
 
     public GamePlayer(short id, String name, Type type, Color color)

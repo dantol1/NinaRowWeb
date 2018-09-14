@@ -1,10 +1,12 @@
+package GameLogic;
+
+import Exceptions.FileDataException;
 import jaxb.schema.generated.GameDescriptor;
 import jaxb.schema.generated.Player;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +20,34 @@ public class GameFactory {
         Unmarshaller u = jc.createUnmarshaller();
         GameDescriptor gd = (GameDescriptor)u.unmarshal(xmlFile);
 
+        if(gd.getDynamicPlayers() == null) {
+            int rows = gd.getGame().getBoard().getRows();
+            int columns = gd.getGame().getBoard().getColumns().intValue();
+            String variant = gd.getGame().getVariant();
+            int target = gd.getGame().getTarget().intValue();
+            String gameType = gd.getGameType();
+            checkGameValidity(rows, columns, target, gd.getPlayers().getPlayer());
+            GameSettings gs = new GameSettings(gameType, variant, rows, columns, target);
+            Game game = new Game(gs,gd.getPlayers().getPlayer());
+
+            return game;
+        }
+        else
+        {
+            return CreateDynamicGame(gd);
+        }
+    }
+
+    public static Game CreateDynamicGame(GameDescriptor gd) throws FileDataException
+    {
         int rows = gd.getGame().getBoard().getRows();
         int columns = gd.getGame().getBoard().getColumns().intValue();
         String variant = gd.getGame().getVariant();
         int target = gd.getGame().getTarget().intValue();
         String gameType = gd.getGameType();
-        checkGameValidity(rows,columns,target,gd.getPlayers().getPlayer());
 
         GameSettings gs = new GameSettings(gameType, variant, rows, columns, target);
-        Game game = new Game(gs,gd.getPlayers().getPlayer());
+        Game game = new Game(gs, gd.getDynamicPlayers());
 
         return game;
     }

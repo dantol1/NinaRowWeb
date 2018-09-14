@@ -1,3 +1,5 @@
+package GameLogic;
+
 public abstract class gameWinChecker implements Runnable {
 
     public void setFoundSequence(boolean foundSequence) {

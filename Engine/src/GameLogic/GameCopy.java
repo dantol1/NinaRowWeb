@@ -1,3 +1,7 @@
+package GameLogic;
+
+import Exceptions.NoMovesMadeException;
+
 public class GameCopy{
 
     public Game getGameCopy() {

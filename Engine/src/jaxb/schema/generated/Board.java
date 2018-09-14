@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "Board")
+@XmlRootElement(name = "GameLogic.Board")
 public class Board {
 
     @XmlAttribute(name = "rows", required = true)

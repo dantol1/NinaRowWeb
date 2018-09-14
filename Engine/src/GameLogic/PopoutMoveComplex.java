@@ -1,3 +1,5 @@
+package GameLogic;
+
 public class PopoutMoveComplex {
 
     private char pieceShape;

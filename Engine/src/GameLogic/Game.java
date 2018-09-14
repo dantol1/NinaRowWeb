@@ -1,4 +1,11 @@
+package GameLogic;
+
+import Exceptions.NoMovesMadeException;
+import Exceptions.PlayersAmountException;
+import WebLogic.User;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
+import jaxb.schema.generated.DynamicPlayers;
 import jaxb.schema.generated.Player;
 
 import java.awt.*;
@@ -65,6 +72,22 @@ public class Game implements Serializable {
     private HashSet<Point> winningPieces = new HashSet<>();
     private boolean[] retiredPlayersIndexes = new boolean[6];
 
+    public int getTotalMoves() {
+        return totalMoves.get();
+    }
+
+    public SimpleIntegerProperty totalMovesProperty() {
+        return totalMoves;
+    }
+
+    private SimpleIntegerProperty totalMoves = new SimpleIntegerProperty(0); //TODO: bind this property to the sum of all the player turns properties.
+
+    public String getGameTitle() {
+        return gameTitle;
+    }
+
+    String gameTitle;
+
     public HashSet<Point> getWinningPieces() {
         return winningPieces;
     }
@@ -92,6 +115,7 @@ public class Game implements Serializable {
 
     private int activePlayerIndex = 0;
     private boolean ended = false;
+    private int playersCreated = 0;
 
     public Game(GameSettings gs, List<Player> thePlayers)
     {
@@ -122,6 +146,21 @@ public class Game implements Serializable {
         }
     }
 
+    public Game(GameSettings gs, DynamicPlayers dm)
+    {
+        gameBoard = new Board(gs.getColumns(), gs.getRows());
+        settings = gs;
+
+        moveHistory = new History();
+        players = new GamePlayer[dm.getTotalPlayers()];
+        gameTitle = dm.getGameTitle();
+
+        for(boolean i : retiredPlayersIndexes)
+        {
+            i = false;
+        }
+    }
+
     public Game(GameSettings gs, List<GamePlayer> thePlayers, History copyMoveHistory)
     {
         gameBoard = new Board(gs.getColumns(), gs.getRows());
@@ -145,30 +184,30 @@ public class Game implements Serializable {
         }
     }
 
-    public void saveGame(String fileName) throws IOException
-    {
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
-            out.writeObject(this);
-            out.flush();
-        }
-        catch (IOException e) {
-
-            throw e;
-        }
-    }
-
-
-    public void loadGame(String fileName) throws ClassNotFoundException, IOException {
-
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
-
-        this.gameBoard = ((Game)in.readObject()).gameBoard;
-        this.moveHistory = ((Game)in.readObject()).moveHistory;
-        this.settings = ((Game)in.readObject()).settings;
-        this.players = ((Game)in.readObject()).players;
-        this.numOfActivePlayers = ((Game)in.readObject()).numOfActivePlayers;
-    }
+//    public void saveGame(String fileName) throws IOException
+//    {
+//        try {
+//            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
+//            out.writeObject(this);
+//            out.flush();
+//        }
+//        catch (IOException e) {
+//
+//            throw e;
+//        }
+//    }
+//
+//
+//    public void loadGame(String fileName) throws ClassNotFoundException, IOException {
+//
+//        ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
+//
+//        this.gameBoard = ((GameLogic.Game)in.readObject()).gameBoard;
+//        this.moveHistory = ((GameLogic.Game)in.readObject()).moveHistory;
+//        this.settings = ((GameLogic.Game)in.readObject()).settings;
+//        this.players = ((GameLogic.Game)in.readObject()).players;
+//        this.numOfActivePlayers = ((GameLogic.Game)in.readObject()).numOfActivePlayers;
+//    }
 
     public char[][] returnBoard()
     {
@@ -741,6 +780,7 @@ public class Game implements Serializable {
             moveHistory.AddMoveToHistory(activePlayerIndex, rowInWhichDiscWasPut, columnInWhichDiscWasPut, i_MoveType);
         }
         players[activePlayerIndex].playedTurn();
+        totalMoves.set(totalMoves.get() + 1);
     }
     public void addComputerTurnToHistory(int columnInWhichDiscWasPut,int rowInWhichDiscWasPut, Move.moveType i_MoveType)
     {
@@ -861,5 +901,65 @@ public class Game implements Serializable {
         }
     }
 
+    public synchronized boolean addPlayer(User user)
+    {
+        boolean added = false;
+
+        if(playersCreated < players.length)
+        {
+            players[playersCreated] = new GamePlayer(user.getId(),
+                    user.getName(),
+                    user.isComputer() ? GamePlayer.Type.Computer : GamePlayer.Type.Computer,
+                    ColorGenerator.getColor(playersCreated));
+
+            playersCreated++;
+            added = true;
+        }
+
+        return added;
+    }
+
+    public synchronized boolean removePlayer(short playerID)
+    {
+        boolean removed = false;
+
+        if(playersCreated > 0)
+        {
+            GamePlayer[] remainingPlayers = new GamePlayer[playersCreated - 1];
+            for(int i = 0, playerToCopyIndex = 0; i < playersCreated; i++)
+            {
+                if(players[i].getId() != playerID)
+                {
+                    remainingPlayers[playerToCopyIndex] = players[i];
+                    playerToCopyIndex++;
+                }
+            }
+
+            players = remainingPlayers;
+            playersCreated--;
+            removed = true;
+        }
+
+        return removed;
+    }
+
+
+    private static class ColorGenerator {
+        private static LinkedList<Color> colors = new LinkedList<>();
+
+        static {
+            colors.add(Color.RED);
+            colors.add(Color.BLUE);
+            colors.add(Color.GREEN);
+            colors.add(Color.ORANGE);
+            colors.add(Color.BLACK);
+            colors.add(Color.PURPLE);
+        }
+
+        public static Color getColor(int index)
+        {
+            return colors.get(index);
+        }
+    }
 
 }

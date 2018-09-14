@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="NinaRow">
+    <output-path>$PROJECT_DIR$/out/artifacts/NinaRow</output-path>
+    <root id="archive" name="NinaRow.war" />
+  </artifact>
+</component>

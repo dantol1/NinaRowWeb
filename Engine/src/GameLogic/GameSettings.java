@@ -1,3 +1,5 @@
+package GameLogic;
+
 import java.io.Serializable;
 
 public class GameSettings implements Serializable {
