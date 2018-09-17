@@ -23,4 +23,5 @@
 
 body{
     background-image: url("../GamesHubPage/WoodenBackground.jpg");
+    background-size: cover;
 }
