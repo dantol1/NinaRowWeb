@@ -933,6 +933,10 @@ public class Game implements Serializable {
                     remainingPlayers[playerToCopyIndex] = players[i];
                     playerToCopyIndex++;
                 }
+                else
+                {
+                    ColorGenerator.freeColor(players[i].getPlayerColor());
+                }
             }
 
             players = remainingPlayers;
@@ -946,7 +950,7 @@ public class Game implements Serializable {
 
     private static class ColorGenerator {
         private static LinkedList<Color> colors = new LinkedList<>();
-
+        private static boolean[] colorUsed = {false, false, false, false, false, false};
         static {
             colors.add(Color.RED);
             colors.add(Color.BLUE);
@@ -958,7 +962,25 @@ public class Game implements Serializable {
 
         public static Color getColor(int index)
         {
+            while(colorUsed[index])
+            {
+                index = (index + 1) % 6;
+            }
+
+            colorUsed[index] = true;
             return colors.get(index);
+        }
+
+        public static void freeColor(Color colorToFree)
+        {
+            int index = 0;
+
+            while(colors.get(index) != colorToFree)
+            {
+                index++;
+            }
+
+            colorUsed[index] = false;
         }
     }
 

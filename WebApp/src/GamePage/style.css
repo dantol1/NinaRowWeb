@@ -1,0 +1,68 @@
+body {
+    text-align: center;
+}
+
+#NinaRow {
+    background-color: yellow;
+    display: inline-block;
+}
+
+.col {
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+    background-color: white;
+    border-radius: 50%;
+    margin: 5px;
+}
+
+.col.empty {
+    cursor: pointer;
+}
+
+.next-red {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+.next-black {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.col.red {
+    background-color: red;
+}
+
+.col.black {
+    background-color: black;
+}
+
+.next-blue {
+    background-color: rgba(0, 0, 255, 0.2);
+}
+
+.next-green {
+    background-color: rgba(0, 255, 0, 0.2);
+}
+
+.col.green {
+    background-color: green;
+}
+
+.col.blue {
+    background-color: blue;
+}
+.next-purple {
+    background-color: rgba(255, 0, 0255, 0.2);
+}
+
+.next-orange {
+    background-color: rgba(255, 152, 35, 0.6);
+}
+
+.col.purple {
+    background-color: purple;
+}
+
+.col.orange {
+    background-color: orange;
+}
