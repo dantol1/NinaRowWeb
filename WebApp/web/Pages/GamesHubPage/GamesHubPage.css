@@ -1,5 +1,5 @@
 body{
-    background: aliceblue;
+    background: #ffd500;
     margin: 0;
     min-width: 400px;
 }
@@ -11,7 +11,7 @@ body{
 
 .toolBar{
     height: 50px;
-    background: gainsboro;
+    background: #ff9823;
 }
 
 .toolbarContent {
@@ -60,21 +60,22 @@ body{
 
 th {
     padding: 0% 5% 2% 1%;
-    background: lightskyblue;
+    background: #edb5fa;
 }
 
 .gamesDiv tr {
-    background: lightsteelblue;
-    color: navy;
+    background: rgba(55, 63, 73, 0.78);
+    color: #828100;
 }
 
 .usersDiv tr{
-    background: lightsteelblue;
-    color: navy;
+    background: rgba(55, 63, 73, 0.78);
+    color: #828100;
 }
 
 .gamesDiv td {
     height: 40px;
+    color: whitesmoke;
 }
 
 .usersDiv td {

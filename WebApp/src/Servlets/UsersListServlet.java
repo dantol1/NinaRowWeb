@@ -23,9 +23,7 @@ public class UsersListServlet extends HttpServlet {
         response.setContentType("application/json");
 
         try (PrintWriter out = response.getWriter()) {
-            System.out.println("after GSON");
             UserManager userManager = ServletUtils.getUserManager(getServletContext());
-            System.out.println("In USERLIST SERVLET");
             Set<String> usersList = userManager.getUsers();
             String json = gson.toJson(usersList);
             out.println(json);

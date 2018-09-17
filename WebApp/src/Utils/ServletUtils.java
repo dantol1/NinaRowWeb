@@ -17,7 +17,6 @@ public class ServletUtils {
         synchronized (userManagerLock) {
             if (servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME) == null) {
                 servletContext.setAttribute(USER_MANAGER_ATTRIBUTE_NAME, new UserManager());
-                System.out.println("Created new UserManager");
             }
         }
         return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
