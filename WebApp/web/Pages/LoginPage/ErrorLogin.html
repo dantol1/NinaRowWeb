@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nina's Row</title>
+    <link rel="stylesheet" type="text/css" href="LoginStyle.css">
+</head>
+<body class="mainBody">
+<div class="mainDiv">
+    <span class="ErrorUsername">Username already taken, please select another one.</span>
+    <br/>
+    <span class="welcomeSpan">Welcome to the Nina's Row Game!</span>
+    <br/>
+    <form name="formLogin" onsubmit="loginClick()">
+        <div>
+            <span>Please insert your name:</span>
+            <input name="UserNameInput" type="text" class="UserNameInput"/>
+        </div>
+        <br/>
+        <div>
+            <span>Computer</span>
+            <input name="ComputerCheckBox" type="checkbox" class="ComputerCheckBox"/>
+        </div>
+        <input type="submit" class="buttonLogin" value="Login"/>
+    </form>
+    <br/>
+</div>
+<script type="text/javascript" src=../../Utils/JQuery3.3.1min.js></script>
+</body>
+</html>

@@ -1,15 +1,14 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="NinaRow">
-    <output-path>$PROJECT_DIR$/out/artifacts/NinaRow</output-path>
-    <root id="archive" name="NinaRow.war">
-      <element id="javaee-facet-resources" facet="WebApp/web/Web" />
+  <artifact type="exploded-war" name="WebApp:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/WebApp_war_exploded</output-path>
+    <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="WebApp" />
           <element id="module-output" name="Engine" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="Engine/web/Web" />
+      <element id="javaee-facet-resources" facet="WebApp/web/Web" />
     </root>
   </artifact>
 </component>
