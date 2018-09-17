@@ -81,6 +81,7 @@ class NinaRow {
     }
 
     checkForWinner(row, col) {
+        //TODO: AJAX to our server logic.
         const that = this;
 
         function $getCell(i, j) {
