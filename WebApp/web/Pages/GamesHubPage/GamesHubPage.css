@@ -1,5 +1,5 @@
 body{
-    background: #ffd500;
+    background-image: url("WoodenBackground.jpg");
     margin: 0;
     min-width: 400px;
 }
@@ -11,7 +11,9 @@ body{
 
 .toolBar{
     height: 50px;
-    background: #ff9823;
+    background:transparent;
+    color: Black;
+    font-weight: bold;
 }
 
 .toolbarContent {
@@ -22,6 +24,9 @@ body{
 
 .logoutSpan{
     position: relative;
+    font-weight: bold;
+    font-size: 20px;
+    color:whitesmoke;
 }
 
 .userNameSpan {
@@ -59,40 +64,53 @@ body{
 }
 
 th {
-    padding: 0% 5% 2% 1%;
-    background: #edb5fa;
+    padding: 0.5% 2% 0.5% 0%;
+    background: linear-gradient(#ffd65b, #e68400),
+    linear-gradient(#ffef84, #f2ba44),
+    linear-gradient(#ffea6a, #efaa22),
+    linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%);
+    border-radius:50%;
+    text-align: center;
+    vertical-align: center;
+    font-weight: bold;
 }
 
 .gamesDiv tr {
-    background: rgba(55, 63, 73, 0.78);
-    color: #828100;
+    background:transparent;
+    font-family: Arial;
 }
 
 .usersDiv tr{
-    background: rgba(55, 63, 73, 0.78);
-    color: #828100;
+    background: transparent;
+    font-family: Arial;
 }
 
 .gamesDiv td {
     height: 40px;
     color: whitesmoke;
+    font-family: Arial;
 }
 
 .usersDiv td {
     height: 40px;
+    color: whitesmoke;
+    font-family: Arial;
 }
 
 .logoutSpan:hover {
-    color: blueviolet;
+    background: burlywood;
+    font-weight: bold;
+    font-size: 20px;
+    color:whitesmoke;
     cursor: pointer;
 }
 
 .gamesDiv tr:hover {
-    background: blanchedalmond;
+    background: rgba(55, 63, 73, 0.78);
 }
 
 .usersDiv tr:hover {
-    background: blanchedalmond;
+    background: rgba(55, 63, 73, 0.78);
 }
 
 .dialogDiv {
@@ -238,4 +256,9 @@ th {
     to { transform: rotate(1turn);}
 }
 
-
+.UploadText
+{
+    font-weight: bold;
+    font-size: 20px;
+    color:whitesmoke;
+}

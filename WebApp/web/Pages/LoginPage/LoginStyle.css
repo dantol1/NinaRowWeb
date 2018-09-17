@@ -3,3 +3,24 @@
     color: red;
     font-size: 24px;
 }
+
+.UserNameInput {
+    width: 200px;
+    height: 30px;
+}
+
+.buttonLogin {
+
+}
+
+.welcomeSpan {
+    font-size: 60px;
+}
+
+.mainDiv{
+    text-align: center;
+}
+
+body{
+    background-image: url("../GamesHubPage/WoodenBackground.jpg");
+}
