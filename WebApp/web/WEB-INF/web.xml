@@ -24,11 +24,7 @@
         <url-pattern>/UsersList</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UsersListServlet</servlet-name>
-        <url-pattern>/NinaRow/UsersList</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
-        <url-pattern>/NinaRow/Logout</url-pattern>
+        <url-pattern>/Logout</url-pattern>
     </servlet-mapping>
 </web-app>

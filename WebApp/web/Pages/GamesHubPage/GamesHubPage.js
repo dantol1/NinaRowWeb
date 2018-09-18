@@ -107,6 +107,7 @@ function statusCallback(json)
 }
 
 function onLogoutClick() {
+    console.log(LOGOUT_URL);
     $.ajax(
         {
             url: LOGOUT_URL,
@@ -118,7 +119,7 @@ function onLogoutClick() {
 
 function logoutCallback(json) {
     didUserCloseWindow = false;
-    window.location = "/";
+    window.location = "/NinaRow";
 }
 
 function refreshUserList() {
@@ -136,7 +137,6 @@ function refreshUserListCallback(users) {
     usersTable.empty();
 
     $.each(users || [], function(index, username) {
-        console.log(username);
         $('<tr><td>' + username + '</tr></td>').appendTo(usersTable);
     });
 }
