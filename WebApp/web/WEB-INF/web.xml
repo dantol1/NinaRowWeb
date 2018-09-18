@@ -8,6 +8,10 @@
         <servlet-class>Servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>Servlets.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>UsersListServlet</servlet-name>
         <servlet-class>Servlets.UsersListServlet</servlet-class>
     </servlet>
@@ -22,5 +26,9 @@
     <servlet-mapping>
         <servlet-name>UsersListServlet</servlet-name>
         <url-pattern>/NinaRow/UsersList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/NinaRow/Logout</url-pattern>
     </servlet-mapping>
 </web-app>

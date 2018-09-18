@@ -1,5 +1,6 @@
 var REFRESH_RATE = 2000;
 var USER_LIST_URL = buildUrlWithContextPath("UsersList");
+var LOGOUT_URL = buildUrlWithContextPath("Logout");
 
 window.onload = function ()
 {
@@ -105,18 +106,15 @@ function statusCallback(json)
     }
 }
 
-// function onLogoutClick() {
-//     $.ajax(
-//         {
-//             url: 'Login',
-//             data: {
-//                 action: "logout"
-//             },
-//             type: 'GET',
-//             success: logoutCallback
-//         }
-//     );
-// }
+function onLogoutClick() {
+    $.ajax(
+        {
+            url: LOGOUT_URL,
+            type: 'GET',
+            success: logoutCallback
+        }
+    );
+}
 
 function logoutCallback(json) {
     didUserCloseWindow = false;

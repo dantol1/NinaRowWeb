@@ -4,6 +4,7 @@ import WebLogic.GameManager;
 import WebLogic.UserManager;
 import javax.servlet.ServletContext;
 
+
 public class ServletUtils {
 
     private static final String USER_MANAGER_ATTRIBUTE_NAME = "UserManager";
