@@ -24,10 +24,48 @@ body{
 }
 
 .logoutSpan{
-    position: relative;
+    background: linear-gradient(#ffd65b, #e68400),
+    linear-gradient(#ffef84, #f2ba44),
+    linear-gradient(#ffea6a, #efaa22),
+    linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%);
+    border: none;
+    color: black;
     font-weight: bold;
-    font-size: 20px;
-    color:whitesmoke;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+    box-shadow: 0 9px #999;
+    cursor: pointer;
+}
+
+.logoutSpan:hover {
+    background: linear-gradient(#e6b788, #e68100),
+    linear-gradient(#e6d785, #e6b33b),
+    linear-gradient(#e6cf5e, #e69d27),
+    linear-gradient(#e6c55b 0%, #e6bb02 50%, #e69e0a 100%);
+    border: none;
+}
+
+.logoutSpan:active {
+    background: linear-gradient(#e6b788, #e68100),
+    linear-gradient(#e6d785, #e6b33b),
+    linear-gradient(#e6cf5e, #e69d27),
+    linear-gradient(#e6c55b 0%, #e6bb02 50%, #e69e0a 100%);
+    border: none;
+    color: dimgray;
+    font-weight: bold;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 8px;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
 
 .userNameSpan {
@@ -96,14 +134,6 @@ th {
     height: 40px;
     color: whitesmoke;
     font-family: Arial;
-}
-
-.logoutSpan:hover {
-    background: burlywood;
-    font-weight: bold;
-    font-size: 20px;
-    color:whitesmoke;
-    cursor: pointer;
 }
 
 .gamesDiv tr:hover {
