@@ -1,6 +1,8 @@
 var REFRESH_RATE = 2000;
 var USER_LIST_URL = buildUrlWithContextPath("UsersList");
 var LOGOUT_URL = buildUrlWithContextPath("Logout");
+var LOGIN_URL = buildUrlWithContextPath("Login");
+var STATUS_URL = buildUrlWithContextPath("Status");
 
 window.onload = function ()
 {
@@ -44,22 +46,19 @@ window.onload = function ()
 //     return result;
 // }
 //
-// function getUserName() {
-//     var result;
-//     $.ajax
-//     ({
-//         async: false,
-//         url: 'login',
-//         data: {
-//             action: "status"
-//         },
-//         type: 'GET',
-//         success: function (json) {
-//             result = json.userName;
-//         }
-//     });
-//     return result;
-// }
+function getUserName() {
+    var result;
+    $.ajax
+    ({
+        async: false,
+        url: STATUS_URL,
+        type: 'GET',
+        success: function (json) {
+            result = json.userName;
+        }
+    });
+    return result;
+}
 //
 // function isUserComputer() {
 //     var result;
@@ -141,40 +140,40 @@ function refreshUserListCallback(users) {
     });
 }
 
-// function loadGameClicked(event) {
-//     var file = event.target.files[0];
-//     var reader = new FileReader();
-//     var creatorName = getUserName();
-//
-//     reader.onload = function () {
-//         var content = reader.result;
-//         $.ajax(
-//             {
-//                 url: 'games',
-//                 data: {
-//                     action: "loadGame",
-//                     file: content,
-//                     creator: creatorName
-//                 },
-//                 type: 'POST',
-//                 success: loadGameCallback
-//             }
-//         );
-//     };
-//
-//     $.ajax // Getting creator's name.
-//     ({
-//         url: 'login',
-//         data: {
-//             action: "status"
-//         },
-//         type: 'GET',
-//         success: function (json) {
-//             creatorName = json.userName;
-//             reader.readAsText(file);
-//         }
-//     });
-// }
+function loadGameClicked(event) {
+    var file = event.target.files[0];
+    var reader = new FileReader();
+    var creatorName = getUserName();
+
+
+    reader.onload = function () {
+        var content = reader.result;
+        $.ajax(
+            {
+                url: 'games',
+                data: {
+                    file: content,
+                    creator: creatorName
+                },
+                type: 'POST',
+                success: loadGameCallback
+            }
+        );
+    };
+
+    $.ajax // Getting creator's name.
+    ({
+        url: 'login',
+        data: {
+            action: "status"
+        },
+        type: 'GET',
+        success: function (json) {
+            creatorName = json.userName;
+            reader.readAsText(file);
+        }
+    });
+}
 //
 // function loadGameCallback(json) {
 //     if (json.isLoaded) {

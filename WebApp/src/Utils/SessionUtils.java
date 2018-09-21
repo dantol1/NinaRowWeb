@@ -14,6 +14,11 @@ public class SessionUtils {
         return sessionAttribute != null ? sessionAttribute.toString() : null;
     }
 
+    public static String getUsername(HttpSession session) {
+        return (String)session.getAttribute("userName");
+    }
+
+
     public static void clearSession (HttpServletRequest request) {
         request.getSession().invalidate();
     }
@@ -23,4 +28,17 @@ public class SessionUtils {
         Object sessionAttribute = session != null ? session.getAttribute(PLAYERTYPE) : null;
         return sessionAttribute != null;
     }
+
+    public static boolean hasSession(HttpServletRequest request) {
+        return request.getSession(false) != null;
+    }
+
+    public static boolean isLoggedIn(HttpSession session) {
+        return session.getAttribute("userName") != null;
+    }
+
+    public static boolean isComputer(HttpSession session) {
+        return (Boolean)session.getAttribute("isComputer");
+    }
+
 }
