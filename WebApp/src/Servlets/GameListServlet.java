@@ -1,49 +1,27 @@
 package Servlets;
-import GameLogic.Game;
-import GameLogic.GameFactory;
+
 import Utils.ServletUtils;
-import WebLogic.LoadGameStatus;
-import WebLogic.GameManager;
+import WebLogic.Games;
 import com.google.gson.Gson;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class LoadGameServlet extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+public class GameListServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String gameContent = request.getParameter("file");
-        String gameCreator = request.getParameter("creator");
-        System.out.println(gameCreator);
         Gson gson = new Gson();
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
-        GameManager gameManager = ServletUtils.getGameManager(getServletContext());
-        try {
-            Game game = GameFactory.CreateGame(gameContent);
-            gameManager.addGame(game, gameCreator);
-            out.println(gson.toJson(new LoadGameStatus(true, "")));
-        } catch (Exception exception) {
-            out.println(gson.toJson(new LoadGameStatus(false, exception.getMessage())));
-        }
-
+        out.println(gson.toJson(new Games(ServletUtils.getGameManager(getServletContext()).getGamesList())));
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

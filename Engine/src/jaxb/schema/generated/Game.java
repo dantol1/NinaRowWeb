@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;all>
- *         &lt;element ref="{}GameLogic.Board"/>
+ *         &lt;element ref="{}Board"/>
  *         &lt;element name="Variant">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -43,10 +43,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
 
 })
-@XmlRootElement(name = "GameLogic.Game")
+@XmlRootElement(name = "Game")
 public class Game {
 
-    @XmlElement(name = "GameLogic.Board", required = true)
+    @XmlElement(name = "Board", required = true)
     protected Board board;
     @XmlElement(name = "Variant", required = true)
     protected String variant;

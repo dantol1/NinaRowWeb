@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element ref="{}GameLogic.Game"/>
+ *         &lt;element ref="{}Game"/>
  *         &lt;element ref="{}Players" minOccurs="0"/>
  *         &lt;element ref="{}DynamicPlayers" minOccurs="0"/>
  *       &lt;/sequence>
@@ -50,7 +50,7 @@ public class GameDescriptor {
 
     @XmlElement(name = "GameType", required = true)
     protected String gameType;
-    @XmlElement(name = "GameLogic.Game", required = true)
+    @XmlElement(name = "Game", required = true)
     protected Game game;
     @XmlElement(name = "Players")
     protected Players players;

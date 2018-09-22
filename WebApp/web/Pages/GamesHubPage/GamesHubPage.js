@@ -1,15 +1,18 @@
+
 var REFRESH_RATE = 2000;
 var USER_LIST_URL = buildUrlWithContextPath("UsersList");
 var LOGOUT_URL = buildUrlWithContextPath("Logout");
 var LOGIN_URL = buildUrlWithContextPath("Login");
 var STATUS_URL = buildUrlWithContextPath("Status");
+var LOADGAME_URL = buildUrlWithContextPath("LoadGame");
+var GAMELIST_URL = buildUrlWithContextPath("GameList");
 
 window.onload = function ()
 {
     //refreshLoginStatus();
     refreshUserList();
     setInterval(refreshUserList, REFRESH_RATE);
-    //setInterval(refreshGamesList, REFRESH_RATE);
+    setInterval(refreshGamesList, REFRESH_RATE);
     //setInterval(refreshLoginStatus, REFRESH_RATE);
 };
 
@@ -106,7 +109,6 @@ function statusCallback(json)
 }
 
 function onLogoutClick() {
-    console.log(LOGOUT_URL);
     $.ajax(
         {
             url: LOGOUT_URL,
@@ -150,7 +152,7 @@ function loadGameClicked(event) {
         var content = reader.result;
         $.ajax(
             {
-                url: 'games',
+                url: LOADGAME_URL,
                 data: {
                     file: content,
                     creator: creatorName
@@ -163,10 +165,7 @@ function loadGameClicked(event) {
 
     $.ajax // Getting creator's name.
     ({
-        url: 'login',
-        data: {
-            action: "status"
-        },
+        url: STATUS_URL,
         type: 'GET',
         success: function (json) {
             creatorName = json.userName;
@@ -174,32 +173,29 @@ function loadGameClicked(event) {
         }
     });
 }
-//
-// function loadGameCallback(json) {
-//     if (json.isLoaded) {
-//         alert("Load game Success !!");
-//         refreshGamesList();
-//         clearFileInput();
-//     }
-//     else {
-//         clearFileInput();
-//         alert(json.errorMessage);
-//     }
-// }
-//
-// function refreshGamesList() {
-//     $.ajax
-//     (
-//         {
-//             url: 'games',
-//             data: {
-//                 action: 'gameList'
-//             },
-//             type: 'GET',
-//             success: refreshGamesListCallback
-//         }
-//     )
-// }
+
+function loadGameCallback(json) {
+    if (json.isLoaded) {
+        alert("Load game Success !!");
+        refreshGamesList();
+        clearFileInput();
+    }
+    else {
+        clearFileInput();
+        alert(json.errorMessage);
+    }
+}
+
+function refreshGamesList() {
+    $.ajax
+    (
+        {
+            url: GAMELIST_URL,
+            type: 'GET',
+            success: refreshGamesListCallback
+        }
+    )
+}
 
 function refreshGamesListCallback(json) {
     var gamesTable = $('.gamesTable tbody');
@@ -208,27 +204,27 @@ function refreshGamesListCallback(json) {
 
     gamesList.forEach(function (game) {
         var tr = $(document.createElement('tr'));
-        var tdGameNumber = $(document.createElement('td')).text(game.key);
-        var tdGameName = $(document.createElement('td')).text(game.gameTitle);
-        var tdCreatorName = $(document.createElement('td')).text(game.creatorName);
-        var tdBoardSize = $(document.createElement('td')).text(game.rows + " X " + game.cols);
-        var tdPlayerNumber = $(document.createElement('td')).text(game.registeredPlayers + " / " + game.requiredPlayers);
-        var tdMovesNumber = $(document.createElement('td')).text(game.moves);
+        var tdGameName = $(document.createElement('td')).text(game.title);
+        var tdCreatorName = $(document.createElement('td')).text(game.uploadedBy);
+        var tdBoardSize = $(document.createElement('td')).text(game.rows + " X " + game.columns);
+        var tdTarget = $(document.createElement('td')).text(game.target);
+        var tdGameVariant = $(document.createElement('td')).text(game.variant);
+        var tdPlayerNumber = $(document.createElement('td')).text(game.numberOfRegisteredPlayers + " / " + game.numberOfPlayers);
 
-        tdGameNumber.appendTo(tr);
         tdGameName.appendTo(tr);
         tdCreatorName.appendTo(tr);
         tdBoardSize.appendTo(tr);
+        tdTarget.appendTo(tr);
+        tdGameVariant.appendTo(tr);
         tdPlayerNumber.appendTo(tr);
-        tdMovesNumber.appendTo(tr);
 
         tr.appendTo(gamesTable);
     });
 
-    var tr = $('.tableBody tr');
-    for (var i = 0; i < tr.length; i++) {
-        tr[i].onclick = createGameDialog;
-    }
+    // var tr = $('.tableBody tr');
+    // for (var i = 0; i < tr.length; i++) {
+    //     tr[i].onclick = createGameDialog;
+    // }
 }
 
 function removeGameDialog() {

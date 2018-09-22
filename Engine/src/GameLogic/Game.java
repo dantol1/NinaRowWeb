@@ -19,6 +19,12 @@ public class Game implements Serializable {
         return winningPlayers;
     }
 
+    private int totalPlayers;
+
+    public int getTotalPlayers(){
+        return totalPlayers;
+    }
+
     HashSet<GamePlayer> winningPlayers = new HashSet<>();
 
     private ArrayList<Color> playerColors = new ArrayList<Color> () {{
@@ -86,7 +92,7 @@ public class Game implements Serializable {
         return gameTitle;
     }
 
-    String gameTitle;
+    private String gameTitle;
 
     public HashSet<Point> getWinningPieces() {
         return winningPieces;
@@ -150,7 +156,7 @@ public class Game implements Serializable {
     {
         gameBoard = new Board(gs.getColumns(), gs.getRows());
         settings = gs;
-
+        totalPlayers = dm.getTotalPlayers();
         moveHistory = new History();
         players = new GamePlayer[dm.getTotalPlayers()];
         gameTitle = dm.getGameTitle();

@@ -2,7 +2,6 @@ package GameLogic;
 
 import Exceptions.FileDataException;
 import jaxb.schema.generated.GameDescriptor;
-import jaxb.schema.generated.Player;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -14,11 +13,12 @@ import java.util.List;
 public class GameFactory {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.schema.generated";
 
-    public static Game CreateGame(InputStream xmlFile) throws JAXBException, FileDataException
+    public static Game CreateGame(String xmlFile) throws JAXBException, FileDataException
     {
         JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
         Unmarshaller u = jc.createUnmarshaller();
-        GameDescriptor gd = (GameDescriptor)u.unmarshal(xmlFile);
+        StringReader sr = new StringReader(xmlFile);
+        GameDescriptor gd = (GameDescriptor)u.unmarshal(sr);
 
         if(gd.getDynamicPlayers() == null) {
             int rows = gd.getGame().getBoard().getRows();
@@ -26,7 +26,7 @@ public class GameFactory {
             String variant = gd.getGame().getVariant();
             int target = gd.getGame().getTarget().intValue();
             String gameType = gd.getGameType();
-            checkGameValidity(rows, columns, target, gd.getPlayers().getPlayer());
+
             GameSettings gs = new GameSettings(gameType, variant, rows, columns, target);
             Game game = new Game(gs,gd.getPlayers().getPlayer());
 
@@ -45,6 +45,7 @@ public class GameFactory {
         String variant = gd.getGame().getVariant();
         int target = gd.getGame().getTarget().intValue();
         String gameType = gd.getGameType();
+        checkGameValidity(rows, columns, target, gd.getDynamicPlayers().getTotalPlayers());
 
         GameSettings gs = new GameSettings(gameType, variant, rows, columns, target);
         Game game = new Game(gs, gd.getDynamicPlayers());
@@ -52,31 +53,16 @@ public class GameFactory {
         return game;
     }
 
-    private static void checkGameValidity(int rows, int columns, int target, List<Player> thePlayers) throws FileDataException{
+    private static void checkGameValidity(int rows, int columns, int target, byte thePlayers) throws FileDataException{
 
         String message = "";
         boolean idIsDuplicated = false;
         
-        if (thePlayers.size() > 6 || thePlayers.size() < 2)
+        if (thePlayers > 6 || thePlayers < 2)
         {
             message += "Num of players is incorrect, must be within 2-6";
         }
 
-        for (int i = 0; i<thePlayers.size(); i++)
-        {
-            for (int j = i+1; j<thePlayers.size(); j++)
-            {
-                if (thePlayers.get(i).getId() == thePlayers.get(j).getId())
-                {
-                    idIsDuplicated = true;
-                    break;
-                }
-            }
-        }
-        if (idIsDuplicated)
-        {
-            message += "Two or more players have the same id, each player must have a different id";
-        }
         if (rows > 50 || rows < 5) {
             message += "Rows is not within boundries [5,50]";
         }

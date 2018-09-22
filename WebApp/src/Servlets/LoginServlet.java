@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static constants.Constants.PLAYERTYPE;
 import static constants.Constants.USERNAME;
 
 public class LoginServlet extends HttpServlet {
@@ -37,6 +38,13 @@ public class LoginServlet extends HttpServlet {
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         if (usernameFromSession == null) {
             String usernameFromParameter = request.getParameter(USERNAME);
+            String isComputer = request.getParameter(PLAYERTYPE);
+            System.out.println(isComputer);
+            boolean isComputerBool = false;
+            if (isComputer != null)
+            {
+                isComputerBool = true;
+            }
             if (usernameFromParameter.isEmpty()) {
                 response.sendRedirect(SIGN_UP_URL);
             }
@@ -50,6 +58,7 @@ public class LoginServlet extends HttpServlet {
                     } else {
                         userManager.addUser(usernameFromParameter, userTypeFromSession);
                         request.getSession(true).setAttribute(Constants.USERNAME, usernameFromParameter);
+                        request.getSession(true).setAttribute(Constants.PLAYERTYPE, isComputerBool);
 
                         response.sendRedirect(GAME_ROOM_URL);
                     }

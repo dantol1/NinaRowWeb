@@ -8,6 +8,14 @@
         <servlet-class>Servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>GameListServlet</servlet-name>
+        <servlet-class>Servlets.GameListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadGameServlet</servlet-name>
+        <servlet-class>Servlets.LoadGameServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>StatusServlet</servlet-name>
         <servlet-class>Servlets.StatusServlet</servlet-class>
     </servlet>
@@ -34,5 +42,13 @@
     <servlet-mapping>
         <servlet-name>StatusServlet</servlet-name>
         <url-pattern>/Status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadGameServlet</servlet-name>
+        <url-pattern>/LoadGame</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GameListServlet</servlet-name>
+        <url-pattern>/GameList</url-pattern>
     </servlet-mapping>
 </web-app>

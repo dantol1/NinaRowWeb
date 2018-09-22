@@ -15,7 +15,7 @@ public class SessionUtils {
     }
 
     public static String getUsername(HttpSession session) {
-        return (String)session.getAttribute("userName");
+        return (String)session.getAttribute("UserNameInput");
     }
 
 
@@ -34,11 +34,12 @@ public class SessionUtils {
     }
 
     public static boolean isLoggedIn(HttpSession session) {
-        return session.getAttribute("userName") != null;
+
+        return session.getAttribute("UserNameInput") != null;
     }
 
     public static boolean isComputer(HttpSession session) {
-        return (Boolean)session.getAttribute("isComputer");
+        return (boolean)session.getAttribute("ComputerCheckBox");
     }
 
 }

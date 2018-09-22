@@ -5,12 +5,14 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class GameInfo {
     private String title;
-    private SimpleIntegerProperty totalMoves;
+    private SimpleIntegerProperty totalMoves = new SimpleIntegerProperty();
     private int numberOfPlayers;
     private int numberOfRegisteredPlayers = 0;
     private int rows = 0;
     private int columns = 0;
     private String uploadedBy;
+    private int target;
+    private String variant;
 
     public void setDisplay(boolean display) {
         this.display = display;
@@ -20,11 +22,12 @@ public class GameInfo {
 
     public GameInfo(Game game, String uploadedBy) {
         this.title = game.getGameTitle();
-        this.totalMoves.bind(game.totalMovesProperty());
-        this.numberOfPlayers = game.getPlayers().length;
+        this.numberOfPlayers = game.getTotalPlayers();
         this.uploadedBy = uploadedBy;
         this.columns = game.getSettings().getColumns();
         this.rows = game.getSettings().getRows();
+        this.target = game.getSettings().getTarget();
+        this.variant = game.getSettings().getVariant().name();
     }
 
     public synchronized void registerPlayer() throws PlayersAmountException {
