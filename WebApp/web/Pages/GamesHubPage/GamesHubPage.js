@@ -6,6 +6,7 @@ var LOGIN_URL = buildUrlWithContextPath("Login");
 var STATUS_URL = buildUrlWithContextPath("Status");
 var LOADGAME_URL = buildUrlWithContextPath("LoadGame");
 var GAMELIST_URL = buildUrlWithContextPath("GameList");
+var GAMEDETAILS_URL = buildUrlWithContextPath("GameDetails");
 
 window.onload = function ()
 {
@@ -176,7 +177,7 @@ function loadGameClicked(event) {
 
 function loadGameCallback(json) {
     if (json.isLoaded) {
-        alert("Load game Success !!");
+        alert("Load game Success!!");
         refreshGamesList();
         clearFileInput();
     }
@@ -202,6 +203,7 @@ function refreshGamesListCallback(json) {
     gamesTable.empty();
     var gamesList = json.games;
 
+
     gamesList.forEach(function (game) {
         var tr = $(document.createElement('tr'));
         var tdGameName = $(document.createElement('td')).text(game.title);
@@ -210,6 +212,7 @@ function refreshGamesListCallback(json) {
         var tdTarget = $(document.createElement('td')).text(game.target);
         var tdGameVariant = $(document.createElement('td')).text(game.variant);
         var tdPlayerNumber = $(document.createElement('td')).text(game.numberOfRegisteredPlayers + " / " + game.numberOfPlayers);
+
 
         tdGameName.appendTo(tr);
         tdCreatorName.appendTo(tr);
@@ -221,10 +224,10 @@ function refreshGamesListCallback(json) {
         tr.appendTo(gamesTable);
     });
 
-    // var tr = $('.tableBody tr');
-    // for (var i = 0; i < tr.length; i++) {
-    //     tr[i].onclick = createGameDialog;
-    // }
+    var tr = $('.tableBody tr');
+    for (var i = 0; i < tr.length; i++) {
+        tr[i].onclick = createGameDialog;
+    }
 }
 
 function removeGameDialog() {
@@ -235,40 +238,39 @@ function clearFileInput() {
     document.getElementById("fileInput").value = "";
 }
 
-// function createGameDialog(event) {
-//     var td = event.currentTarget.children[0];
-//     var number = td.innerText;
-//     $.ajax
-//     (
-//         {
-//             url: 'games',
-//             data: {
-//                 action: 'gameDetails',
-//                 key: number
-//             },
-//             type: 'GET',
-//             success: createGameDialogCallback
-//         }
-//     )
-// }
+function createGameDialog(event) {
+    var td = event.currentTarget.children[0];
+    var gameTitle = td.innerText;
+    $.ajax
+    (
+        {
+            url: GAMEDETAILS_URL,
+            data: {
+                title: gameTitle
+            },
+            type: 'GET',
+            success: createGameDialogCallback
+        }
+    )
+}
 
 function createGameDialogCallback(json) {
     var div = $('.dialogDiv')[0];
     div.style.display = "block";
     var playersNamesDiv = $('.playersNames');
 
-    var key = json.key;
-    var creatorName = json.creatorName;
-    var gameName = json.gameTitle;
-    var boardSize = json.rows + " X " + json.cols;
-    var moves = json.moves;
-    var playerNumber = json.registeredPlayers + " / " + json.requiredPlayers
+    var target = json.target;
+    var creatorName = json.uploadedBy;
+    var gameName = json.title;
+    var boardSize = json.rows + " X " + json.columns;
+    var variant = json.variant;
+    var playerNumber = json.numberOfRegisteredPlayers + " / " + json.numberOfPlayers;
 
-    $('.key').text("Game id: " + key + ".");
+    $('.target').text("Target: " + target + ".");
     $('.creatorName').text("Game Creator: " + creatorName + ".");
     $('.gameName').text("Game Title: " + gameName);
     $('.boardSize').text("Board size: " + boardSize);
-    $('.moves').text("Moves number: " + moves);
+    $('.variant').text("Variant: " + variant);
     $('.playerNumber').text("Players : " + playerNumber);
     for (i = 0; i < json.registeredPlayers; i++) {
         var playerDiv = $(document.createElement('div'));
@@ -278,10 +280,10 @@ function createGameDialogCallback(json) {
 
     var playerDivs = $('.playerDiv');
     for (i = 0; i < json.registeredPlayers; i++) {
-        playerDivs[i].innerHTML = (+i + 1) + '. ' + json.players[i].m_Name + '.';
+        playerDivs[i].innerHTML = (+i + 1) + '. ' + json.theGame.players[i].name + '.';
     }
 
-    createBoard(json.rows, json.cols, json.rowBlocks, json.colBlocks);
+    // createBoard(json.rows, json.cols, json.rowBlocks, json.colBlocks);
 }
 
 function createBoard(rows, cols, rowBlocks, colBlocks) {

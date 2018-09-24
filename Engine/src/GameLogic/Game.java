@@ -68,11 +68,11 @@ public class Game implements Serializable {
     private Board gameBoard;
     private GameSettings settings;
 
-    public GamePlayer[] getPlayers() {
+    public ArrayList<GamePlayer> getPlayers() {
         return players;
     }
 
-    private GamePlayer players[];
+    private ArrayList<GamePlayer> players = new ArrayList<>();
     private int numOfActivePlayers;
     private History moveHistory;
     private HashSet<Point> winningPieces = new HashSet<>();
@@ -100,13 +100,13 @@ public class Game implements Serializable {
 
     public GamePlayer getPlayerByIndex(int i) throws ArrayIndexOutOfBoundsException {
 
-        if (i>players.length) {
+        if (i>players.size()) {
 
             throw new ArrayIndexOutOfBoundsException();
         }
         else {
 
-            return players[i];
+            return players.get(i);
 
         }
     }
@@ -138,11 +138,10 @@ public class Game implements Serializable {
         }
 
         moveHistory = new History();
-        players = new GamePlayer[numOfActivePlayers];
 
         for (int i = 0; i<numOfActivePlayers; i++) {
-            players[i] = new GamePlayer(thePlayers.get(i).getId(), thePlayers.get(i).getName(),
-                    GamePlayer.Type.valueOf(thePlayers.get(i).getType()), playerColors.get(i));
+            players.add(new GamePlayer(thePlayers.get(i).getId(), thePlayers.get(i).getName(),
+                    GamePlayer.Type.valueOf(thePlayers.get(i).getType()), playerColors.get(i)));
 
         }
 
@@ -158,7 +157,6 @@ public class Game implements Serializable {
         settings = gs;
         totalPlayers = dm.getTotalPlayers();
         moveHistory = new History();
-        players = new GamePlayer[dm.getTotalPlayers()];
         gameTitle = dm.getGameTitle();
 
         for(boolean i : retiredPlayersIndexes)
@@ -182,7 +180,6 @@ public class Game implements Serializable {
         }
 
         moveHistory = new History();
-        players = GamePlayer.Copy(thePlayers);
 
         for(boolean i : retiredPlayersIndexes)
         {
@@ -222,7 +219,7 @@ public class Game implements Serializable {
 
     public boolean dropDisc (int column){
 
-        return gameBoard.dropDisc(column,players[activePlayerIndex].getPieceShape());
+        return gameBoard.dropDisc(column,players.get(activePlayerIndex).getPieceShape());
     }
 
     public boolean popoutDisc(int column)
@@ -233,9 +230,9 @@ public class Game implements Serializable {
         {
             int playerIndex = -1;
             Move move;
-            for (int i = 0 ; i < players.length; i++) {
+            for (int i = 0 ; i < players.size(); i++) {
 
-                if (players[i].getPieceShape() == popoutMove.getPieceShape()){
+                if (players.get(i).getPieceShape() == popoutMove.getPieceShape()){
 
                     playerIndex = i;
                 }
@@ -649,7 +646,7 @@ public class Game implements Serializable {
 
         for (i = 0; i < settings.getTarget(); i++) {
             try {
-                if (gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape()) {
+                if (gameBoard.getCellSymbol(row, column) == players.get(activePlayerIndex).getPieceShape()) {
                     row += rowMovement;
                     column += colMovement;
                     row = row % settings.getRows();
@@ -745,7 +742,7 @@ public class Game implements Serializable {
     {
         boolean succeeded = true;
 
-        succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
+        succeeded = gameBoard.dropDisc(columnToPlaceDisc, players.get(activePlayerIndex).getPieceShape());
         if(succeeded)
         {
             endOfTurnActions(getNextPlaceInColumn(columnToPlaceDisc),columnToPlaceDisc, Move.moveType.POPIN);
@@ -759,7 +756,7 @@ public class Game implements Serializable {
         boolean succeeded = true;
 
         succeeded = popoutDisc(columnToPlaceDisc);
-        players[activePlayerIndex].playedTurn();
+        players.get(activePlayerIndex).playedTurn();
 
         return succeeded;
     }
@@ -772,7 +769,7 @@ public class Game implements Serializable {
 
         do {
             columnToPlaceDisc = randomCol.nextInt(settings.getColumns());
-            succeeded = gameBoard.dropDisc(columnToPlaceDisc, players[activePlayerIndex].getPieceShape());
+            succeeded = gameBoard.dropDisc(columnToPlaceDisc, players.get(activePlayerIndex).getPieceShape());
         }while(!succeeded);
 
         endOfTurnActions(getNextPlaceInColumn(columnToPlaceDisc), columnToPlaceDisc, Move.moveType.POPIN);
@@ -785,7 +782,7 @@ public class Game implements Serializable {
         if (i_MoveType != Move.moveType.POPOUT) {
             moveHistory.AddMoveToHistory(activePlayerIndex, rowInWhichDiscWasPut, columnInWhichDiscWasPut, i_MoveType);
         }
-        players[activePlayerIndex].playedTurn();
+        players.get(activePlayerIndex).playedTurn();
         totalMoves.set(totalMoves.get() + 1);
     }
     public void addComputerTurnToHistory(int columnInWhichDiscWasPut,int rowInWhichDiscWasPut, Move.moveType i_MoveType)
@@ -821,13 +818,13 @@ public class Game implements Serializable {
             columnToRemoveFrom = moveToUndo.getColumnIndex();
             rowToRemoveFrom = moveToUndo.getRowIndex();
             if(moveToUndo.getType() == Move.moveType.POPIN) {
-                gameBoard.removeDisc(columnToRemoveFrom, rowToRemoveFrom, players[activePlayerIndex].getPieceShape());
+                gameBoard.removeDisc(columnToRemoveFrom, rowToRemoveFrom, players.get(activePlayerIndex).getPieceShape());
             }
             else if(moveToUndo.getType() == Move.moveType.POPOUT)
             {
-                gameBoard.insertDiscAtBottom(columnToRemoveFrom, players[moveToUndo.getPlayerIndex()].getPieceShape());
+                gameBoard.insertDiscAtBottom(columnToRemoveFrom, players.get(moveToUndo.getPlayerIndex()).getPieceShape());
             }
-            players[moveToUndo.getPlayerIndex()].undidTurn();
+            players.get(moveToUndo.getPlayerIndex()).undidTurn();
         }
         else
         {
@@ -858,7 +855,7 @@ public class Game implements Serializable {
         int stillPlaying = 0;
         int lastPlayerIndex = 0;
 
-        for(int i = 0; i < players.length; i++)
+        for(int i = 0; i < players.size(); i++)
         {
             if(!retiredPlayersIndexes[i])
             {
@@ -869,7 +866,7 @@ public class Game implements Serializable {
 
         if(stillPlaying == 1)
         {
-            winningPlayers.add(players[lastPlayerIndex]);
+            winningPlayers.add(players.get(lastPlayerIndex));
 
             return GameState.GameWin;
         }
@@ -898,7 +895,7 @@ public class Game implements Serializable {
         {
             for(int column = 0; column < settings.getColumns(); column++)
             {
-                if(gameBoard.getCellSymbol(row, column) == players[activePlayerIndex].getPieceShape())
+                if(gameBoard.getCellSymbol(row, column) == players.get(activePlayerIndex).getPieceShape())
                 {
                     gameBoard.getBoard()[row][column] = Board.EMPTY_CELL;
                     moveHistory.AddMoveToHistory(activePlayerIndex,-1, column, Move.moveType.RETIRE);
@@ -911,12 +908,12 @@ public class Game implements Serializable {
     {
         boolean added = false;
 
-        if(playersCreated < players.length)
+        if(playersCreated < players.size())
         {
-            players[playersCreated] = new GamePlayer(user.getId(),
+            players.add(new GamePlayer(user.getId(),
                     user.getName(),
                     user.isComputer() ? GamePlayer.Type.Computer : GamePlayer.Type.Computer,
-                    ColorGenerator.getColor(playersCreated));
+                    ColorGenerator.getColor(playersCreated)));
 
             playersCreated++;
             added = true;
@@ -931,17 +928,17 @@ public class Game implements Serializable {
 
         if(playersCreated > 0)
         {
-            GamePlayer[] remainingPlayers = new GamePlayer[playersCreated - 1];
+            ArrayList<GamePlayer> remainingPlayers = new ArrayList<>(playersCreated - 1);
             for(int i = 0, playerToCopyIndex = 0; i < playersCreated; i++)
             {
-                if(players[i].getId() != playerID)
+                if(players.get(i).getId() != playerID)
                 {
-                    remainingPlayers[playerToCopyIndex] = players[i];
+                    remainingPlayers.add(players.get(i));
                     playerToCopyIndex++;
                 }
                 else
                 {
-                    ColorGenerator.freeColor(players[i].getPlayerColor());
+                    ColorGenerator.freeColor(players.get(i).getPlayerColor());
                 }
             }
 

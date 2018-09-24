@@ -45,7 +45,7 @@ public class GameCopy{
         else if(moveToPlay.getType() == Move.moveType.POPOUT)
         {
             gameCopy.popoutDisc(moveToPlay.getColumnIndex());
-            gameCopy.getPlayers()[moveToPlay.getPlayerIndex()].playedTurn();
+            gameCopy.getPlayers().get(moveToPlay.getPlayerIndex()).playedTurn();
         }
 
         gameCopy.changeToNextActivePlayer();

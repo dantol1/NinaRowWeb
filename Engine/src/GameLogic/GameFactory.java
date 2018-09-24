@@ -106,8 +106,8 @@ public class GameFactory {
         return copy;
     }
 
-    private static List<GamePlayer> createPlayerCopies(GamePlayer[] players) {
-        List<GamePlayer> playerCopies = new ArrayList<>(players.length);
+    private static List<GamePlayer> createPlayerCopies(ArrayList<GamePlayer> players) {
+        List<GamePlayer> playerCopies = new ArrayList<>(players.size());
 
         for(GamePlayer pl : players)
         {

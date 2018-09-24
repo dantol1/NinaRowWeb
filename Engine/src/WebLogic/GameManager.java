@@ -45,7 +45,7 @@ public class GameManager {
         GameInfo gameInfo = gamesInfo.get(gameTitle);
         Game game = games.get(gameTitle);
 
-        gameInfo.registerPlayer();
+        gameInfo.registerPlayer(user.getName());
         if(game.addPlayer(user) == false)
         {
             throw new PlayersAmountException("The game already has too many players!");
@@ -55,6 +55,9 @@ public class GameManager {
 
     public Game getGame(String gameTitle) {
         return games.get(gameTitle);
+    }
+    public GameInfo getGameInfo(String gameTitle) {
+        return gamesInfo.get(gameTitle);
     }
 
     public void unregisterPlayer(String gameTitle, short playerId) throws PlayersAmountException {
@@ -66,5 +69,19 @@ public class GameManager {
         }
         gameInfo.unregisterPlayer();
         //gameInfo.setDisplay(game.isShow());
+    }
+
+    public GameInfo getGameByUserName(String userName) {
+
+        GameInfo[] gameResult = new GameInfo[1];
+
+        gamesInfo.forEach((string,game)->{
+            if (game.hasPlayerWithName(userName))
+            {
+                gameResult[0] = game;
+            }
+        });
+
+        return gameResult[0];
     }
 }
