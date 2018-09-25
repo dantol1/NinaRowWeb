@@ -175,17 +175,18 @@ th {
 
 .dialogDiv {
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-
+    color: whitesmoke;
     max-width: 1000px;
     max-height: 1000px;
     z-index: 1000;
     display: none;
-    background: burlywood;
+    background: #6c6c6c;
     opacity: 0.85;
+    border-radius: 6px;
 
     -webkit-box-shadow: 10px 10px 30px -8px rgba(0,0,0,0.75);
     -moz-box-shadow: 10px 10px 30px -8px rgba(0,0,0,0.75);
@@ -206,6 +207,7 @@ th {
     white-space: nowrap;
     max-width: 880px;
     max-height: 700px;
+    font-family: Arial;
 }
 
 .board {
