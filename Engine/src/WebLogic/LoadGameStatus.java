@@ -3,7 +3,6 @@ package WebLogic;
 public class LoadGameStatus {
      boolean isLoaded;
      String errorMessage;
-     int testt;
 
     public LoadGameStatus(boolean isLoaded, String message) {
         this.isLoaded = isLoaded;

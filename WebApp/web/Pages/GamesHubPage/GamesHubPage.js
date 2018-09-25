@@ -7,6 +7,7 @@ var STATUS_URL = buildUrlWithContextPath("Status");
 var LOADGAME_URL = buildUrlWithContextPath("LoadGame");
 var GAMELIST_URL = buildUrlWithContextPath("GameList");
 var GAMEDETAILS_URL = buildUrlWithContextPath("GameDetails");
+var JOINGAME_URL = buildUrlWithContextPath("JoinGame");
 
 window.onload = function ()
 {
@@ -64,22 +65,24 @@ function getUserName() {
     return result;
 }
 //
-// function isUserComputer() {
-//     var result;
-//     $.ajax
-//     ({
-//         async: false,
-//         url: 'login',
-//         data: {
-//             action: "status"
-//         },
-//         type: 'GET',
-//         success: function (json) {
-//             result = json.isComputer;
-//         }
-//     });
-//     return result;
-// }
+function isUserComputer() {
+    var result;
+    $.ajax
+    ({
+        async: false,
+        url: STATUS_URL,
+        type: 'GET',
+        success: function (json) {
+            result = json.isComputer;
+        }
+    });
+    return result;
+}
+function getGameTitle() {
+    var string = $('.gameName').text();
+
+    return string;
+}
 //
 // function refreshLoginStatus() {
 //     $.ajax
@@ -278,11 +281,6 @@ function createGameDialogCallback(json) {
         playerDiv.appendTo(playersNamesDiv);
     }
 
-    var playerDivs = $('.playerDiv');
-    for (i = 0; i < json.registeredPlayers; i++) {
-        playerDivs[i].innerHTML = (+i + 1) + '. ' + json.theGame.players[i].name + '.';
-    }
-
     // createBoard(json.rows, json.cols, json.rowBlocks, json.colBlocks);
 }
 
@@ -349,49 +347,49 @@ function createBoard(rows, cols, rowBlocks, colBlocks) {
     }
 }
 
-// function joinGameClicked() {
-//     var name = getUserName();
-//     var isComputer = isUserComputer();
-//     var gameId = getGameId();
-//     $.ajax
-//     (
-//         {
-//             url: 'games',
-//             data: {
-//                 action: 'joinGame',
-//                 user: name,
-//                 isComputer: isComputer,
-//                 gameId: gameId
-//             },
-//             type: 'GET',
-//             success: joinGameClickedCallback
-//         }
-//     );
-// }
+function joinGameClicked() {
+    var name = getUserName();
+    var isComputer = isUserComputer();
+    var gameTitle = getGameTitle();
+    $.ajax
+    (
+        {
+            url: JOINGAME_URL,
+            data: {
+                user: name,
+                isComputer: isComputer,
+                gameTitle: gameTitle
+            },
+            type: 'GET',
+            success: joinGameClickedCallback
+        }
+    );
+}
 
 function joinGameClickedCallback(json) {
 
     if (json.isLoaded)
     {
+        console.log("we are here!");
         didUserCloseWindow = false;
-        window.location = "GameRoom.html";
+        window.location = "/NinaRow/Pages/GamePage/GamePage.html";
     }
     else {
         alert(json.errorMessage);
     }
 }
 
-function getGameId() {
-    var string = $('.key').text();
-    var result = +0;
-    var i = 9;
-    var temp = +string[i];
-    while (!isNaN(temp)) // while temp is a number..
-    {
-        result = result * 10 + temp;
-        i++;
-        temp = +string[i];
-    }
-    return result;
-}
+// function getGameId() {
+//     var string = $('.key').text();
+//     var result = +0;
+//     var i = 9;
+//     var temp = +string[i];
+//     while (!isNaN(temp)) // while temp is a number..
+//     {
+//         result = result * 10 + temp;
+//         i++;
+//         temp = +string[i];
+//     }
+//     return result;
+// }
 

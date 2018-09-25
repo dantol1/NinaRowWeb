@@ -1,21 +1,21 @@
 package WebLogic;
 
-import GameLogic.GameInfo;
+import GameLogic.GameController;
 
 import java.util.List;
 
 public class Games {
-    List<GameInfo> games;
+    List<GameController> games;
 
-    public Games(List<GameInfo> games) {
+    public Games(List<GameController> games) {
         this.games = games;
     }
 
-    public List<GameInfo> getGames() {
+    public List<GameController> getGames() {
         return this.games;
     }
 
-    public void setGames(List<GameInfo> games) {
+    public void setGames(List<GameController> games) {
         this.games = games;
     }
 }

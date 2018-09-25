@@ -28,7 +28,6 @@ public class LoadGameServlet extends HttpServlet {
             throws ServletException, IOException {
         String gameContent = request.getParameter("file");
         String gameCreator = request.getParameter("creator");
-        System.out.println(gameCreator);
         Gson gson = new Gson();
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");

@@ -1,9 +1,10 @@
 package Servlets;
-
 import GameLogic.GameController;
 import Utils.ServletUtils;
-import Utils.SessionUtils;
 import WebLogic.GameManager;
+import WebLogic.LoadGameStatus;
+import WebLogic.LoginStatus;
+import WebLogic.UserManager;
 import com.google.gson.Gson;
 
 import java.io.*;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GameDetailsServlet extends HttpServlet {
+public class JoinGameServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -26,21 +27,28 @@ public class GameDetailsServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       String gameTitle = request.getParameter("title");
-       Gson gson = new Gson();
-       PrintWriter out = response.getWriter();
-       response.setContentType("application/json");
-
-       if (gameTitle != "") {
-           GameController game = ServletUtils.getGameManager(getServletContext()).getGameInfo(gameTitle);
-           out.println(gson.toJson(game));
-       }
-       else {
-           String userName = SessionUtils.getUsername(request.getSession());
-           GameManager gameManager = ServletUtils.getGameManager(getServletContext());
-           GameController game = gameManager.getGameByUserName(userName);
-           out.println(gson.toJson(game));
-       }
+        String userName = request.getParameter("user");
+        boolean isComputer = false;
+        if (request.getParameter("isComputer") != null)
+        {
+            isComputer = true;
+        }
+        String gameTitle = request.getParameter("gameTitle");
+        String realGameTitle = gameTitle.substring(12);
+        GameManager gameManager = ServletUtils.getGameManager(getServletContext());
+        GameController gameController = gameManager.getGameInfo(realGameTitle);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        PrintWriter out = response.getWriter();
+        Gson gson = new Gson();
+        response.setContentType("application/json");
+        if (userManager.canUserJoinTheGame(userName) && gameController.getStatus() == GameController.GameStatus.WaitingForPlayers) {
+            userManager.JoinUserToTheGame(userName,realGameTitle);
+            gameController.registerPlayer(userName, isComputer);
+            out.println(gson.toJson(new LoadGameStatus(true,"")));
+        }
+        else {
+            out.println(gson.toJson(new LoadGameStatus(false,"Error in joining the game")));
+        }
 
     }
 

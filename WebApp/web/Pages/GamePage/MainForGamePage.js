@@ -1,4 +1,5 @@
-$(document).ready(function() {
+$('#document').ready(function() {
+
     NinaRow = new NinaRow('#NinaRow')
 
     NinaRow.onPlayerMove = function() {

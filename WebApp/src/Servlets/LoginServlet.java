@@ -39,7 +39,6 @@ public class LoginServlet extends HttpServlet {
         if (usernameFromSession == null) {
             String usernameFromParameter = request.getParameter(USERNAME);
             String isComputer = request.getParameter(PLAYERTYPE);
-            System.out.println(isComputer);
             boolean isComputerBool = false;
             if (isComputer != null)
             {

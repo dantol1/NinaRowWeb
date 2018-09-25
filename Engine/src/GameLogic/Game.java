@@ -71,8 +71,11 @@ public class Game implements Serializable {
     public ArrayList<GamePlayer> getPlayers() {
         return players;
     }
-
     private ArrayList<GamePlayer> players = new ArrayList<>();
+
+    public void setPlayers(ArrayList<GamePlayer> thePlayers) {
+        players = thePlayers;
+    }
     private int numOfActivePlayers;
     private History moveHistory;
     private HashSet<Point> winningPieces = new HashSet<>();

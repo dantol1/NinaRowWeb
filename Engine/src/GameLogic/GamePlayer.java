@@ -36,12 +36,17 @@ public class GamePlayer implements Serializable {
         pieceShape = i_pieceShape;
         playerType = i_isComputer;
     }
-    public GamePlayer(String name) {
+    public GamePlayer(String name, boolean isComputer) {
+        this.playerType = Type.Human;
+        if (isComputer == true)
+        {
+           this.playerType = Type.Computer;
+        }
         this.name = name;
+        this.pieceShape = GamePlayer.pieceShapeChar;
+        GamePlayer.pieceShapeChar++;
     }
-    public GamePlayer(){
 
-    }
 
     public GamePlayer(short id, String name, Type type, Color color)
     {

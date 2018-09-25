@@ -30,4 +30,15 @@ public class UserManager {
     public synchronized User getUser(String username){
         return users.get(username);
     }
+
+    public void JoinUserToTheGame(String userName, String gameTitle) {
+        User user = users.get(userName);
+        user.setGameRegisteredTo(gameTitle);
+    }
+
+    public boolean canUserJoinTheGame(String username) {
+        User user = users.get(username);
+        String gameRegisteredTo = user.getGameRegisteredTo();
+        return gameRegisteredTo.equals("");
+    }
 }

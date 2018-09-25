@@ -6,7 +6,14 @@ import javafx.beans.property.SimpleIntegerProperty;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class GameInfo {
+public class GameController {
+
+    public enum GameStatus {
+        WaitingForPlayers,
+        Started
+    }
+
+    private GameStatus status;
     private String title;
     private SimpleIntegerProperty totalMoves = new SimpleIntegerProperty();
     private int numberOfPlayers;
@@ -25,7 +32,7 @@ public class GameInfo {
 
     private boolean display = true;
 
-    public GameInfo(Game game, String uploadedBy) {
+    public GameController(Game game, String uploadedBy) {
         this.theGame = game;
         this.title = game.getGameTitle();
         this.numberOfPlayers = game.getTotalPlayers();
@@ -35,15 +42,24 @@ public class GameInfo {
         this.target = game.getSettings().getTarget();
         this.variant = game.getSettings().getVariant().name();
         this.players = new ArrayList<>();
+        this.status = GameStatus.WaitingForPlayers;
     }
 
-    public synchronized void registerPlayer(String name) throws PlayersAmountException {
-        if (numberOfRegisteredPlayers >= numberOfPlayers) {
-            throw new PlayersAmountException("Game already have its maximum number of players allowed");
-        }
-        players.add(new GamePlayer(name));
+    public GameStatus getStatus(){
+        return status;
+    }
+    public synchronized void registerPlayer(String name, boolean isComputer){
+        //TODO need to Randomize and give a color to each player which i haven't done yet
+        GamePlayer player = new GamePlayer(name,isComputer);
+        this.players.add(player);
+        this.numberOfRegisteredPlayers++;
 
-        numberOfRegisteredPlayers++;
+        if (this.numberOfRegisteredPlayers == this.numberOfPlayers)
+        {
+            this.status = GameStatus.Started;
+            this.theGame.setPlayers(this.players);
+        }
+
     }
 
     public synchronized void unregisterPlayer() throws PlayersAmountException {
