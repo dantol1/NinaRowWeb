@@ -1,6 +1,7 @@
 package GameLogic;
 
 import Exceptions.PlayersAmountException;
+import WebLogic.User;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
@@ -48,22 +49,24 @@ public class GameController {
     public GameStatus getStatus(){
         return status;
     }
-    public synchronized void registerPlayer(String name, boolean isComputer){
-        //TODO need to Randomize and give a color to each player which i haven't done yet
-        GamePlayer player = new GamePlayer(name,isComputer);
-        this.players.add(player);
-        this.numberOfRegisteredPlayers++;
+
+    public synchronized void registerPlayer(User userToAdd) throws PlayersAmountException{
+        if(theGame.addPlayer(userToAdd) == true) {
+            this.numberOfRegisteredPlayers++;
+        }
+        else
+        {
+            throw new PlayersAmountException("too many players");
+        }
 
         if (this.numberOfRegisteredPlayers == this.numberOfPlayers)
         {
             this.status = GameStatus.Started;
-            this.theGame.setPlayers(this.players);
         }
-
     }
 
-    public synchronized void unregisterPlayer() throws PlayersAmountException {
-        if (numberOfRegisteredPlayers <= 0) {
+    public synchronized void unregisterPlayer(User userToRemove) throws PlayersAmountException {
+        if (theGame.removePlayer(userToRemove.getId()) == false) {
             throw new PlayersAmountException("Game number of players can't be negative");
         }
         --numberOfRegisteredPlayers;

@@ -60,16 +60,16 @@ public class GameManager {
         return gamesInfo.get(gameTitle);
     }
 
-    public void unregisterPlayer(String gameTitle, short playerId) throws PlayersAmountException {
-        Game game = games.get(gameTitle);
-        GameController gameInfo = gamesInfo.get(gameTitle);
-        if(game.removePlayer(playerId) == false)
-        {
-            throw new PlayersAmountException("The game has no players!");
-        }
-        gameInfo.unregisterPlayer();
-        //gameInfo.setDisplay(game.isShow());
-    }
+//    public void unregisterPlayer(String gameTitle, short playerId) throws PlayersAmountException {
+//        Game game = games.get(gameTitle);
+//        GameController gameInfo = gamesInfo.get(gameTitle);
+//        if(game.removePlayer(playerId) == false)
+//        {
+//            throw new PlayersAmountException("The game has no players!");
+//        }
+//        gameInfo.unregisterPlayer();
+//        //gameInfo.setDisplay(game.isShow());
+//    }
 
     public GameController getGameByUserName(String userName) {
 

@@ -1,4 +1,5 @@
 package Servlets;
+import Exceptions.PlayersAmountException;
 import GameLogic.GameController;
 import Utils.ServletUtils;
 import WebLogic.GameManager;
@@ -6,6 +7,8 @@ import WebLogic.LoadGameStatus;
 import WebLogic.LoginStatus;
 import WebLogic.UserManager;
 import com.google.gson.Gson;
+import com.sun.media.jfxmedia.events.PlayerStateEvent;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
 import java.io.*;
 import javax.servlet.ServletException;
@@ -43,8 +46,14 @@ public class JoinGameServlet extends HttpServlet {
         response.setContentType("application/json");
         if (userManager.canUserJoinTheGame(userName) && gameController.getStatus() == GameController.GameStatus.WaitingForPlayers) {
             userManager.JoinUserToTheGame(userName,realGameTitle);
-            gameController.registerPlayer(userName, isComputer);
-            out.println(gson.toJson(new LoadGameStatus(true,"")));
+            try {
+                gameController.registerPlayer(userManager.getUser(userName));
+                out.println(gson.toJson(new LoadGameStatus(true,"")));
+            }
+            catch (PlayersAmountException e)
+            {
+                out.println(gson.toJson(new LoadGameStatus(false,"Error in joining the game")));
+            }
         }
         else {
             out.println(gson.toJson(new LoadGameStatus(false,"Error in joining the game")));

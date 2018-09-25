@@ -68,6 +68,35 @@ body{
     transform: translateY(4px);
 }
 
+.dialogButton{
+    background-color: #2b2b2b;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    border-radius: 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    font-family: Arial;
+    font-size: 12px;
+}
+
+.dialogButton:hover {
+    background-color: #959595;
+    color: black;
+    border: none;
+}
+
+.dialogButton:active {
+    background-color: #e7e7e7;
+    border: none;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
 .userNameSpan {
     margin: 20px;
 }
@@ -151,8 +180,8 @@ th {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 
-    max-width: 800px;
-    max-height: 800px;
+    max-width: 1000px;
+    max-height: 1000px;
     z-index: 1000;
     display: none;
     background: burlywood;
@@ -175,8 +204,8 @@ th {
     overflow: auto;
     margin: 25px;
     white-space: nowrap;
-    max-width: 780px;
-    max-height: 600px;
+    max-width: 880px;
+    max-height: 700px;
 }
 
 .board {
@@ -209,70 +238,6 @@ th {
     border: 1px black solid;
     width: 30px;
     height: 30px;
-}
-
-.dialogButtons {
-    font-size: 14px;
-    margin-top: 11px;
-    position: absolute;
-    bottom: 100px;
-    left: 30px;
-    width: 100px;
-}
-
-.dialogButton {
-    display: inline-block;
-    margin-right: 8px;
-    padding: 5px;
-    border: grey 1px solid;
-    border-radius: 4px;
-    background: #fff4fd;
-    box-shadow: 3px 3px 9px -2px rgba(0,0,0,0.75);
-}
-
-.dialogButton:hover {
-    cursor: pointer;
-    background: gainsboro;
-}
-
-.rowBlocks {
-    display: inline-block;
-    position: relative;
-    vertical-align: top;
-    top: 15px;
-}
-
-.colBlocks {
-    display: inline-block;
-    margin-bottom: 5px;
-}
-
-.rowBlock {
-    display: block;
-    height: 30px;
-    text-align: center;
-}
-
-.colBlock{
-    display: inline-block;
-    width: 30px;
-    text-align: center;
-    border: 1px solid transparent;
-}
-
-.rowSquares {
-    display: inline-block;
-}
-
-.colHint{
-    font-size: 14px;
-    margin-top: 15px;
-}
-
-.rowHint {
-    font-size: 14px;
-    margin-right: 5px;
-    display: inline-block;
 }
 
 .image {

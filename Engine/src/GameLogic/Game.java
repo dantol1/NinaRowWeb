@@ -910,8 +910,7 @@ public class Game implements Serializable {
     public synchronized boolean addPlayer(User user)
     {
         boolean added = false;
-
-        if(playersCreated < players.size())
+        if(playersCreated < totalPlayers)
         {
             players.add(new GamePlayer(user.getId(),
                     user.getName(),
