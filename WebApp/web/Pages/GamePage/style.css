@@ -2,8 +2,21 @@ body {
     text-align: center;
 }
 
+.toolBar{
+    height: 50px;
+    background: gainsboro;
+}
+
+.toolbarContent {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 #NinaRow {
-    background-color: yellow;
+    overflow: auto;
+    white-space: nowrap;
+    background-color: #ffe000;
     display: inline-block;
 }
 

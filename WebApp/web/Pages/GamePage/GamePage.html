@@ -9,7 +9,13 @@
 </head>
 
 <body>
-<h4>It's <span id="player">red</span>'s turn!</h4>
+<div class="toolBar">
+    <div class="toolbarContent">
+        <span class="leaveGame" onclick="onLeaveGameClick()">Leave Game</span>
+        <span class="gameStatus">Game status: Waiting for players...</span>
+    </div>
+</div>
+<h4>It's <span id="player"></span>'s turn!</h4>
 <div id="NinaRow"></div>
 <br>
 <button id="restart">Restart</button>

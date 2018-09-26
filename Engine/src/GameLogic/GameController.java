@@ -3,6 +3,7 @@ package GameLogic;
 import Exceptions.PlayersAmountException;
 import WebLogic.User;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ public class GameController {
     private String variant;
     private Game theGame;
     private ArrayList<GamePlayer> players;
+    private Color[][] Discs;
 
     public void setDisplay(boolean display) {
         this.display = display;
@@ -44,6 +46,7 @@ public class GameController {
         this.variant = game.getSettings().getVariant().name();
         this.players = new ArrayList<>();
         this.status = GameStatus.WaitingForPlayers;
+        this.Discs = new Color[rows][columns];
     }
 
     public GameStatus getStatus(){
@@ -52,6 +55,7 @@ public class GameController {
 
     public synchronized void registerPlayer(User userToAdd) throws PlayersAmountException{
         if(theGame.addPlayer(userToAdd) == true) {
+            players.add(theGame.getPlayers().get(theGame.getPlayersCreated()-1));
             this.numberOfRegisteredPlayers++;
         }
         else

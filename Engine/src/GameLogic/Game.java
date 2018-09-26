@@ -126,6 +126,10 @@ public class Game implements Serializable {
     private boolean ended = false;
     private int playersCreated = 0;
 
+    public int getPlayersCreated(){
+
+        return playersCreated;
+    }
     public Game(GameSettings gs, List<Player> thePlayers)
     {
         gameBoard = new Board(gs.getColumns(), gs.getRows());

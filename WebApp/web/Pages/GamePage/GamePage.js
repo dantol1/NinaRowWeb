@@ -1,8 +1,9 @@
 class NinaRow {
-    constructor(selector) {
-        this.ROWS = 6;
-        this.COLS = 7;
-        this.player = 'red';
+    constructor(selector, json) {
+        this.ROWS = json.rows;
+        this.COLS = json.columns;
+        this.player = json.players[0].name;
+        $('#player').text(this.player);
         this.selector = selector;
         this.isGameOver = false;
         this.onPlayerMove = function() {};
@@ -56,6 +57,7 @@ class NinaRow {
         });
 
         $board.on('click', '.col.empty', function() {
+
             if (that.isGameOver) return;
             const col = $(this).data('col');
             const $lastEmptyCell = findLastEmptyCell(col);
