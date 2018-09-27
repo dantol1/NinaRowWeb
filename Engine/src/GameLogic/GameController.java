@@ -27,7 +27,7 @@ public class GameController {
     private String variant;
     private Game theGame;
     private ArrayList<GamePlayer> players;
-    private Color[][] Discs;
+    private String[][] Discs;
 
     public void setDisplay(boolean display) {
         this.display = display;
@@ -46,7 +46,7 @@ public class GameController {
         this.variant = game.getSettings().getVariant().name();
         this.players = new ArrayList<>();
         this.status = GameStatus.WaitingForPlayers;
-        this.Discs = new Color[rows][columns];
+        this.Discs = new String[rows][columns];
     }
 
     public GameStatus getStatus(){
