@@ -67,7 +67,7 @@ public class Game implements Serializable {
     }
     private Board gameBoard;
     private GameSettings settings;
-
+    private ColorGenerator colorGenerator = new ColorGenerator();
     public ArrayList<GamePlayer> getPlayers() {
         return players;
     }
@@ -916,11 +916,11 @@ public class Game implements Serializable {
         boolean added = false;
         if(playersCreated < totalPlayers)
         {
-            Color playerColor = ColorGenerator.getColor(playersCreated);
+            Color playerColor = colorGenerator.getColor(playersCreated);
             players.add(new GamePlayer(user.getId(),
                     user.getName(),
                     user.isComputer() ? GamePlayer.Type.Computer : GamePlayer.Type.Computer,
-                    playerColor, ColorGenerator.getColorName(playerColor)));
+                    playerColor, colorGenerator.getColorName(playerColor)));
 
             playersCreated++;
             added = true;
@@ -945,7 +945,7 @@ public class Game implements Serializable {
                 }
                 else
                 {
-                    ColorGenerator.freeColor(players.get(i).getPlayerColor());
+                    colorGenerator.freeColor(players.get(i).getPlayerColor());
                 }
             }
 
@@ -958,10 +958,10 @@ public class Game implements Serializable {
     }
 
 
-    private static class ColorGenerator {
-        private static LinkedList<Color> colors = new LinkedList<>();
-        private static boolean[] colorUsed = {false, false, false, false, false, false};
-        static {
+    private class ColorGenerator {
+        private LinkedList<Color> colors = new LinkedList<>();
+        private boolean[] colorUsed = {false, false, false, false, false, false};
+        ColorGenerator() {
             colors.add(Color.RED);
             colors.add(Color.BLUE);
             colors.add(Color.GREEN);
@@ -970,7 +970,7 @@ public class Game implements Serializable {
             colors.add(Color.PURPLE);
         }
 
-        public static Color getColor(int index)
+        public Color getColor(int index)
         {
             while(colorUsed[index])
             {
@@ -981,7 +981,7 @@ public class Game implements Serializable {
             return colors.get(index);
         }
 
-        public static String getColorName(Color color)
+        public String getColorName(Color color)
         {
 
             if(color == Color.RED)
@@ -1013,7 +1013,7 @@ public class Game implements Serializable {
             return null;
         }
 
-        public static void freeColor(Color colorToFree)
+        public void freeColor(Color colorToFree)
         {
             int index = 0;
 
