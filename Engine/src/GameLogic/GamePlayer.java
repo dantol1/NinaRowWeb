@@ -29,6 +29,7 @@ public class GamePlayer implements Serializable {
     private Color playerColor;
     private char pieceShape;
     private Type playerType;
+    private String colorName;
     private static char pieceShapeChar = 'a';
 
     public void setPlayer(String i_name, char i_pieceShape, Type i_isComputer) {
@@ -54,6 +55,18 @@ public class GamePlayer implements Serializable {
         this.name = name;
         this.playerType = type;
         this.playerColor = color;
+        this.colorName = null;
+        this.pieceShape = GamePlayer.pieceShapeChar;
+        GamePlayer.pieceShapeChar++;
+    }
+
+    public GamePlayer(short id, String name, Type type, Color color, String colorName)
+    {
+        this.id = id;
+        this.name = name;
+        this.playerType = type;
+        this.playerColor = color;
+        this.colorName = colorName;
         this.pieceShape = GamePlayer.pieceShapeChar;
         GamePlayer.pieceShapeChar++;
     }

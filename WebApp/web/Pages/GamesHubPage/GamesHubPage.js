@@ -140,7 +140,6 @@ function refreshUserList() {
 function refreshUserListCallback(users) {
     var usersTable = $("#GamesHubUsersList");
     usersTable.empty();
-
     $.each(users || [], function(index, username) {
         $('<tr><td>' + username + '</tr></td>').appendTo(usersTable);
     });

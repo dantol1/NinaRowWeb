@@ -36,6 +36,7 @@ public class JoinGameServlet extends HttpServlet {
         {
             isComputer = true;
         }
+        //TODO: maybe get the game title from the user.
         String gameTitle = request.getParameter("gameTitle");
         String realGameTitle = gameTitle.substring(12);
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
@@ -52,10 +53,12 @@ public class JoinGameServlet extends HttpServlet {
             }
             catch (PlayersAmountException e)
             {
+                System.out.println("too many players");
                 out.println(gson.toJson(new LoadGameStatus(false,"Error in joining the game")));
             }
         }
         else {
+            System.out.println("other issue");
             out.println(gson.toJson(new LoadGameStatus(false,"Error in joining the game")));
         }
 

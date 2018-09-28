@@ -26,6 +26,11 @@ public class GameController {
     private int target;
     private String variant;
     private Game theGame;
+
+    public ArrayList<GamePlayer> getPlayers() {
+        return players;
+    }
+
     private ArrayList<GamePlayer> players;
     private String[][] Discs;
 

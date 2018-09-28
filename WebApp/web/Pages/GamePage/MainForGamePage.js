@@ -10,15 +10,19 @@
 //         NinaRow.restart();
 //     })
 // });
-
+var REFRESH_RATE = 500;
+var GAME_USERS_LIST_URL = buildUrlWithContextPath("GamePlayersList");
 var GAMEDETAILS_URL = buildUrlWithContextPath("GameDetails");
 var turn = 0;
 var intervalTimer = 100;
 var isFirstStatus = true;
+var STATUS_URL = buildUrlWithContextPath("Status");
 
 window.onload = function()
 {
     checkLoginStatus();
+    refreshUserList();
+    setInterval(refreshUserList, REFRESH_RATE);
 };
 
 function checkLoginStatus() {
@@ -139,3 +143,41 @@ function createGrid(json) {
 
 }
 
+function getUserName() {
+    var result;
+    $.ajax
+    ({
+        async: false,
+        url: STATUS_URL,
+        type: 'GET',
+        success: function (json) {
+            result = json.userName;
+        }
+    });
+    console.log(result);
+    return result;
+}
+
+function refreshUserList() {
+    $.ajax(
+        {
+            url: GAME_USERS_LIST_URL,
+            data:{
+                username: getUserName()
+            },
+            type: 'GET',
+            success: refreshUserListCallback
+        }
+    );
+}
+
+function refreshUserListCallback(users) {
+    var usersTable = $("#GameUsersList");
+    usersTable.empty();
+    console.log(users);
+
+    $.each(users || [], function(index, user) {
+        $('<tr><td>' + user.name + '<br/>' + user.colorName + '<br/>' + "Turns Played: " + user.howManyTurnsPlayed.value + '<br/>' + "ID: " + user.id + '<br/>').appendTo(usersTable);
+        $('</tr></td>').appendTo(usersTable);
+    });
+}

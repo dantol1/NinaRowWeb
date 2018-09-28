@@ -916,10 +916,11 @@ public class Game implements Serializable {
         boolean added = false;
         if(playersCreated < totalPlayers)
         {
+            Color playerColor = ColorGenerator.getColor(playersCreated);
             players.add(new GamePlayer(user.getId(),
                     user.getName(),
                     user.isComputer() ? GamePlayer.Type.Computer : GamePlayer.Type.Computer,
-                    ColorGenerator.getColor(playersCreated)));
+                    playerColor, ColorGenerator.getColorName(playerColor)));
 
             playersCreated++;
             added = true;
@@ -978,6 +979,38 @@ public class Game implements Serializable {
 
             colorUsed[index] = true;
             return colors.get(index);
+        }
+
+        public static String getColorName(Color color)
+        {
+
+            if(color == Color.RED)
+            {
+                return "RED";
+            }
+            else if(color == Color.BLUE)
+            {
+                return "BLUE";
+            }
+            else if(color == Color.BLACK)
+            {
+                return "BLACK";
+            }
+            else if(color == Color.GREEN)
+            {
+                return "GREEN";
+            }
+            else if(color == Color.PURPLE)
+            {
+                return "PURPLE";
+            }
+            else if(color == Color.ORANGE)
+            {
+                return "ORANGE";
+            }
+
+
+            return null;
         }
 
         public static void freeColor(Color colorToFree)

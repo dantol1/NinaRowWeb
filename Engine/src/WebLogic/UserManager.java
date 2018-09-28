@@ -1,4 +1,7 @@
 package WebLogic;
+import GameLogic.GameController;
+import GameLogic.GamePlayer;
+
 import java.util.*;
 import java.util.stream.Collectors;
 

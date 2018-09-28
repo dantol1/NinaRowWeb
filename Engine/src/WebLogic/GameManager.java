@@ -1,5 +1,6 @@
 package WebLogic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import Exceptions.GameServiceException;
 import Exceptions.PlayersAmountException;
 import GameLogic.Game;
 import GameLogic.GameController;
+import GameLogic.GamePlayer;
 
 public class GameManager {
 
@@ -83,5 +85,9 @@ public class GameManager {
         });
 
         return gameResult[0];
+    }
+
+    public ArrayList<GamePlayer> getUsersByGame(GameController game) {
+        return game.getPlayers();
     }
 }

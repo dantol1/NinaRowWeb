@@ -5,19 +5,31 @@
     <script src="../../Utils/context-path-helper.js"></script>
     <script type="text/javascript" src=../../Utils/JQuery3.3.1min.js></script>
     <!--<script src="GamePage.js"></script>-->
-    <script src="MainForGamePage.js"></script>
 </head>
 
 <body>
 <div class="toolBar">
     <div class="toolbarContent">
-        <span class="leaveGame" onclick="onLeaveGameClick()">Leave Game</span>
-        <span class="gameStatus">Game status: Waiting for players...</span>
+        <span class="leaveGame" onclick="onLeaveGameClick()" style="cursor: pointer; float:left">Leave Game</span>
+        <span style="color:red">Game status: </span>
+        <span class="gameStatus">Waiting for players...</span>
     </div>
 </div>
 <h4>It's <span id="player"></span>'s turn!</h4>
-<div id="NinaRow"></div>
+<div class="gameDiv">
+    <div id="NinaRow"></div>
+    <div class="usersDiv">
+        <table class="usersTable">
+            <thead>
+            <th>Users In Game:</th>
+            </thead>
+            <tbody id="GameUsersList">
+            </tbody>
+        </table>
+    </div>
+</div>
 <br>
 <button id="restart">Restart</button>
+<script src="MainForGamePage.js"></script>
 </body>
 </html>

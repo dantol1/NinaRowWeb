@@ -1,51 +1,42 @@
 package Servlets;
 
 import GameLogic.GameController;
+import GameLogic.GamePlayer;
 import Utils.ServletUtils;
-import Utils.SessionUtils;
 import WebLogic.GameManager;
+import WebLogic.UserManager;
 import com.google.gson.Gson;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GameDetailsServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
+public class GamePlayersListServlet extends HttpServlet {
+
+    private Gson gson = new Gson();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-       String gameTitle = request.getParameter("title");
-       Gson gson = new Gson();
-       PrintWriter out = response.getWriter();
-       response.setContentType("application/json");
-
-       if (gameTitle != "") {
-           GameController game = ServletUtils.getGameManager(getServletContext()).getGameInfo(gameTitle);
-           out.println(gson.toJson(game));
-       }
-       else {
-           //System.out.println("we are here!");
-           String userName = SessionUtils.getUsername(request.getSession());
-           GameManager gameManager = ServletUtils.getGameManager(getServletContext());
-           GameController game = gameManager.getGameByUserName(userName);
-           out.println(gson.toJson(game));
-       }
-
+            throws IOException {
+        response.setContentType("application/json");
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        String userName = request.getParameter("username");
+        String gameTitle = userManager.getUser(userName).getGameRegisteredTo();
+        try (PrintWriter out = response.getWriter()) {
+            GameManager gameManager = ServletUtils.getGameManager(getServletContext());
+            GameController game = gameManager.getGameInfo(gameTitle);
+            ArrayList<GamePlayer> usersList = gameManager.getUsersByGame(game);
+            String json = gson.toJson(usersList);
+            out.println(json);
+            out.flush();
+        }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
