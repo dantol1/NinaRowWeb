@@ -12,7 +12,8 @@ public class GameController {
 
     public enum GameStatus {
         WaitingForPlayers,
-        Started
+        Started,
+        Finished
     }
 
     private GameStatus status;
@@ -81,6 +82,32 @@ public class GameController {
         --numberOfRegisteredPlayers;
     }
 
+    public DropDiscComplex dropDisc(int column) {
+
+        DropDiscComplex result;
+
+        result = theGame.playTurn(column);
+
+        return result;
+    }
+    public Game.GameState playTurn(int column) {
+
+        DropDiscComplex checkForWinners;
+        Game.GameState state = null;
+
+        checkForWinners = dropDisc(column);
+
+        if (checkForWinners.isDropSucceded())
+        {
+            int row = checkForWinners.getRow();
+            int col = checkForWinners.getColumn();
+            String color = players.get(theGame.getActivePlayerIndex()).getColorName().toLowerCase();
+            Discs[row][col] = color;
+            state = theGame.isGameEnded(column);
+        }
+
+        return state;
+    }
     public boolean hasPlayerWithName(String userName) {
         Iterator var2 = this.players.iterator();
 
@@ -95,5 +122,10 @@ public class GameController {
 
         return true;
 
+    }
+
+    public String getTheCurrentPlayer() {
+
+        return players.get(theGame.getActivePlayerIndex()).getName();
     }
 }

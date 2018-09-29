@@ -8,6 +8,18 @@
         <servlet-class>Servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>CheckPlayerServlet</servlet-name>
+        <servlet-class>Servlets.CheckPlayerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GameStatusServlet</servlet-name>
+        <servlet-class>Servlets.GameStatusServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PlayTurnServlet</servlet-name>
+        <servlet-class>Servlets.PlayTurnServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>JoinGameServlet</servlet-name>
         <servlet-class>Servlets.JoinGameServlet</servlet-class>
     </servlet>
@@ -74,5 +86,17 @@
     <servlet-mapping>
         <servlet-name>GamePlayersListServlet</servlet-name>
         <url-pattern>/GamePlayersList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PlayTurnServlet</servlet-name>
+        <url-pattern>/PlayTurn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GameStatusServlet</servlet-name>
+        <url-pattern>/GameStatus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckPlayerServlet</servlet-name>
+        <url-pattern>/CheckPlayer</url-pattern>
     </servlet-mapping>
 </web-app>

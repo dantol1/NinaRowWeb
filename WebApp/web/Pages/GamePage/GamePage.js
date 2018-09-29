@@ -25,6 +25,13 @@ class NinaRow {
                     .attr('data-col', col)
                     .attr('data-row', row);
                 $row.append($col);
+
+                // if (row === this.ROWS-1)
+                // {
+                //     const $overlayCol = $('<button>')
+                //         .addClass('Pop');
+                //     $row.append($overlayCol);
+                // }
             }
             $board.append($row);
         }

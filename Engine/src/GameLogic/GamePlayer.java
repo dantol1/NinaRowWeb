@@ -32,6 +32,10 @@ public class GamePlayer implements Serializable {
     private String colorName;
     private static char pieceShapeChar = 'a';
 
+    public String getColorName(){
+
+        return colorName;
+    }
     public void setPlayer(String i_name, char i_pieceShape, Type i_isComputer) {
         name = i_name;
         pieceShape = i_pieceShape;

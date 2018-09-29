@@ -11,10 +11,13 @@
 //     })
 // });
 var REFRESH_RATE = 500;
+var CHECKPLAYER_URL = buildUrlWithContextPath("CheckPlayer");
 var GAME_USERS_LIST_URL = buildUrlWithContextPath("GamePlayersList");
 var GAMEDETAILS_URL = buildUrlWithContextPath("GameDetails");
-var turn = 0;
-var intervalTimer = 100;
+var GAMESTATUS_URL = buildUrlWithContextPath("GameStatus");
+var PLAYTURN_URL = buildUrlWithContextPath("PlayTurn");
+var gameStarted = 0;
+var intervalTimer = 500;
 var isFirstStatus = true;
 var STATUS_URL = buildUrlWithContextPath("Status");
 
@@ -23,7 +26,32 @@ window.onload = function()
     checkLoginStatus();
     refreshUserList();
     setInterval(refreshUserList, REFRESH_RATE);
+    setInterval(checkGameStatus, REFRESH_RATE);
 };
+
+function checkGameStatus() {
+
+        $.ajax({
+
+            url: GAMESTATUS_URL,
+            type: 'GET',
+            success: checkGameStatusCallback
+
+        });
+}
+
+function checkGameStatusCallback(json) {
+
+    $(".gameStatus").text(json.status);
+
+    if (json.status === "Started") {
+        if (gameStarted === 0)
+        {
+            alert("The Game Has Started!");
+            gameStarted = 1;
+        }
+    }
+}
 
 function checkLoginStatus() {
 
@@ -53,10 +81,11 @@ function printBoardcallback(json) {
     {
         for (let j=0; j<json.columns; j++)
         {
-            if (json.Discs[i][j]!=null)
+            if (json.Discs[i][j]!==null)
             {
+
                 var color = json.Discs[i][j];
-                $(`.col[row-data='${i}'][col-data='${j}']`).css("backgroundColor",color);
+                $(`.col[data-row='${i}'][data-col='${j}']`).css("backgroundColor",color);
             }
         }
     }
@@ -83,8 +112,76 @@ function intializePagecallback(json){
     createGrid(json);
     SetupOnMouseEnter();
     SetupOnMouseLeave();
+    SetupOnMouseClick();
 
     setInterval(printBoard,intervalTimer);
+}
+
+function SetupOnMouseClick() {
+
+    const $board = $("#NinaRow");
+
+    $board.on('click', '.col.empty', function() {
+        if ($(".gameStatus").text() !== "Waiting For Players") {
+            const col = $(this).data('col');
+            checkPlayer(col);
+        }
+        else {
+            alert($(".gameStatus").text());
+        }
+    });
+
+}
+
+function checkPlayer(col) {
+
+    $.ajax({
+
+        url: CHECKPLAYER_URL,
+        type: 'GET',
+        success: function(json) {
+
+            checkPlayerCallback(json, col);
+        }
+
+    });
+ ;
+}
+
+function checkPlayerCallback(json, col) {
+
+
+    if (json === null)
+    {
+
+        alert("it's not your turn!");
+    }
+    else
+    {
+        $.ajax
+        ({
+            url: PLAYTURN_URL,
+            data: {
+
+                column: col
+            },
+            type: 'GET',
+            success: onClickCallback
+        });
+    }
+
+
+}
+
+function onClickCallback(json) {
+
+    if (json !== null) {
+
+        printBoardcallback(json);
+
+    }
+
+
 }
 
 function SetupOnMouseLeave() {
@@ -126,8 +223,6 @@ function createGrid(json) {
 
     const $board = $("#NinaRow");
     $board.empty();
-    // this.isGameOver = false;
-    // this.player = 'red';
     for (let row = 0; row < ROWS; row++) {
         const $row = $('<div>')
             .addClass('row');
@@ -137,6 +232,15 @@ function createGrid(json) {
                 .attr('data-col', col)
                 .attr('data-row', row);
             $row.append($col);
+
+            // if (row === ROWS-1)
+            // {
+            //     console.log("we got here!");
+            //     const $overlayCol = $('<button>')
+            //         .addClass('Pop')
+            //         .text("Pop");
+            //     $row.append($overlayCol);
+            // }
         }
         $board.append($row);
     }
@@ -154,7 +258,6 @@ function getUserName() {
             result = json.userName;
         }
     });
-    console.log(result);
     return result;
 }
 
@@ -174,7 +277,6 @@ function refreshUserList() {
 function refreshUserListCallback(users) {
     var usersTable = $("#GameUsersList");
     usersTable.empty();
-    console.log(users);
 
     $.each(users || [], function(index, user) {
         $('<tr><td>' + user.name + '<br/>' + user.colorName + '<br/>' + "Turns Played: " + user.howManyTurnsPlayed.value + '<br/>' + "ID: " + user.id + '<br/>').appendTo(usersTable);

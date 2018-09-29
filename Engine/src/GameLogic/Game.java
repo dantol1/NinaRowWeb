@@ -1,7 +1,6 @@
 package GameLogic;
 
 import Exceptions.NoMovesMadeException;
-import Exceptions.PlayersAmountException;
 import WebLogic.User;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
@@ -224,7 +223,7 @@ public class Game implements Serializable {
         return gameBoard.getBoard();
     }
 
-    public boolean dropDisc (int column){
+    public DropDiscComplex dropDisc (int column){
 
         return gameBoard.dropDisc(column,players.get(activePlayerIndex).getPieceShape());
     }
@@ -745,12 +744,12 @@ public class Game implements Serializable {
         return tie;
     }
 
-    public boolean playTurn(int columnToPlaceDisc)
+    public DropDiscComplex playTurn(int columnToPlaceDisc)
     {
-        boolean succeeded = true;
+        DropDiscComplex succeeded;
 
         succeeded = gameBoard.dropDisc(columnToPlaceDisc, players.get(activePlayerIndex).getPieceShape());
-        if(succeeded)
+        if(succeeded.isDropSucceded())
         {
             endOfTurnActions(getNextPlaceInColumn(columnToPlaceDisc),columnToPlaceDisc, Move.moveType.POPIN);
         }
@@ -768,16 +767,16 @@ public class Game implements Serializable {
         return succeeded;
     }
 
-    public boolean playComputerTurn()
+    public DropDiscComplex playComputerTurn()
     {
-        boolean succeeded = false;
+        DropDiscComplex succeeded;
         Random randomCol = new Random();
         int columnToPlaceDisc;
 
         do {
             columnToPlaceDisc = randomCol.nextInt(settings.getColumns());
             succeeded = gameBoard.dropDisc(columnToPlaceDisc, players.get(activePlayerIndex).getPieceShape());
-        }while(!succeeded);
+        }while(!succeeded.isDropSucceded());
 
         endOfTurnActions(getNextPlaceInColumn(columnToPlaceDisc), columnToPlaceDisc, Move.moveType.POPIN);
 
@@ -799,7 +798,7 @@ public class Game implements Serializable {
 
     public void changeToNextActivePlayer()
     {
-        activePlayerIndex = (activePlayerIndex + 1) % numOfActivePlayers;
+        activePlayerIndex = (activePlayerIndex + 1) % totalPlayers;
         if(retiredPlayersIndexes[activePlayerIndex] == true)
         {
             changeToNextActivePlayer();
