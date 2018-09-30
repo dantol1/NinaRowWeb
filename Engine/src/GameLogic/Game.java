@@ -922,6 +922,7 @@ public class Game implements Serializable {
                     playerColor, colorGenerator.getColorName(playerColor)));
 
             playersCreated++;
+            numOfActivePlayers++;
             added = true;
         }
 

@@ -11,11 +11,14 @@
 //     })
 // });
 var REFRESH_RATE = 500;
+var REFRESH_USER_RATE = 200;
 var CHECKPLAYER_URL = buildUrlWithContextPath("CheckPlayer");
 var GAME_USERS_LIST_URL = buildUrlWithContextPath("GamePlayersList");
 var GAMEDETAILS_URL = buildUrlWithContextPath("GameDetails");
 var GAMESTATUS_URL = buildUrlWithContextPath("GameStatus");
 var PLAYTURN_URL = buildUrlWithContextPath("PlayTurn");
+var CURRENT_PLAYER_INFO_URL = buildUrlWithContextPath("PlayerInfo");
+var ACTIVE_PLAYER_INFO_URL = buildUrlWithContextPath("ActivePlayerTurn");
 var gameStarted = 0;
 var intervalTimer = 500;
 var isFirstStatus = true;
@@ -25,7 +28,8 @@ window.onload = function()
 {
     checkLoginStatus();
     refreshUserList();
-    setInterval(refreshUserList, REFRESH_RATE);
+    createUserInfoGrid();
+    setInterval(refreshUserList, REFRESH_USER_RATE);
     setInterval(checkGameStatus, REFRESH_RATE);
 };
 
@@ -49,6 +53,7 @@ function checkGameStatusCallback(json) {
         {
             alert("The Game Has Started!");
             gameStarted = 1;
+            setInterval(updatePlayerTurn, REFRESH_USER_RATE);
         }
     }
 }
@@ -176,12 +181,27 @@ function checkPlayerCallback(json, col) {
 function onClickCallback(json) {
 
     if (json !== null) {
-
         printBoardcallback(json);
-
+        createUserInfoGrid();
+        //updatePlayerTurn(json);
     }
+}
 
+function updatePlayerTurn() {
+    $.ajax({
+        url: ACTIVE_PLAYER_INFO_URL,
+        type: 'GET',
+        success: updatePlayerTurnCallback
+    });
 
+}
+
+function updatePlayerTurnCallback(json){
+    const playerName = $("#activePlayerName");
+    playerName.empty();
+    // console.log(json);
+    // console.log(json.theGame.players[json.theGame.activePlayerIndex].name);
+    playerName.text(json);
 }
 
 function SetupOnMouseLeave() {
@@ -282,4 +302,25 @@ function refreshUserListCallback(users) {
         $('<tr><td>' + user.name + '<br/>' + user.colorName + '<br/>' + "Turns Played: " + user.howManyTurnsPlayed.value + '<br/>' + "ID: " + user.id + '<br/>').appendTo(usersTable);
         $('</tr></td>').appendTo(usersTable);
     });
+}
+
+function createUserInfoGrid() {
+    $.ajax(
+        {
+            url: CURRENT_PLAYER_INFO_URL,
+            data:{
+                username: getUserName()
+            },
+            type: 'GET',
+            success: createUserInfoGridCallback
+        }
+    );
+}
+
+function createUserInfoGridCallback(player) {
+    var usersTable = $("#playerInfo");
+    usersTable.empty();
+
+    $('<tr><td>' + player.name + '<br/>' + player.colorName + '<br/>' + "Turns Played: " + player.howManyTurnsPlayed.value + '<br/>' + "ID: " + player.id + '<br/>').appendTo(usersTable);
+    $('</tr></td>').appendTo(usersTable);
 }

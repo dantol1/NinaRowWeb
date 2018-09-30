@@ -90,4 +90,19 @@ public class GameManager {
     public ArrayList<GamePlayer> getUsersByGame(GameController game) {
         return game.getPlayers();
     }
+
+    public GamePlayer getPlayerByGame(GameController game, User user)
+    {
+        GamePlayer player = null;
+
+        for(GamePlayer pl : game.getPlayers())
+        {
+            if(pl.getId() == user.getId())
+            {
+                player = pl;
+            }
+        }
+
+        return player;
+    }
 }

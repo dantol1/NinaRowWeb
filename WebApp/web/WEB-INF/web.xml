@@ -51,6 +51,14 @@
         <servlet-name>GamePlayersListServlet</servlet-name>
         <servlet-class>Servlets.GamePlayersListServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PlayerInfoServlet</servlet-name>
+        <servlet-class>Servlets.CurrentPlayerInfoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ActivePlayerInfoServlet</servlet-name>
+        <servlet-class>Servlets.ShowActivePlayerServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/Pages/LoginPage/Login</url-pattern>
@@ -98,5 +106,13 @@
     <servlet-mapping>
         <servlet-name>CheckPlayerServlet</servlet-name>
         <url-pattern>/CheckPlayer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PlayerInfoServlet</servlet-name>
+        <url-pattern>/PlayerInfo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ActivePlayerInfoServlet</servlet-name>
+        <url-pattern>/ActivePlayerTurn</url-pattern>
     </servlet-mapping>
 </web-app>
