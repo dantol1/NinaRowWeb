@@ -918,7 +918,7 @@ public class Game implements Serializable {
             Color playerColor = colorGenerator.getColor(playersCreated);
             players.add(new GamePlayer(user.getId(),
                     user.getName(),
-                    user.isComputer() ? GamePlayer.Type.Computer : GamePlayer.Type.Computer,
+                    user.isComputer() ? GamePlayer.Type.Computer : GamePlayer.Type.Human,
                     playerColor, colorGenerator.getColorName(playerColor)));
 
             playersCreated++;

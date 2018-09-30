@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
                         request.setAttribute(Constants.USER_NAME_ERROR, errorMessage);
                         getServletContext().getRequestDispatcher(LOGIN_ERROR_URL).forward(request, response);
                     } else {
-                        userManager.addUser(usernameFromParameter, userTypeFromSession);
+                        userManager.addUser(usernameFromParameter, isComputerBool);
                         request.getSession(true).setAttribute(Constants.USERNAME, usernameFromParameter);
                         request.getSession(true).setAttribute(Constants.PLAYERTYPE, isComputerBool);
 

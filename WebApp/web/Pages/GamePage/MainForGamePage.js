@@ -183,7 +183,6 @@ function onClickCallback(json) {
     if (json !== null) {
         printBoardcallback(json);
         createUserInfoGrid();
-        //updatePlayerTurn(json);
     }
 }
 
@@ -199,8 +198,6 @@ function updatePlayerTurn() {
 function updatePlayerTurnCallback(json){
     const playerName = $("#activePlayerName");
     playerName.empty();
-    // console.log(json);
-    // console.log(json.theGame.players[json.theGame.activePlayerIndex].name);
     playerName.text(json);
 }
 
@@ -299,7 +296,7 @@ function refreshUserListCallback(users) {
     usersTable.empty();
 
     $.each(users || [], function(index, user) {
-        $('<tr><td>' + user.name + '<br/>' + user.colorName + '<br/>' + "Turns Played: " + user.howManyTurnsPlayed.value + '<br/>' + "ID: " + user.id + '<br/>').appendTo(usersTable);
+        $('<tr><td>' + user.name + '<br/>' + user.colorName + '<br/>' + "Turns Played: " + user.howManyTurnsPlayed.value + '<br/>' + "ID: " + user.id + '<br/>' + user.playerType + '<br/>').appendTo(usersTable);
         $('</tr></td>').appendTo(usersTable);
     });
 }

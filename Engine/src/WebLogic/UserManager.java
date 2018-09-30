@@ -14,7 +14,7 @@ public class UserManager {
     }
 
     public synchronized void addUser(String username, boolean isComputer) {
-
+        System.out.println(isComputer);
         users.put(username, new User(username, idGenerator++, isComputer));
     }
 
