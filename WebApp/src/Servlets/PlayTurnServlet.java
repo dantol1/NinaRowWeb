@@ -28,14 +28,14 @@ public class PlayTurnServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int column = Integer.parseInt(request.getParameter("column"));
+        String moveType = request.getParameter("moveType");
         response.setContentType("application/json");
         Gson gson = new Gson();
         PrintWriter out = response.getWriter();
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
         GameController gameController = gameManager.getGameByUserName(
                 SessionUtils.getUsername(request.getSession()));
-        Game.GameState state = gameController.playTurn(column);
-        System.out.println("we got here also");
+        Game.GameState state = gameController.playTurn(column, moveType);
         if (state == null) {
 
             out.println(gson.toJson(null));

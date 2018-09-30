@@ -230,7 +230,15 @@ public class Game implements Serializable {
 
     public boolean popoutDisc(int column)
     {
-        PopoutMoveComplex popoutMove = gameBoard.popoutDisc(column);
+        PopoutMoveComplex popoutMove;
+        if (gameBoard.getBoard()[settings.getRows()-1][column] !=
+                players.get(activePlayerIndex).getPieceShape())
+        {
+            popoutMove = new PopoutMoveComplex('7',false);
+        }
+        else {
+            popoutMove = gameBoard.popoutDisc(column);
+        }
 
         if (popoutMove.isSucceeded())
         {

@@ -36,6 +36,14 @@ body {
     left:25%;
 }
 
+.Button {
+
+    width: 70px;
+    height: 70px;
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+}
 .col {
     width: 70px;
     height: 70px;
@@ -50,9 +58,6 @@ body {
 
 .next-stam{
     background-color: rgba(105,105,105,.3);
-}
-.col.empty {
-    cursor: pointer;
 }
 
 .next-red {

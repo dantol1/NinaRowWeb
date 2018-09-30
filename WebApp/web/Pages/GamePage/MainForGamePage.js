@@ -80,6 +80,17 @@ function printBoard() {
     });
 }
 
+function onButtonClick(col, moveType) {
+
+    if ($(".gameStatus").text() !== "Waiting For Players") {
+        checkPlayer(col, moveType);
+    }
+    else {
+        alert($(".gameStatus").text());
+    }
+
+}
+
 function printBoardcallback(json) {
 
     for(let i=0; i<json.rows;i++)
@@ -90,7 +101,11 @@ function printBoardcallback(json) {
             {
 
                 var color = json.Discs[i][j];
-                $(`.col[data-row='${i}'][data-col='${j}']`).css("backgroundColor",color);
+                $(`.col[data-row='${i+1}'][data-col='${j}']`).css("backgroundColor",color);
+            }
+            else if (json.Discs[i][j]===null) {
+
+                $(`.col[data-row='${i+1}'][data-col='${j}']`).css("backgroundColor","white");
             }
         }
     }
@@ -102,7 +117,6 @@ function IntializePage() {
 
         url: GAMEDETAILS_URL,
         data: {
-
            title: ""
         },
         type: 'GET',
@@ -115,10 +129,6 @@ function intializePagecallback(json){
     // NinaRow = new NinaRow('#NinaRow',json);
 
     createGrid(json);
-    SetupOnMouseEnter();
-    SetupOnMouseLeave();
-    SetupOnMouseClick();
-
     setInterval(printBoard,intervalTimer);
 }
 
@@ -128,7 +138,6 @@ function SetupOnMouseClick() {
 
     $board.on('click', '.col.empty', function() {
         if ($(".gameStatus").text() !== "Waiting For Players") {
-            const col = $(this).data('col');
             checkPlayer(col);
         }
         else {
@@ -138,7 +147,7 @@ function SetupOnMouseClick() {
 
 }
 
-function checkPlayer(col) {
+function checkPlayer(col, moveType) {
 
     $.ajax({
 
@@ -146,14 +155,14 @@ function checkPlayer(col) {
         type: 'GET',
         success: function(json) {
 
-            checkPlayerCallback(json, col);
+            checkPlayerCallback(json, col, moveType);
         }
 
     });
  ;
 }
 
-function checkPlayerCallback(json, col) {
+function checkPlayerCallback(json, col, moveType) {
 
 
     if (json === null)
@@ -167,7 +176,7 @@ function checkPlayerCallback(json, col) {
         ({
             url: PLAYTURN_URL,
             data: {
-
+                moveType: moveType,
                 column: col
             },
             type: 'GET',
@@ -237,6 +246,13 @@ function createGrid(json) {
 
     var ROWS = json.rows;
     var COLS = json.columns;
+    var rowsForPop;
+    if (json.variant === "Popout") {
+
+       rowsForPop = ROWS+1;
+       ROWS = ROWS+1;
+    }
+    ROWS = ROWS+1;
 
     const $board = $("#NinaRow");
     $board.empty();
@@ -244,24 +260,40 @@ function createGrid(json) {
         const $row = $('<div>')
             .addClass('row');
         for (let col = 0; col < COLS; col++) {
-            const $col = $('<div>')
-                .addClass('col empty')
-                .attr('data-col', col)
-                .attr('data-row', row);
-            $row.append($col);
-
-            // if (row === ROWS-1)
-            // {
-            //     console.log("we got here!");
-            //     const $overlayCol = $('<button>')
-            //         .addClass('Pop')
-            //         .text("Pop");
-            //     $row.append($overlayCol);
-            // }
+            if (row === 0) {
+                const $button = $('<button>')
+                    .addClass('Button')
+                    .attr('data-col', col)
+                    .text("Drop!")
+                    .click(function(){
+                        var moveType = $(this).text();
+                        var col = $(this).attr('data-col');
+                        onButtonClick(col, moveType);
+                    });
+                $row.append($button);
+            }
+            else if (row === rowsForPop) {
+                const $button = $('<button>')
+                    .addClass('Button')
+                    .attr('data-col', col)
+                    .text("Pop!")
+                    .click(function() {
+                        var moveType = $(this).text();
+                        var col = $(this).attr('data-col');
+                        onButtonClick(col, moveType);
+                    });
+                $row.append($button);
+            }
+            else {
+                const $col = $('<div>')
+                    .addClass('col empty')
+                    .attr('data-col', col)
+                    .attr('data-row', row);
+                $row.append($col);
+            }
         }
         $board.append($row);
     }
-
 }
 
 function getUserName() {

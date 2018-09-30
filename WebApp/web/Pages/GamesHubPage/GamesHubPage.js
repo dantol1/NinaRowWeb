@@ -51,6 +51,11 @@ window.onload = function ()
 //     return result;
 // }
 //
+// window.onunload = function (event) {
+//
+//     onLogoutClick()
+//
+// }
 function getUserName() {
     var result;
     $.ajax

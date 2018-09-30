@@ -36,7 +36,7 @@ public class GameDetailsServlet extends HttpServlet {
            out.println(gson.toJson(game));
        }
        else {
-           //System.out.println("we are here!");
+           System.out.println("we are here!");
            String userName = SessionUtils.getUsername(request.getSession());
            GameManager gameManager = ServletUtils.getGameManager(getServletContext());
            GameController game = gameManager.getGameByUserName(userName);

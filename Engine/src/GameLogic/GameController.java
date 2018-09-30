@@ -90,19 +90,49 @@ public class GameController {
 
         return result;
     }
-    public Game.GameState playTurn(int column) {
 
-        DropDiscComplex checkForWinners;
+    public DropDiscComplex popDisc(int column) {
+
+        DropDiscComplex result = new DropDiscComplex(theGame.playPopTurn(column)
+                ,0,0);
+
+        return result;
+    }
+    public Game.GameState playTurn(int column, String moveType) {
+
+        DropDiscComplex checkForWinners = null;
         Game.GameState state = null;
 
-        checkForWinners = dropDisc(column);
+        if (moveType.equals("Drop!")) {
+            checkForWinners = dropDisc(column);
+        }
+        else if (moveType.equals("Pop!")){
+
+            checkForWinners = popDisc(column);
+        }
 
         if (checkForWinners.isDropSucceded())
         {
-            int row = checkForWinners.getRow();
-            int col = checkForWinners.getColumn();
-            String color = players.get(theGame.getActivePlayerIndex()).getColorName().toLowerCase();
-            Discs[row][col] = color;
+            if (moveType.equals("Drop!")) {
+                int row = checkForWinners.getRow();
+                int col = checkForWinners.getColumn();
+                String color = players.get(theGame.getActivePlayerIndex()).getColorName().toLowerCase();
+                Discs[row][col] = color;
+            }
+            else if (moveType.equals("Pop!")) {
+
+                Discs[theGame.getSettings().getRows()-1][column] = null;
+
+                for (int i = theGame.getSettings().getRows()-1; i>=0; i--)
+                {
+                    if (Discs[i][column] != null) {
+                        String save = Discs[i][column];
+                        Discs[i][column] = Discs[i+1][column];
+                        Discs[i+1][column] = save;
+                    }
+                }
+
+            }
             state = theGame.isGameEnded(column);
         }
 
