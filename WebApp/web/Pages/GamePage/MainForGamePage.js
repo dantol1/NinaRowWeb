@@ -18,9 +18,11 @@ var GAME_USERS_LIST_URL = buildUrlWithContextPath("GamePlayersList");
 var GAMEDETAILS_URL = buildUrlWithContextPath("GameDetails");
 var GAMESTATUS_URL = buildUrlWithContextPath("GameStatus");
 var PLAYTURN_URL = buildUrlWithContextPath("PlayTurn");
+var FINISHGAME_URL = buildUrlWithContextPath("FinishGame");
 var CURRENT_PLAYER_INFO_URL = buildUrlWithContextPath("PlayerInfo");
 var ACTIVE_PLAYER_INFO_URL = buildUrlWithContextPath("ActivePlayerTurn");
 var gameStarted = 0;
+var gameFinished = 0;
 var intervalTimer = 500;
 var isFirstStatus = true;
 var STATUS_URL = buildUrlWithContextPath("Status");
@@ -60,6 +62,33 @@ function checkGameStatusCallback(json) {
 
         }
     }
+    else if (json.status === "Finished") {
+
+        if (gameFinished === 0) {
+            printBoard();
+            alert(json.message);
+            gameFinished = 1;
+
+            finishingTheGame();
+        }
+    }
+}
+
+function finishingTheGame() {
+
+    $.ajax({
+
+        url: FINISHGAME_URL,
+        type: 'GET',
+        success: finisingTheGameCallback
+        });
+
+}
+
+function finisingTheGameCallback(json) {
+
+    window.location = "/NinaRow/Pages/GamesHubPage/GamesHubPage.html"
+
 }
 
 function CheckIfItsAComputerAndExecuteTurn() {
@@ -153,25 +182,9 @@ function IntializePage() {
 
 function intializePagecallback(json){
 
-    // NinaRow = new NinaRow('#NinaRow',json);
 
     createGrid(json);
     setInterval(printBoard,intervalTimer);
-}
-
-function SetupOnMouseClick() {
-
-    const $board = $("#NinaRow");
-
-    $board.on('click', '.col.empty', function() {
-        if ($(".gameStatus").text() !== "Waiting For Players") {
-            checkPlayer(col);
-        }
-        else {
-            alert($(".gameStatus").text());
-        }
-    });
-
 }
 
 function checkPlayer(col, moveType) {
@@ -216,18 +229,19 @@ function checkPlayerCallback(json, col, moveType) {
 
 function onClickCallback(json) {
 
-    if (json !== null) {
-        printBoardcallback(json);
-        createUserInfoGrid();
+    printBoardcallback(json);
+    createUserInfoGrid();
 
 
-        var index = json.theGame.activePlayerIndex;
 
-        if(json.players[index].isComputer)
-        {
-            doComputerTurn();
-        }
+    var index = json.theGame.activePlayerIndex;
+
+    if(json.players[index].isComputer)
+    {
+        doComputerTurn();
     }
+
+
 
 }
 
@@ -271,38 +285,6 @@ function updatePlayerTurnCallback(json){
     const playerName = $("#activePlayerName");
     playerName.empty();
     playerName.text(json);
-}
-
-function SetupOnMouseLeave() {
-
-    const $board = $("#NinaRow");
-
-    $board.on('mouseleave', '.col', function() {
-        $('.col').removeClass(`next-stam`);
-    });
-}
-
-function SetupOnMouseEnter() {
-
-    const $board = $("#NinaRow");
-
-    $board.on('mouseenter', '.col.empty', function() {
-        const col = $(this).data('col');
-        const $lastEmptyCell = findLastEmptyCell(col);
-        $lastEmptyCell.addClass(`next-stam`);
-    });
-}
-
-function findLastEmptyCell(col) {
-
-    const cells = $(`.col[data-col='${col}']`);
-    for (let i = cells.length - 1; i >= 0; i--) {
-        const $cell = $(cells[i]);
-        if ($cell.hasClass('empty')) {
-            return $cell;
-        }
-    }
-    return null;
 }
 
 function createGrid(json) {

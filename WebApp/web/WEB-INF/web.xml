@@ -8,6 +8,10 @@
         <servlet-class>Servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>FinishGameServlet</servlet-name>
+        <servlet-class>Servlets.FinishGameServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ComputerTurnServlet</servlet-name>
         <servlet-class>Servlets.ComputerTurnServlet</servlet-class>
     </servlet>
@@ -122,5 +126,9 @@
     <servlet-mapping>
         <servlet-name>ComputerTurnServlet</servlet-name>
         <url-pattern>/ComputerTurn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FinishGameServlet</servlet-name>
+        <url-pattern>/FinishGame</url-pattern>
     </servlet-mapping>
 </web-app>

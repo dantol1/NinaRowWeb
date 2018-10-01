@@ -36,8 +36,9 @@ public class PlayTurnServlet extends HttpServlet {
         GameController gameController = gameManager.getGameByUserName(
                 SessionUtils.getUsername(request.getSession()));
         Game.GameState state = gameController.playTurn(column, moveType);
-        if (state == null) {
+        if (state == Game.GameState.GameWin) {
 
+            System.out.println("we got here!");
             out.println(gson.toJson(null));
         }
         else {

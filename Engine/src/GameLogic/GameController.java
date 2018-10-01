@@ -4,6 +4,7 @@ import Exceptions.PlayersAmountException;
 import WebLogic.User;
 import javafx.beans.property.SimpleIntegerProperty;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -15,6 +16,7 @@ public class GameController {
         Finished
     }
 
+    private Game.GameState state = Game.GameState.GameNotEnded;
     private GameStatus status;
     private String title;
     private SimpleIntegerProperty totalMoves = new SimpleIntegerProperty();
@@ -26,6 +28,7 @@ public class GameController {
     private int target;
     private String variant;
     private Game theGame;
+    private Game OriginalGame;
 
     public ArrayList<GamePlayer> getPlayers() {
         return players;
@@ -40,7 +43,16 @@ public class GameController {
 
     private boolean display = true;
 
+    public void setStatus (GameStatus status) {
+
+        this.status = status;
+    }
+    public void setState (Game.GameState state) {
+
+        this.state = state;
+    }
     public GameController(Game game, String uploadedBy) {
+        this.OriginalGame = game;
         this.theGame = game;
         this.title = game.getGameTitle();
         this.numberOfPlayers = game.getTotalPlayers();
@@ -50,6 +62,14 @@ public class GameController {
         this.target = game.getSettings().getTarget();
         this.variant = game.getSettings().getVariant().name();
         this.players = new ArrayList<>();
+        this.status = GameStatus.WaitingForPlayers;
+        this.Discs = new String[rows][columns];
+    }
+
+    public void cleanGame() {
+
+        this.theGame = this.OriginalGame;
+        this.state = Game.GameState.GameNotEnded;
         this.status = GameStatus.WaitingForPlayers;
         this.Discs = new String[rows][columns];
     }
@@ -74,11 +94,27 @@ public class GameController {
         }
     }
 
-    public synchronized void unregisterPlayer(User userToRemove) throws PlayersAmountException {
-        if (theGame.removePlayer(userToRemove.getId()) == false) {
-            throw new PlayersAmountException("Game number of players can't be negative");
+    public synchronized void unregisterPlayer(User userToRemove) {
+
+        theGame.removePlayer(userToRemove.getId());
+
+        GamePlayer toRemove = null;
+        for (GamePlayer player : players) {
+
+            if (player.getName().equals(userToRemove.getName())) {
+
+                toRemove = player;
+            }
         }
+
+        players.remove(toRemove);
+
         --numberOfRegisteredPlayers;
+
+        if (numberOfRegisteredPlayers == 0) {
+
+            cleanGame();
+        }
     }
 
     public DropDiscComplex dropComputerDisc() {
@@ -186,6 +222,15 @@ public class GameController {
             state = theGame.isGameEnded(checkForWinners.getColumn());
         }
 
+        this.state = state;
+
+        if (state == Game.GameState.GameWin ||
+                state == Game.GameState.GameTie ||
+                state == Game.GameState.SeveralPlayersWonTie)
+        {
+            this.status = GameStatus.Finished;
+        }
+
         return state;
 
     }
@@ -227,6 +272,15 @@ public class GameController {
             state = theGame.isGameEnded(column);
         }
 
+        this.state = state;
+
+        if (state == Game.GameState.GameWin ||
+                state == Game.GameState.GameTie ||
+                state == Game.GameState.SeveralPlayersWonTie)
+        {
+            this.status = GameStatus.Finished;
+        }
+
         return state;
     }
     public boolean hasPlayerWithName(String userName) {
@@ -248,5 +302,15 @@ public class GameController {
     public String getTheCurrentPlayer() {
 
         return players.get(theGame.getActivePlayerIndex()).getName();
+    }
+
+    public Game.GameState getState() {
+
+        return this.state;
+    }
+
+    public HashSet<GamePlayer> getWinningPlayers() {
+
+        return theGame.getWinningPlayers();
     }
 }
