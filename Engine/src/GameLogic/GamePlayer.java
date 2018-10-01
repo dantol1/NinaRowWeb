@@ -31,6 +31,7 @@ public class GamePlayer implements Serializable {
     private Type playerType;
     private String colorName;
     private static char pieceShapeChar = 'a';
+    private boolean isComputer = false;
 
     public String getColorName(){
 
@@ -40,6 +41,9 @@ public class GamePlayer implements Serializable {
         name = i_name;
         pieceShape = i_pieceShape;
         playerType = i_isComputer;
+        if (i_isComputer == Type.Computer) {
+            isComputer = true;
+        }
     }
     public GamePlayer(String name, boolean isComputer) {
         this.playerType = Type.Human;
@@ -47,6 +51,7 @@ public class GamePlayer implements Serializable {
         {
            this.playerType = Type.Computer;
         }
+        this.isComputer = isComputer;
         this.name = name;
         this.pieceShape = GamePlayer.pieceShapeChar;
         GamePlayer.pieceShapeChar++;
@@ -58,6 +63,10 @@ public class GamePlayer implements Serializable {
         this.id = id;
         this.name = name;
         this.playerType = type;
+        if (type == Type.Computer) {
+
+            this.isComputer = true;
+        }
         this.playerColor = color;
         this.colorName = null;
         this.pieceShape = GamePlayer.pieceShapeChar;
@@ -69,6 +78,10 @@ public class GamePlayer implements Serializable {
         this.id = id;
         this.name = name;
         this.playerType = type;
+        if (type == Type.Computer) {
+
+            this.isComputer = true;
+        }
         this.playerColor = color;
         this.colorName = colorName;
         this.pieceShape = GamePlayer.pieceShapeChar;

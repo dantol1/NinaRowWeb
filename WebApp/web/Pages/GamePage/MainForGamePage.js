@@ -13,6 +13,7 @@
 var REFRESH_RATE = 500;
 var REFRESH_USER_RATE = 200;
 var CHECKPLAYER_URL = buildUrlWithContextPath("CheckPlayer");
+var COMPUTERTURN_URL = buildUrlWithContextPath("ComputerTurn");
 var GAME_USERS_LIST_URL = buildUrlWithContextPath("GamePlayersList");
 var GAMEDETAILS_URL = buildUrlWithContextPath("GameDetails");
 var GAMESTATUS_URL = buildUrlWithContextPath("GameStatus");
@@ -54,7 +55,33 @@ function checkGameStatusCallback(json) {
             alert("The Game Has Started!");
             gameStarted = 1;
             setInterval(updatePlayerTurn, REFRESH_USER_RATE);
+
+            CheckIfItsAComputerAndExecuteTurn()
+
         }
+    }
+}
+
+function CheckIfItsAComputerAndExecuteTurn() {
+
+    $.ajax({
+
+        url: GAMEDETAILS_URL,
+        data: {
+            title: ""
+        },
+        type: 'GET',
+        success: CheckIfComputerCallback
+    })
+}
+
+function CheckIfComputerCallback(json) {
+
+    var index = json.theGame.activePlayerIndex;
+
+    if (json.players[index].isComputer) {
+
+        doComputerTurn();
     }
 }
 
@@ -192,6 +219,42 @@ function onClickCallback(json) {
     if (json !== null) {
         printBoardcallback(json);
         createUserInfoGrid();
+
+
+        var index = json.theGame.activePlayerIndex;
+
+        if(json.players[index].isComputer)
+        {
+            doComputerTurn();
+        }
+    }
+
+}
+
+function doComputerTurn() {
+
+    $.ajax({
+
+        url: COMPUTERTURN_URL,
+        type: 'GET',
+        success: doComputerTurnCallback
+    });
+
+
+}
+
+function doComputerTurnCallback(json) {
+
+    if (json !== null) {
+        printBoardcallback(json);
+        createUserInfoGrid();
+
+        var index = json.theGame.activePlayerIndex;
+
+        if(json.players[index].isComputer)
+        {
+            doComputerTurn();
+        }
     }
 }
 

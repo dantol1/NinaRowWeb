@@ -1,5 +1,6 @@
 package Servlets;
 
+import GameLogic.Game;
 import GameLogic.GameController;
 import Utils.ServletUtils;
 import Utils.SessionUtils;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GameDetailsServlet extends HttpServlet {
+public class ComputerTurnServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -26,21 +27,21 @@ public class GameDetailsServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       String gameTitle = request.getParameter("title");
-       Gson gson = new Gson();
-       PrintWriter out = response.getWriter();
-       response.setContentType("application/json");
+        response.setContentType("application/json");
+        Gson gson = new Gson();
+        PrintWriter out = response.getWriter();
+        GameManager gameManager = ServletUtils.getGameManager(getServletContext());
+        GameController gameController = gameManager.getGameByUserName(
+                SessionUtils.getUsername(request.getSession()));
+        Game.GameState state = gameController.playComputerTurn();
+        if (state == null) {
 
-       if (gameTitle != "") {
-           GameController game = ServletUtils.getGameManager(getServletContext()).getGameInfo(gameTitle);
-           out.println(gson.toJson(game));
-       }
-       else {
-           String userName = SessionUtils.getUsername(request.getSession());
-           GameManager gameManager = ServletUtils.getGameManager(getServletContext());
-           GameController game = gameManager.getGameByUserName(userName);
-           out.println(gson.toJson(game));
-       }
+            out.println(gson.toJson(null));
+        }
+        else {
+
+            out.println(gson.toJson(gameController));
+        }
 
     }
 

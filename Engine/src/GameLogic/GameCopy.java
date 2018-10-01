@@ -40,7 +40,7 @@ public class GameCopy{
 
         if(moveToPlay.getType() == Move.moveType.POPIN)
         {
-            gameCopy.playTurn(moveToPlay.getColumnIndex());
+            gameCopy.playDropTurn(moveToPlay.getColumnIndex());
         }
         else if(moveToPlay.getType() == Move.moveType.POPOUT)
         {

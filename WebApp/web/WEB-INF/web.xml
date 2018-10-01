@@ -8,6 +8,10 @@
         <servlet-class>Servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ComputerTurnServlet</servlet-name>
+        <servlet-class>Servlets.ComputerTurnServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>CheckPlayerServlet</servlet-name>
         <servlet-class>Servlets.CheckPlayerServlet</servlet-class>
     </servlet>
@@ -114,5 +118,9 @@
     <servlet-mapping>
         <servlet-name>ActivePlayerInfoServlet</servlet-name>
         <url-pattern>/ActivePlayerTurn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ComputerTurnServlet</servlet-name>
+        <url-pattern>/ComputerTurn</url-pattern>
     </servlet-mapping>
 </web-app>

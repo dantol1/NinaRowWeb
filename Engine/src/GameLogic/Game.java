@@ -313,8 +313,9 @@ public class Game implements Serializable {
         }
         else
         {
-            if(winningPlayers.size() == 1)
+            if(winningPlayers.size() == 1) {
                 state = GameState.GameWin;
+            }
             else
                 state = GameState.SeveralPlayersWonTie;
 
@@ -752,7 +753,7 @@ public class Game implements Serializable {
         return tie;
     }
 
-    public DropDiscComplex playTurn(int columnToPlaceDisc)
+    public DropDiscComplex playDropTurn(int columnToPlaceDisc)
     {
         DropDiscComplex succeeded;
 
@@ -775,20 +776,75 @@ public class Game implements Serializable {
         return succeeded;
     }
 
-    public DropDiscComplex playComputerTurn()
+    public boolean playPopComputerTurn(int column)
     {
+        boolean succeeded = popoutDisc(column);
+        if (succeeded) {
+
+            players.get(activePlayerIndex).playedTurn();
+        }
+        return succeeded;
+    }
+
+    public DropDiscComplex playDropTurn() {
+
         DropDiscComplex succeeded;
-        Random randomCol = new Random();
-        int columnToPlaceDisc;
+        Random rand = new Random();
+        int randomizedColumn = 0;
 
         do {
-            columnToPlaceDisc = randomCol.nextInt(settings.getColumns());
-            succeeded = gameBoard.dropDisc(columnToPlaceDisc, players.get(activePlayerIndex).getPieceShape());
-        }while(!succeeded.isDropSucceded());
+
+            randomizedColumn = rand.nextInt(settings.getColumns());
+            succeeded = gameBoard.dropDisc(randomizedColumn,players.get(activePlayerIndex).getPieceShape());
+        } while(!succeeded.isDropSucceded());
+
+        players.get(activePlayerIndex).playedTurn();
+
+        return succeeded;
+    }
+
+    public boolean playComputerTurn()
+    {
+        boolean isDrop = false;
+        DropDiscComplex succeeded = null;
+        Random randomCol = new Random();
+        int columnToPlaceDisc = 0;
+
+        if (settings.getVariant() == GameSettings.Variant.Circular ||
+                settings.getVariant() == GameSettings.Variant.Regular  ) {
+            do {
+                columnToPlaceDisc = randomCol.nextInt(settings.getColumns());
+                succeeded = gameBoard.dropDisc(columnToPlaceDisc, players.get(activePlayerIndex).getPieceShape());
+            } while (!succeeded.isDropSucceded());
+            isDrop = true;
+        }
+        else if (settings.getVariant() == GameSettings.Variant.Popout) {
+
+            do {
+
+                Move.moveType randomMoveType = Move.moveType.values()[randomCol.nextInt(Move.moveType.values().length)];
+                columnToPlaceDisc = randomCol.nextInt(settings.getColumns());
+
+                if (randomMoveType == Move.moveType.POPOUT) {
+
+                    succeeded = new DropDiscComplex(playPopTurn(columnToPlaceDisc), 0, 0);
+                    isDrop = true;
+                } else if (randomMoveType == Move.moveType.POPIN) {
+
+                    succeeded = playDropTurn();
+                    isDrop = false;
+                }
+                else if (randomMoveType == Move.moveType.RETIRE) {
+
+                    succeeded = new DropDiscComplex(false,0,0);
+                    isDrop = false;
+                }
+            }while(!succeeded.isDropSucceded());
+        }
 
         endOfTurnActions(getNextPlaceInColumn(columnToPlaceDisc), columnToPlaceDisc, Move.moveType.POPIN);
 
-        return succeeded;
+        return isDrop;
     }
 
     public void endOfTurnActions(int columnInWhichDiscWasPut,int rowInWhichDiscWasPut, Move.moveType i_MoveType)
@@ -928,7 +984,7 @@ public class Game implements Serializable {
                     user.getName(),
                     user.isComputer() ? GamePlayer.Type.Computer : GamePlayer.Type.Human,
                     playerColor, colorGenerator.getColorName(playerColor)));
-
+            System.out.println(user.isComputer());
             playersCreated++;
             numOfActivePlayers++;
             added = true;

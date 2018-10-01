@@ -5,6 +5,7 @@ public class User {
     private String name;
     private short id;
     private String gameRegisteredTo;
+    private boolean isComputer;
 
     public User(String name, short id, boolean isComputer) {
         this.name = name;
@@ -31,5 +32,5 @@ public class User {
         return isComputer;
     }
 
-    private boolean isComputer;
+
 }
