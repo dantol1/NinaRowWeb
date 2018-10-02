@@ -28,7 +28,7 @@ public class GameController {
     private int target;
     private String variant;
     private Game theGame;
-    private boolean toBeDeleted = false;
+    private String active = "No";
 
     public ArrayList<GamePlayer> getPlayers() {
         return players;
@@ -65,6 +65,27 @@ public class GameController {
         this.Discs = new String[rows][columns];
     }
 
+    public void Restart() {
+
+        cleanBoard();
+        setState(Game.GameState.GameNotEnded);
+        setStatus(GameStatus.WaitingForPlayers);
+        theGame.Restart();
+        this.active = "No";
+    }
+
+    private void cleanBoard(){
+
+        for (int i = 0; i<Discs.length; i++){
+
+            for(int j=0; j<Discs[i].length; j++) {
+
+                Discs[i][j] = null;
+
+            }
+        }
+    }
+
     public GameStatus getStatus(){
         return status;
     }
@@ -81,6 +102,7 @@ public class GameController {
 
         if (this.numberOfRegisteredPlayers == this.numberOfPlayers)
         {
+            this.active = "Yes";
             this.status = GameStatus.Started;
         }
     }
@@ -149,16 +171,6 @@ public class GameController {
         DropDiscComplex result = new DropDiscComplex(succeeded,randomizedColumn,0);
 
         return result;
-    }
-
-    public boolean isToBeDeleted() {
-
-        return toBeDeleted;
-    }
-
-    public void setToBeDeleted(boolean toBeDeleted) {
-
-        this.toBeDeleted = toBeDeleted;
     }
 
     public Game.GameState playComputerTurn() {

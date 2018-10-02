@@ -8,8 +8,8 @@
         <servlet-class>Servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DeleteGamesServlet</servlet-name>
-        <servlet-class>Servlets.DeleteGamesServlet</servlet-class>
+        <servlet-name>RestartGameServlet</servlet-name>
+        <servlet-class>Servlets.RestartGameServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>FinishGameServlet</servlet-name>
@@ -136,7 +136,7 @@
         <url-pattern>/FinishGame</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DeleteGamesServlet</servlet-name>
-        <url-pattern>/DeleteGames</url-pattern>
+        <servlet-name>RestartGameServlet</servlet-name>
+        <url-pattern>/RestartGame</url-pattern>
     </servlet-mapping>
 </web-app>

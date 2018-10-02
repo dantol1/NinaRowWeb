@@ -12,6 +12,7 @@
 // });
 var REFRESH_RATE = 500;
 var REFRESH_USER_RATE = 200;
+var RESTARTGAME_URL = buildUrlWithContextPath("RestartGame");
 var CHECKPLAYER_URL = buildUrlWithContextPath("CheckPlayer");
 var COMPUTERTURN_URL = buildUrlWithContextPath("ComputerTurn");
 var GAME_USERS_LIST_URL = buildUrlWithContextPath("GamePlayersList");
@@ -21,11 +22,13 @@ var PLAYTURN_URL = buildUrlWithContextPath("PlayTurn");
 var FINISHGAME_URL = buildUrlWithContextPath("FinishGame");
 var CURRENT_PLAYER_INFO_URL = buildUrlWithContextPath("PlayerInfo");
 var ACTIVE_PLAYER_INFO_URL = buildUrlWithContextPath("ActivePlayerTurn");
+var STATUS_URL = buildUrlWithContextPath("Status");
 var gameStarted = 0;
 var gameFinished = 0;
-var intervalTimer = 500;
+var intervalTimer = 200;
 var isFirstStatus = true;
-var STATUS_URL = buildUrlWithContextPath("Status");
+
+
 
 window.onload = function()
 {
@@ -87,8 +90,24 @@ function finishingTheGame() {
 
 function finisingTheGameCallback(json) {
 
+    if (json.numberOfRegisteredPlayers === 0)
+    {
+        restartTheGame(json.title)
+    }
     window.location = "/NinaRow/Pages/GamesHubPage/GamesHubPage.html"
 
+}
+
+function restartTheGame(title) {
+
+    $.ajax({
+
+        url: RESTARTGAME_URL,
+        data: {
+            title: title
+        },
+        type: 'GET'
+    });
 }
 
 function CheckIfItsAComputerAndExecuteTurn() {

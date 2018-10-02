@@ -37,8 +37,6 @@ public class FinishGameServlet extends HttpServlet {
                 .getUser(SessionUtils.getUsername(request.getSession()));
         toRemove.setGameRegisteredTo("");
         gameController.unregisterPlayer(toRemove);
-        gameController.setToBeDeleted(true);
-
         out.println(gson.toJson(gameController));
 
     }

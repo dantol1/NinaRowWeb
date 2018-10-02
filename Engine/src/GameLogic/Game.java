@@ -122,12 +122,19 @@ public class Game implements Serializable {
     }
 
     private int activePlayerIndex = 0;
-    private boolean ended = false;
     private int playersCreated = 0;
 
     public int getPlayersCreated(){
 
         return playersCreated;
+    }
+
+    public void Restart() {
+
+        gameBoard = new Board(settings.getColumns(), settings.getRows());
+        activePlayerIndex = 0;
+        winningPlayers = new HashSet<>();
+
     }
     public Game(GameSettings gs, List<Player> thePlayers)
     {
@@ -771,7 +778,9 @@ public class Game implements Serializable {
         boolean succeeded = true;
 
         succeeded = popoutDisc(columnToPlaceDisc);
-        players.get(activePlayerIndex).playedTurn();
+        if (succeeded == true) {
+             players.get(activePlayerIndex).playedTurn();
+         }
 
         return succeeded;
     }

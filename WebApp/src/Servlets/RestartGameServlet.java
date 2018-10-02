@@ -1,50 +1,33 @@
 package Servlets;
 
 import GameLogic.GameController;
+import GameLogic.GamePlayer;
 import Utils.ServletUtils;
 import WebLogic.GameManager;
-import WebLogic.Games;
+import WebLogic.UserManager;
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class DeleteGamesServlet extends HttpServlet {
+
+
+public class RestartGameServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<GameController> gamesToDelete = new ArrayList<>();
 
-        response.setContentType("application/json");
-        Gson gson = new Gson();
-        PrintWriter out = response.getWriter();
 
-        GameManager gameManager = ServletUtils.getGameManager(getServletContext());
+            String title = request.getParameter("title");
+            GameManager gameManager = ServletUtils.getGameManager(getServletContext());
+            GameController gameController = gameManager.getGameInfo(title);
 
-        for(GameController game : gameManager.getGamesList()) {
-
-            if (game.isToBeDeleted()) {
-
-                gamesToDelete.add(game);
-            }
+            gameController.Restart();
         }
-
-        for (GameController game : gamesToDelete) {
-
-
-            gameManager.removeGame(game);
-        }
-
-
-
-        out.println(gson.toJson(new Games(gamesToDelete)));
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

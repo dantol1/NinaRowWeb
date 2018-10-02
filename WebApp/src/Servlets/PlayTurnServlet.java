@@ -38,7 +38,6 @@ public class PlayTurnServlet extends HttpServlet {
         Game.GameState state = gameController.playTurn(column, moveType);
         if (state == Game.GameState.GameWin) {
 
-            System.out.println("we got here!");
             out.println(gson.toJson(null));
         }
         else {
