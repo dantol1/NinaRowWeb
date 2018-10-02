@@ -28,7 +28,7 @@ public class GameController {
     private int target;
     private String variant;
     private Game theGame;
-    private Game OriginalGame;
+    private boolean toBeDeleted = false;
 
     public ArrayList<GamePlayer> getPlayers() {
         return players;
@@ -52,7 +52,6 @@ public class GameController {
         this.state = state;
     }
     public GameController(Game game, String uploadedBy) {
-        this.OriginalGame = game;
         this.theGame = game;
         this.title = game.getGameTitle();
         this.numberOfPlayers = game.getTotalPlayers();
@@ -62,14 +61,6 @@ public class GameController {
         this.target = game.getSettings().getTarget();
         this.variant = game.getSettings().getVariant().name();
         this.players = new ArrayList<>();
-        this.status = GameStatus.WaitingForPlayers;
-        this.Discs = new String[rows][columns];
-    }
-
-    public void cleanGame() {
-
-        this.theGame = this.OriginalGame;
-        this.state = Game.GameState.GameNotEnded;
         this.status = GameStatus.WaitingForPlayers;
         this.Discs = new String[rows][columns];
     }
@@ -94,6 +85,11 @@ public class GameController {
         }
     }
 
+    public String getTitle() {
+
+        return title;
+    }
+
     public synchronized void unregisterPlayer(User userToRemove) {
 
         theGame.removePlayer(userToRemove.getId());
@@ -111,10 +107,6 @@ public class GameController {
 
         --numberOfRegisteredPlayers;
 
-        if (numberOfRegisteredPlayers == 0) {
-
-            cleanGame();
-        }
     }
 
     public DropDiscComplex dropComputerDisc() {
@@ -157,6 +149,16 @@ public class GameController {
         DropDiscComplex result = new DropDiscComplex(succeeded,randomizedColumn,0);
 
         return result;
+    }
+
+    public boolean isToBeDeleted() {
+
+        return toBeDeleted;
+    }
+
+    public void setToBeDeleted(boolean toBeDeleted) {
+
+        this.toBeDeleted = toBeDeleted;
     }
 
     public Game.GameState playComputerTurn() {

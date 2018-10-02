@@ -22,6 +22,14 @@ public class GameManager {
         gamesInfo = new HashMap<>();
     }
 
+    public void removeGame(GameController game) {
+
+        String gameTitleToRemove = game.getTitle();
+
+        games.remove(gameTitleToRemove);
+        gamesInfo.remove(gameTitleToRemove);
+    }
+
     public List<GameController> getGamesList(){
         return gamesInfo.values().stream().collect(Collectors.toList());
     }

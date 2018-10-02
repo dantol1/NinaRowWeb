@@ -2,12 +2,13 @@
 var REFRESH_RATE = 2000;
 var USER_LIST_URL = buildUrlWithContextPath("UsersList");
 var LOGOUT_URL = buildUrlWithContextPath("Logout");
-var LOGIN_URL = buildUrlWithContextPath("Login");
 var STATUS_URL = buildUrlWithContextPath("Status");
 var LOADGAME_URL = buildUrlWithContextPath("LoadGame");
 var GAMELIST_URL = buildUrlWithContextPath("GameList");
 var GAMEDETAILS_URL = buildUrlWithContextPath("GameDetails");
 var JOINGAME_URL = buildUrlWithContextPath("JoinGame");
+var DELETEGAMES_URL = buildUrlWithContextPath("DeleteGames");
+
 
 window.onload = function ()
 {
@@ -15,6 +16,7 @@ window.onload = function ()
     refreshUserList();
     setInterval(refreshUserList, REFRESH_RATE);
     setInterval(refreshGamesList, REFRESH_RATE);
+    setInterval(deleteGames, REFRESH_RATE);
     //setInterval(refreshLoginStatus, REFRESH_RATE);
 };
 
@@ -56,6 +58,31 @@ window.onload = function ()
 //     onLogoutClick()
 //
 // }
+
+function deleteGames() {
+
+    $.ajax({
+
+        url: DELETEGAMES_URL,
+        type: 'GET',
+        success: deleteGamesCallback
+    });
+}
+
+function deleteGamesCallback(json) {
+
+    var gamesList = json.games;
+
+    gamesList.forEach(function(games){
+
+        var title = games.title
+
+        var toRemove = $(`.game[title='${title}']`);
+        toRemove.remove();
+    });
+
+}
+
 function getUserName() {
     var result;
     $.ajax
@@ -204,7 +231,14 @@ function refreshGamesList() {
         }
     )
 }
+function buttonDeleteGame() {
 
+    var string = "sample game";
+    var toDelete = $(`.game[title='${string}']`);
+
+    toDelete.remove();
+
+}
 function refreshGamesListCallback(json) {
     var gamesTable = $('.gamesTable tbody');
     gamesTable.empty();
@@ -213,6 +247,7 @@ function refreshGamesListCallback(json) {
 
     gamesList.forEach(function (game) {
         var tr = $(document.createElement('tr'));
+        tr.addClass('game').attr('title',game.title);
         var tdGameName = $(document.createElement('td')).text(game.title);
         var tdCreatorName = $(document.createElement('td')).text(game.uploadedBy);
         var tdBoardSize = $(document.createElement('td')).text(game.rows + " X " + game.columns);
