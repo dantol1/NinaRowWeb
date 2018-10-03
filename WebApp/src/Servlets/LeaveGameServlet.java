@@ -1,27 +1,31 @@
 package Servlets;
 
-import Exceptions.PlayersAmountException;
 import GameLogic.Game;
 import GameLogic.GameController;
-import GameLogic.GamePlayer;
 import Utils.ServletUtils;
 import Utils.SessionUtils;
 import WebLogic.GameManager;
 import WebLogic.User;
 import WebLogic.UserManager;
 import com.google.gson.Gson;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+
+import java.io.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+public class LeaveGameServlet extends HttpServlet {
 
-
-public class FinishGameServlet extends HttpServlet {
-
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,18 +33,15 @@ public class FinishGameServlet extends HttpServlet {
         Gson gson = new Gson();
         PrintWriter out = response.getWriter();
         GameManager gameManager = ServletUtils.getGameManager(getServletContext());
-        GameController gameController = gameManager.getGameByUserName(
-                SessionUtils.getUsername(request.getSession())
-        );
-        User toRemove = ServletUtils.getUserManager(getServletContext())
-                .getUser(SessionUtils.getUsername(request.getSession()));
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        String username = SessionUtils.getUsername(request.getSession());
+        GameController gameController = gameManager.getGameByUserName(username);
+        User toRemove = userManager.getUser(SessionUtils.getUsername(request.getSession()));
         toRemove.setGameRegisteredTo("");
-        gameController.unregisterPlayer(toRemove);
-        out.println(gson.toJson(gameController));
-
+        out.println(gson.toJson(gameController.retirePlayer(userManager.getUser(username))));
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

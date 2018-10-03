@@ -131,6 +131,60 @@ public class GameController {
 
     }
 
+    public synchronized GameController retirePlayer(User userRetired)
+    {
+        GamePlayer playerRetired = getRetiredPlayer(userRetired.getId());
+
+        players.remove(playerRetired);
+        --numberOfRegisteredPlayers;
+        if(theGame.retireFromGame(playerRetired) != null)
+        {
+            state = Game.GameState.GameWin;
+            status = GameStatus.Finished;
+        }
+        updateBoardAfterRetire();
+
+        return this;
+    }
+
+    private void updateBoardAfterRetire() {
+        for (int i = 0; i<Discs.length; i++)
+        {
+            for(int j=0; j<Discs[i].length; j++)
+            {
+                Discs[i][j] = charToColor(theGame.returnBoard()[i][j]);
+            }
+        }
+    }
+
+    private String charToColor(char c) {
+        String colorName = null;
+
+        for(GamePlayer pl : players)
+        {
+            if(c == pl.getPieceShape())
+            {
+                colorName = pl.getColorName().toLowerCase();
+            }
+        }
+
+        return colorName;
+    }
+
+    private GamePlayer getRetiredPlayer(short id) {
+        GamePlayer retiree = null;
+
+        for(GamePlayer pl : players)
+        {
+            if(pl.getId() == id)
+            {
+                retiree = pl;
+            }
+        }
+
+        return retiree;
+    }
+
     public DropDiscComplex dropComputerDisc() {
 
         DropDiscComplex result;

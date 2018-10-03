@@ -871,6 +871,7 @@ public class Game implements Serializable {
 
     public void changeToNextActivePlayer()
     {
+
         activePlayerIndex = (activePlayerIndex + 1) % totalPlayers;
         if(retiredPlayersIndexes[activePlayerIndex] == true)
         {
@@ -929,6 +930,15 @@ public class Game implements Serializable {
         return checkIfLastPlayer();
     }
 
+    public GameState retireFromGame(GamePlayer playerToRemove)
+    {
+        removeAllPlayerPiecesFromBoard(playerToRemove);
+        removePlayerFromGame(playerToRemove);
+        collapseRemainingPieces();
+
+        return checkIfLastPlayer();
+    }
+
     private GameState checkIfLastPlayer()
     {
         int stillPlaying = 0;
@@ -968,6 +978,13 @@ public class Game implements Serializable {
         changeToNextActivePlayer();
     }
 
+    private void removePlayerFromGame(GamePlayer retiree) {
+        retiredPlayersIndexes[players.indexOf(retiree)] = true;
+        if(players.indexOf(retiree) == activePlayerIndex) {
+            changeToNextActivePlayer();
+        }
+    }
+
     private void removeAllPlayerPiecesFromBoard()
     {
         for(int row = 0; row < settings.getRows(); row++)
@@ -975,6 +992,21 @@ public class Game implements Serializable {
             for(int column = 0; column < settings.getColumns(); column++)
             {
                 if(gameBoard.getCellSymbol(row, column) == players.get(activePlayerIndex).getPieceShape())
+                {
+                    gameBoard.getBoard()[row][column] = Board.EMPTY_CELL;
+                    moveHistory.AddMoveToHistory(activePlayerIndex,-1, column, Move.moveType.RETIRE);
+                }
+            }
+        }
+    }
+
+    private void removeAllPlayerPiecesFromBoard(GamePlayer retiree)
+    {
+        for(int row = 0; row < settings.getRows(); row++)
+        {
+            for(int column = 0; column < settings.getColumns(); column++)
+            {
+                if(gameBoard.getCellSymbol(row, column) == retiree.getPieceShape())
                 {
                     gameBoard.getBoard()[row][column] = Board.EMPTY_CELL;
                     moveHistory.AddMoveToHistory(activePlayerIndex,-1, column, Move.moveType.RETIRE);
@@ -993,7 +1025,6 @@ public class Game implements Serializable {
                     user.getName(),
                     user.isComputer() ? GamePlayer.Type.Computer : GamePlayer.Type.Human,
                     playerColor, colorGenerator.getColorName(playerColor)));
-            System.out.println(user.isComputer());
             playersCreated++;
             numOfActivePlayers++;
             added = true;

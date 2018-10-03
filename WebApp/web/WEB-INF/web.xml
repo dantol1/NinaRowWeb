@@ -12,6 +12,10 @@
         <servlet-class>Servlets.RestartGameServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>LeaveGameServlet</servlet-name>
+        <servlet-class>Servlets.LeaveGameServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>FinishGameServlet</servlet-name>
         <servlet-class>Servlets.FinishGameServlet</servlet-class>
     </servlet>
@@ -78,6 +82,10 @@
     <servlet-mapping>
         <servlet-name>UsersListServlet</servlet-name>
         <url-pattern>/UsersList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LeaveGameServlet</servlet-name>
+        <url-pattern>/LeaveGame</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>

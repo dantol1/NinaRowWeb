@@ -23,6 +23,7 @@ var FINISHGAME_URL = buildUrlWithContextPath("FinishGame");
 var CURRENT_PLAYER_INFO_URL = buildUrlWithContextPath("PlayerInfo");
 var ACTIVE_PLAYER_INFO_URL = buildUrlWithContextPath("ActivePlayerTurn");
 var STATUS_URL = buildUrlWithContextPath("Status");
+var LEAVE_GAME_URL = buildUrlWithContextPath("LeaveGame");
 var gameStarted = 0;
 var gameFinished = 0;
 var intervalTimer = 200;
@@ -53,6 +54,10 @@ function checkGameStatus() {
 function checkGameStatusCallback(json) {
 
     $(".gameStatus").text(json.status);
+    if($(".gameStatus").text() === "WaitingForPlayers")
+    {
+        $(".gameStatus").text("Waiting For Players");
+    }
 
     if (json.status === "Started") {
         if (gameStarted === 0)
@@ -153,6 +158,30 @@ function printBoard() {
        type: 'GET',
        success: printBoardcallback
     });
+}
+
+function onLeaveGameClick()
+{
+    if ($(".gameStatus").text() !== "Waiting For Players") {
+        $.ajax({
+            url: LEAVE_GAME_URL,
+            type:'POST',
+            success: leaveGameCallback
+        });
+    }
+    else {
+        $.ajax({
+            url: FINISHGAME_URL,
+            type:'POST',
+            success: leaveGameCallback
+        });
+    }
+
+}
+
+function leaveGameCallback(json)
+{
+    window.location = "/NinaRow/Pages/GamesHubPage/GamesHubPage.html";
 }
 
 function onButtonClick(col, moveType) {
