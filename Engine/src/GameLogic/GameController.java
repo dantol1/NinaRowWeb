@@ -3,10 +3,8 @@ package GameLogic;
 import Exceptions.PlayersAmountException;
 import WebLogic.User;
 import javafx.beans.property.SimpleIntegerProperty;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
+
+import java.util.*;
 
 public class GameController {
 
@@ -70,8 +68,11 @@ public class GameController {
         cleanBoard();
         setState(Game.GameState.GameNotEnded);
         setStatus(GameStatus.WaitingForPlayers);
+        players.clear();
+        numberOfRegisteredPlayers = 0;
         theGame.Restart();
         this.active = "No";
+        System.out.println(Arrays.toString(theGame.getPlayers().toArray()));
     }
 
     private void cleanBoard(){
@@ -135,7 +136,6 @@ public class GameController {
     {
         GamePlayer playerRetired = getRetiredPlayer(userRetired.getId());
 
-        players.remove(playerRetired);
         --numberOfRegisteredPlayers;
         if(theGame.retireFromGame(playerRetired) != null)
         {
@@ -368,7 +368,6 @@ public class GameController {
     }
 
     public String getTheCurrentPlayer() {
-
         return players.get(theGame.getActivePlayerIndex()).getName();
     }
 

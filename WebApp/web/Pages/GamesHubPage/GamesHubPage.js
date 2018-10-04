@@ -8,11 +8,13 @@ var GAMELIST_URL = buildUrlWithContextPath("GameList");
 var GAMEDETAILS_URL = buildUrlWithContextPath("GameDetails");
 var JOINGAME_URL = buildUrlWithContextPath("JoinGame");
 var DELETEGAMES_URL = buildUrlWithContextPath("DeleteGames");
+var SET_USER_TO_BLANK_URL = buildUrlWithContextPath("SetUserToBlank");
 
 
 window.onload = function ()
 {
     //refreshLoginStatus();
+    setUserToBlankGame();
     refreshUserList();
     setInterval(refreshUserList, REFRESH_RATE);
     setInterval(refreshGamesList, REFRESH_RATE);
@@ -57,6 +59,13 @@ window.onload = function ()
 //     onLogoutClick()
 //
 // }
+
+function setUserToBlankGame(){
+    $.ajax({
+        url: SET_USER_TO_BLANK_URL,
+        type:'POST'
+    })
+}
 
 
 function getUserName() {

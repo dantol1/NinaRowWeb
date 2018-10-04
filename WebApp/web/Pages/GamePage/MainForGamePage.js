@@ -40,6 +40,10 @@ window.onload = function()
     setInterval(checkGameStatus, REFRESH_RATE);
 };
 
+window.onunload = function () {
+    onLeaveGameClick();
+};
+
 function checkGameStatus() {
 
         $.ajax({
@@ -330,6 +334,7 @@ function updatePlayerTurn() {
 }
 
 function updatePlayerTurnCallback(json){
+    console.log(json);
     const playerName = $("#activePlayerName");
     playerName.empty();
     playerName.text(json);

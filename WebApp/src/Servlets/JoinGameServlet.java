@@ -58,7 +58,7 @@ public class JoinGameServlet extends HttpServlet {
             }
         }
         else {
-            System.out.println("other issue");
+            System.out.println("the game status is " + gameController.getStatus().toString() + " and user can join game is " + userManager.canUserJoinTheGame(userName));
             out.println(gson.toJson(new LoadGameStatus(false,"Error in joining the game")));
         }
 

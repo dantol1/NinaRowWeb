@@ -44,6 +44,14 @@
         <servlet-class>Servlets.GameDetailsServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>UserSession</servlet-name>
+        <servlet-class>Servlets.UserSessionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SetUserToBlank</servlet-name>
+        <servlet-class>Servlets.SetUserGameToBlankServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>GameListServlet</servlet-name>
         <servlet-class>Servlets.GameListServlet</servlet-class>
     </servlet>
@@ -110,6 +118,14 @@
     <servlet-mapping>
         <servlet-name>JoinGameServlet</servlet-name>
         <url-pattern>/JoinGame</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetUserToBlank</servlet-name>
+        <url-pattern>/SetUserToBlank</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserSession</servlet-name>
+        <url-pattern>/UserSession</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GamePlayersListServlet</servlet-name>

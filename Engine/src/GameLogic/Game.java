@@ -133,9 +133,19 @@ public class Game implements Serializable {
 
         gameBoard = new Board(settings.getColumns(), settings.getRows());
         activePlayerIndex = 0;
+        playersCreated = 0;
         winningPlayers = new HashSet<>();
-
+        restartRetired();
+        colorGenerator = new ColorGenerator();
     }
+
+    private void restartRetired() {
+        for(boolean r : retiredPlayersIndexes)
+        {
+            r = false;
+        }
+    }
+
     public Game(GameSettings gs, List<Player> thePlayers)
     {
         gameBoard = new Board(gs.getColumns(), gs.getRows());
@@ -199,31 +209,6 @@ public class Game implements Serializable {
             i = false;
         }
     }
-
-//    public void saveGame(String fileName) throws IOException
-//    {
-//        try {
-//            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
-//            out.writeObject(this);
-//            out.flush();
-//        }
-//        catch (IOException e) {
-//
-//            throw e;
-//        }
-//    }
-//
-//
-//    public void loadGame(String fileName) throws ClassNotFoundException, IOException {
-//
-//        ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
-//
-//        this.gameBoard = ((GameLogic.Game)in.readObject()).gameBoard;
-//        this.moveHistory = ((GameLogic.Game)in.readObject()).moveHistory;
-//        this.settings = ((GameLogic.Game)in.readObject()).settings;
-//        this.players = ((GameLogic.Game)in.readObject()).players;
-//        this.numOfActivePlayers = ((GameLogic.Game)in.readObject()).numOfActivePlayers;
-//    }
 
     public char[][] returnBoard()
     {
@@ -871,7 +856,6 @@ public class Game implements Serializable {
 
     public void changeToNextActivePlayer()
     {
-
         activePlayerIndex = (activePlayerIndex + 1) % totalPlayers;
         if(retiredPlayersIndexes[activePlayerIndex] == true)
         {

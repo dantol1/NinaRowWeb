@@ -142,5 +142,10 @@ public class GamePlayer implements Serializable {
 
         return copiedPlayers;
     }
+
+    public String toString()
+    {
+        return name;
+    }
 }
 
