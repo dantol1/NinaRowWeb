@@ -69,10 +69,9 @@ public class GameController {
         setState(Game.GameState.GameNotEnded);
         setStatus(GameStatus.WaitingForPlayers);
         players.clear();
-        numberOfRegisteredPlayers = 0;
         theGame.Restart();
+        numberOfRegisteredPlayers = 0;
         this.active = "No";
-        System.out.println(Arrays.toString(theGame.getPlayers().toArray()));
     }
 
     private void cleanBoard(){
@@ -114,7 +113,6 @@ public class GameController {
     }
 
     public synchronized void unregisterPlayer(User userToRemove) {
-
         theGame.removePlayer(userToRemove.getId());
 
         GamePlayer toRemove = null;
@@ -129,10 +127,9 @@ public class GameController {
         players.remove(toRemove);
 
         --numberOfRegisteredPlayers;
-
     }
 
-    public synchronized GameController retirePlayer(User userRetired)
+    public GameController retirePlayer(User userRetired)
     {
         GamePlayer playerRetired = getRetiredPlayer(userRetired.getId());
 

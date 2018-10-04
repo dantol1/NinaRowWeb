@@ -57,10 +57,14 @@ function checkGameStatus() {
 
 function checkGameStatusCallback(json) {
 
-    $(".gameStatus").text(json.status);
-    if($(".gameStatus").text() === "WaitingForPlayers")
+
+    if(json.status === "WaitingForPlayers")
     {
         $(".gameStatus").text("Waiting For Players");
+    }
+    else
+    {
+        $(".gameStatus").text(json.status);
     }
 
     if (json.status === "Started") {

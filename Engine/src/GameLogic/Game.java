@@ -130,19 +130,19 @@ public class Game implements Serializable {
     }
 
     public void Restart() {
-
         gameBoard = new Board(settings.getColumns(), settings.getRows());
         activePlayerIndex = 0;
         playersCreated = 0;
+        players.clear();
         winningPlayers = new HashSet<>();
         restartRetired();
         colorGenerator = new ColorGenerator();
     }
 
     private void restartRetired() {
-        for(boolean r : retiredPlayersIndexes)
+        for(int i = 0; i < retiredPlayersIndexes.length; i++)
         {
-            r = false;
+            retiredPlayersIndexes[i] = false;
         }
     }
 
@@ -496,41 +496,49 @@ public class Game implements Serializable {
         {
             gameEnded = true;
             addWinningPiecesToSet(DiscDirection.Down,column, row);
+            System.out.println("found sequence D");
         }
         else if (checkConsecutiveDirection(DiscDirection.Left,column, row) == true)
         {
             gameEnded = true;
             addWinningPiecesToSet(DiscDirection.Left,column, row);
+            System.out.println("found sequence L");
         }
         else if (checkConsecutiveDirection(DiscDirection.Up,column, row) == true)
         {
             gameEnded = true;
             addWinningPiecesToSet(DiscDirection.Up,column, row);
+            System.out.println("found sequence U");
         }
         else if (checkConsecutiveDirection(DiscDirection.Right,column, row) == true)
         {
             gameEnded = true;
             addWinningPiecesToSet(DiscDirection.Right,column, row);
+            System.out.println("found sequence R");
         }
         else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalLeft,column, row) == true)
         {
             gameEnded = true;
             addWinningPiecesToSet(DiscDirection.LowerDiagonalLeft,column, row);
+            System.out.println("found sequence LDL");
         }
         else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalLeft,column, row) == true)
         {
             gameEnded = true;
             addWinningPiecesToSet(DiscDirection.UpperDiagonalLeft,column, row);
+            System.out.println("found sequence UDL");
         }
         else if (checkConsecutiveDirection(DiscDirection.LowerDiagonalRight,column, row) == true)
         {
             gameEnded = true;
             addWinningPiecesToSet(DiscDirection.LowerDiagonalRight,column, row);
+            System.out.println("found sequence LDR");
         }
         else if (checkConsecutiveDirection(DiscDirection.UpperDiagonalRight,column, row) == true)
         {
             gameEnded = true;
             addWinningPiecesToSet(DiscDirection.UpperDiagonalRight,column, row);
+            System.out.println("found sequence UDR");
         }
 
         return gameEnded;
@@ -647,13 +655,19 @@ public class Game implements Serializable {
         int rowMovement = 0, colMovement = 0;
         int i;
         movement moveChange = getMovementByDirection(dir);
+        char piece = gameBoard.getCellSymbol(row, column);
+
+        if(piece == Board.EMPTY_CELL)
+        {
+            return false;
+        }
 
         rowMovement = moveChange.rowMovement;
         colMovement = moveChange.colMovement;
 
         for (i = 0; i < settings.getTarget(); i++) {
             try {
-                if (gameBoard.getCellSymbol(row, column) == players.get(activePlayerIndex).getPieceShape()) {
+                if (gameBoard.getCellSymbol(row, column) == piece) {
                     row += rowMovement;
                     column += colMovement;
                     row = row % settings.getRows();
@@ -916,11 +930,18 @@ public class Game implements Serializable {
 
     public GameState retireFromGame(GamePlayer playerToRemove)
     {
+        GameState stateAfterRetire = GameState.GameNotEnded;
+
         removeAllPlayerPiecesFromBoard(playerToRemove);
         removePlayerFromGame(playerToRemove);
         collapseRemainingPieces();
+        stateAfterRetire = checkWin();
+        if(stateAfterRetire == GameState.GameNotEnded)
+        {
+            stateAfterRetire = checkIfLastPlayer();
+        }
 
-        return checkIfLastPlayer();
+        return stateAfterRetire;
     }
 
     private GameState checkIfLastPlayer()
@@ -955,6 +976,43 @@ public class Game implements Serializable {
 
     private void collapseRemainingPieces() {
         gameBoard.collapseSpaces();
+    }
+
+    private GameState checkWin() {
+
+        for(int row  = 0; row < settings.getRows(); row++)
+        {
+            for(int col = 0; col <settings.getColumns(); col++)
+            {
+                if(settings.getVariant() == GameSettings.Variant.Circular)
+                {
+                    checkAllDirectionsForWinCircular(col, row);
+                }
+                else if(settings.getVariant() == GameSettings.Variant.Regular)
+                {
+                    checkAllDirectionsForWinRegular(col);
+                }
+                else if(settings.getVariant() == GameSettings.Variant.Popout)
+                {
+                    checkAllDirectionsForWinPopout(col, row);
+                }
+            }
+        }
+
+        findWinningPlayers(0,0);
+
+        if(winningPlayers.size() == 1)
+        {
+            return GameState.GameWin;
+        }
+        else if(winningPlayers.size() > 1)
+        {
+            return GameState.SeveralPlayersWonTie;
+        }
+        else
+        {
+            return GameState.GameNotEnded;
+        }
     }
 
     private void removePlayerFromGame() {

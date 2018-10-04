@@ -9,11 +9,11 @@ window.onload = function () {
 };
 
 function checkUserSessionCallback(json) {
-    if(json.session === 'ConnectedToHub')
+    if(json === 'ConnectedToHub')
     {
         window.location = '/NinaRow/Pages/GamesHubPage/GamesHubPage.html';
     }
-    else if(json.session === 'ConnectedToGame')
+    else if(json === 'ConnectedToGame')
     {
         window.location = '/NinaRow/Pages/GamePage/GamePage.html';
     }

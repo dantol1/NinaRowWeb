@@ -27,7 +27,6 @@ public class SetUserGameToBlankServlet extends HttpServlet {
             throws ServletException, IOException {
         User toSet = ServletUtils.getUserManager(getServletContext())
                 .getUser(SessionUtils.getUsername(request.getSession()));
-        System.out.println(toSet.getGameRegisteredTo());
         toSet.setGameRegisteredTo("");
     }
 
